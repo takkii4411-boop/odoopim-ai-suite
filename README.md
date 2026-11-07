@@ -4,7 +4,7 @@
 
 An enterprise-grade **Product Information Management (PIM)** suite built on Odoo 18, delivering **Akeneo PIM–style** capabilities — families, attributes, channelization, localization, approval workflows, AI enrichment & translation, marketplace connectors, and an embedded AI chatbot — all natively integrated with Odoo Sales, Inventory, Website and Studio.
 
-> Part of the ODOOPIM product line (onboarder.odoopim.com). Built as a production platform with 25 inter-connected custom modules.
+> Part of the ODOOPIM product line (onboarder.odoopim.com). Work here = **client-driven module development**: AI layer, localization/channelization, approvals, bulk imports, connectors and UI widgets + debugging across the platform.
 
 ---
 
