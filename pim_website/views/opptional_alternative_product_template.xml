@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="pxm_product_associations">
+        <t t-if="associated_products_by_type">
+
+            <div class="container mt-3">
+                <div class="pxm-spec-header">
+                    <h4 class="pxm-spec-title">
+                        <i class="fa fa-link me-2"></i>
+                        Associations Product's
+                    </h4>
+                </div>
+
+                <!-- Modern Section Wrapper -->
+                <div class="pxm-associations-wrapper mb-5">
+                    <t t-foreach="associated_products_by_type.items()" t-as="assoc">
+                        <t t-set="assoc_type" t-value="assoc[0]"/>
+                        <t t-set="products" t-value="assoc[1]"/>
+                        <!-- Only show section if products exist -->
+                        <t t-if="products">
+                            <div class="bg-white rounded-3 shadow-sm p-4" t-att-data-section-id="assoc_type.id">
+                                <!-- Modern Header with Gradient -->
+                                <div class="pxm-modern-header">
+                                    <div class="pxm-header-content">
+                                        <div class="pxm-header-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="3" width="7" height="7"></rect>
+                                                <rect x="14" y="3" width="7" height="7"></rect>
+                                                <rect x="14" y="14" width="7" height="7"></rect>
+                                                <rect x="3" y="14" width="7" height="7"></rect>
+                                            </svg>
+                                        </div>
+                                        <h3 class="pxm-section-title">
+                                            <t t-esc="assoc_type.name"/>
+                                        </h3>
+                                        <span class="pxm-product-count">
+                                            <t t-esc="len(products)"/>
+                                            items
+                                        </span>
+                                    </div>
+
+                                    <!-- Navigation Arrows -->
+                                    <div class="pxm-nav-controls">
+                                        <button type="button"
+                                                class="pxm-nav-btn pxm-nav-prev"
+                                                t-att-data-target="'assoc-scroll-%s' % assoc_type.id"
+                                                aria-label="Previous">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                            </svg>
+                                        </button>
+                                        <button type="button"
+                                                class="pxm-nav-btn pxm-nav-next"
+                                                t-att-data-target="'assoc-scroll-%s' % assoc_type.id"
+                                                aria-label="Next">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Products Scroll Container -->
+                                <div class="pxm-products-scroll-wrapper">
+                                    <div class="pxm-products-grid"
+                                         t-att-id="'assoc-scroll-%s' % assoc_type.id">
+                                        <t t-foreach="products" t-as="assoc_product">
+                                            <div class="pxm-product-card-wrapper">
+                                                <div class="pxm-modern-card">
+                                                    <!-- Image Container -->
+                                                    <a class="pxm-card-image-link"
+                                                       t-att-href="'/pxm/shop/%s-%s' % (
+                                                               assoc_product.name.replace(' ', '-'),
+                                                               assoc_product.id
+                                                           )">
+                                                        <div class="pxm-card-image-container">
+                                                            <img t-att-src="'/web/image/product.template/%s/image_512' % assoc_product.id"
+                                                                 class="pxm-card-image"
+                                                                 t-att-alt="assoc_product.name"
+                                                                 loading="lazy"/>
+                                                            <div class="pxm-card-overlay">
+                                                                <span class="pxm-view-details">View Details</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+
+                                                    <!-- Card Body -->
+                                                    <div class="pxm-card-body">
+                                                        <h6 class="pxm-card-title">
+                                                            <a t-att-href="'/pxm/shop/%s-%s' % (
+                                                                   assoc_product.name.replace(' ', '-'),
+                                                                   assoc_product.id
+                                                               )"
+                                                               class="pxm-title-link">
+                                                                <t t-esc="assoc_product.name"/>
+                                                            </a>
+                                                        </h6>
+
+                                                        <!-- Price Section -->
+                                                        <div class="pxm-card-price">
+                                                            <t t-set="assoc_values"
+                                                               t-value="product_dynamic_values.get(assoc_product.id, {})"/>
+                                                            <t t-set="has_price" t-value="False"/>
+
+                                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                                <div class="pxm-sku text-center"
+                                                                     style="color:#714B67;font-size: 14px;">
+                                                                    <t t-esc="assoc_product.sku"/>
+                                                                </div>
+                                                                <t t-foreach="assoc_values.items()" t-as="attr">
+                                                                    <t t-set="field_info"
+                                                                       t-value="dynamic_price_fields.get(attr[0])"/>
+                                                                    <t t-set="label" t-value="attr[0]"/>
+                                                                    <t t-set="val" t-value="attr[1]"/>
+                                                                    <t t-if="field_info and field_info.get('display_type') == 'price' and label == 'Price per Meter'">
+                                                                        <!-- Multiple -->
+                                                                        <t t-if="val and isinstance(val, list)">
+                                                                            <t t-foreach="val" t-as="v">
+                                                                                <t t-if="v">
+                                                                                    <div class="pxm-attr-badge ms-2">
+                                                                                        <strong>
+                                                                                            <span class="pxm-value-text"
+                                                                                                  t-esc="v"
+                                                                                                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                                        </strong>
+                                                                                    </div>
+                                                                                </t>
+                                                                            </t>
+                                                                        </t>
+
+                                                                        <!-- Single -->
+                                                                        <t t-elif="val">
+                                                                            <div class="pxm-attr-badge ms-2">
+                                                                                <strong>
+                                                                                    <span class="pxm-value-text"
+                                                                                          t-esc="val"
+                                                                                          t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                                </strong>
+                                                                            </div>
+                                                                        </t>
+
+                                                                    </t>
+                                                                </t>
+
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Scroll Indicator Dots -->
+                                <div class="pxm-scroll-indicators"
+                                     t-att-data-target="'assoc-scroll-%s' % assoc_type.id">
+                                    <!-- Generated dynamically by JS -->
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </div>
+        </t>
+        <!-- Modern Fallback Message -->
+        <t t-else="">
+            <div class="container pxm-empty-state">
+                <div class="pxm-empty-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <h4>No Associated Products</h4>
+                    <p>There are currently no associated products available for this item.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

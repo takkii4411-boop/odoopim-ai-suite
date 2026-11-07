@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="web.Field" t-inherit="web.Field" t-inherit-mode="extension">
+        <xpath expr="//div" position="replace">
+            <div t-att-name="props.name"
+                 t-att-class="classNames"
+                 t-att-style="props.style"
+                 t-att-data-tooltip-template="tooltip and 'web.FieldTooltip'"
+                 t-att-data-tooltip-info="tooltip">
+
+                <!-- Show NA for fields not in family -->
+                <t t-if="fieldState and fieldState.showNA">
+                    <span class="text-muted o_field_readonly"
+                          style="font-style: italic; opacity: 0.7; padding: 4px 8px;"
+                          title="This attribute is not in the selected family">
+                        NA
+                    </span>
+                </t>
+
+                <!-- Show normal field component -->
+                <t t-else="">
+                    <t t-component="field.component"
+                       t-props="fieldComponentProps"/>
+                </t>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

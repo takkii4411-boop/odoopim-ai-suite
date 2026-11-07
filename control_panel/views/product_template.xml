@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_view_tree_control_panel" model="ir.ui.view">
+        <field name="name">product.template.control.panel</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="pim_ext.view_product_management_tree"/>
+        <field name="arch" type="xml">
+           <xpath expr="//list" position="attributes">
+                <attribute name="js_class">list_panel</attribute>
+           </xpath>
+        </field>
+    </record>
+<!--    <record id="family_attribute__view_kanban_control_panel" model="ir.ui.view">-->
+<!--        <field name="name">family.attribute.control.panel</field>-->
+<!--        <field name="model">family.attribute</field>-->
+<!--        <field name="inherit_id" ref="pim_ext.view_product_family_kanban_view"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//kanban" position="attributes">-->
+<!--                <attribute name="js_class">family_kanban_panel</attribute>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+</odoo>

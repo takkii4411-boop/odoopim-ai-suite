@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_ir_filters_share_dialog_form" model="ir.ui.view">
+    <field name="name">ir.filters.share.dialog.form</field>
+    <field name="model">ir.filters</field>
+    <field name="arch" type="xml">
+        <form>
+            <group>
+                <field name="name" readonly="1"/>
+                <field name="shared_user_ids" widget="many2many_tags"
+                       domain="[('id', '!=', uid)]"
+                       options="{'no_create': True}"
+                       placeholder="Search users to share with..."/>
+            </group>
+            <footer>
+                <button string="Save" type="object" name="action_save_users" class="oe_highlight" data-hotkey="q"/>
+                <button string="Cancel" class="btn btn-default" special="cancel" data-hotkey="x"/>
+            </footer>
+        </form>
+    </field>
+</record>
+</odoo>

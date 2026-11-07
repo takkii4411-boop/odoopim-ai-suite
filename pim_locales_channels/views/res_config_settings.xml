@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.base.setup</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="0"/>
+        <field name="inherit_id" ref="pim_ext.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@name='pim_settings']" position="after">
+                <block title="Channels And Locale" name="channel_and_locale">
+                    <setting id="Locale" company_dependent="1"
+                             string="Enable Channel and Locale"
+                             help="enable channel and locale for product information management"
+                             name="enable_channel_and_locale">
+                        <field name="enable_channel_locale"/>
+                        <div class="content-group" invisible="not enable_channel_locale">
+                            <div class="mt16">
+                                <label for="pim_available_lang_ids" class="o_light_label mr8"/>
+                                <field name="pim_available_lang_ids"
+                                       widget="many2many_tags"
+                                       options="{'no_create_edit': True,'no_create': True, 'no_quick_create': True}"
+                                       class="oe_inline"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+                <block title="Configuration" name="configuration">
+                    <setting id="ModelSpecificChannelLocale"
+                             string="Channel and Locale For specific model"
+                             help="Specify models for channelised translation"
+                             name="channel_locale_model_specific">
+                        <div class="content-group">
+                            <div class="mt16">
+                                <label for="lc_available_model_ids" class="o_light_label mr8"/>
+                                <field name="lc_available_model_ids"
+                                       widget="many2many_tags"
+                                       domain="[('transient','=', False)]"
+                                       options="{'no_create_edit': True,'no_create': True, 'no_quick_create': True}"
+                                       class="oe_inline"/>
+                            </div>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

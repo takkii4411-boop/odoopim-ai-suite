@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <t t-name="pim_ext.Many2OneFieldForm">
+        <div>
+            <t t-call="web.Many2OneField"/>
+            <t t-if="this.embeddedForm.archInfo">
+                <div class="p-1 bg-white" style="position:sticky;top:0;z-index:1;border-bottom:2px solid gray;">
+                    <button class="btn btn-primary" t-on-click.stop="onClickSaveForm">Save</button>
+                    <button class="btn btn-secondary ms-2" t-on-click.stop="onClickDiscardForm">Discard</button>
+                </div>
+                <FormRenderer record="this.embeddedForm.recordData"
+                              archInfo="this.embeddedForm.archInfo"/>
+            </t>
+        </div>
+    </t>
+</templates>

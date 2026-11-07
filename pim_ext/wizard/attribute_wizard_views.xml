@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_add_attribute_wizard" model="ir.ui.view">
+        <field name="name">add.attribute.wizard.form</field>
+        <field name="model">add.attribute.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Attributes">
+                <group>
+                    <field name="company_id" invisible="1"/>
+                    <field name="attribute_family_id" string="Family" readonly="1" options="{'no_open': True}"/>
+                    <!-- Allow multiple attribute groups to be selected -->
+                    <field name="attribute_ids" widget="many2many_tags" domain="[('id', 'not in', exist_attribute_ids),('company_id', '=', company_id)]"
+                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="exist_attribute_ids" invisible="1" string="Exist Attributes" widget="many2many_tags" options="{'no_open': True}"/>
+                </group>
+                <footer>
+                    <button name="add_attributes_to_family" string="Update" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <!-- Server action for "Publish to PIM" which is now bound directly -->
+        <!-- Publish in PIM -->
+        <record id="action_publish_pim_server" model="ir.actions.server">
+            <field name="name">Publish in PIM</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template"/>
+            <field name="binding_type">action</field>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_publish_pim()</field>
+        </record>
+
+        <!-- Unpublish from PIM -->
+        <record id="action_unpublish_pim_server" model="ir.actions.server">
+            <field name="name">Unpublish from PIM</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template"/>
+            <field name="binding_type">action</field>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_unpublish_pim()</field>
+        </record>
+
+    </data>
+</odoo>

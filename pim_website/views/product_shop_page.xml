@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pxm_shop_template" name="Shop Page">
+        <t t-call="website.layout">
+            <t t-set="page_name">pim_shop</t>
+            <div id="pxm-shop-wrapper" class="container-fluid mt-4">
+                <div class="row">
+                    <!-- DESKTOP FILTER SIDEBAR -->
+                    <aside class="col-md-3 d-none d-md-block">
+                        <div class="pxm-filter-modern shadow-sm rounded-4 p-4">
+                            <!-- Header -->
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h6 class="pxm-filter-title mt-1">
+                                    <i class="fa fa-sliders me-2"></i>
+                                    Filters
+                                </h6>
+                                <a href="#"
+                                   class="pxm-clear-all-filters text-decoration-none text-primary small fw-semibold">
+                                    <i class="fa fa-refresh me-1"></i>
+                                    Clear All
+                                </a>
+                            </div>
+
+                            <!-- FILTER GROUPS -->
+                            <div class="pxm-filter-groups">
+
+                                <!-- FAMILY FILTER (COLLAPSED BY DEFAULT) -->
+                                <div t-if="families" class="pxm-filter-group mb-3">
+                                    <div class="pxm-filter-header d-flex justify-content-between align-items-center"
+                                         data-bs-toggle="collapse"
+                                         data-bs-target="#familyGroup"
+                                         style="cursor: pointer;">
+                                        <span class="fw-semibold">
+                                            <i class="fa fa-folder-open me-2 text-primary"></i>
+                                            Family
+                                        </span>
+                                        <i class="fa fa-chevron-down pxm-toggle-icon"></i>
+                                    </div>
+
+                                    <div id="familyGroup" class="collapse pxm-filter-body mt-2">
+                                        <t t-foreach="families" t-as="family">
+                                            <label class="pxm-filter-item d-flex align-items-center py-2 px-3 rounded-3 mb-2"
+                                                   style="cursor: pointer;">
+                                                <input class="pxm-filter-input form-check-input me-3"
+                                                       type="checkbox"
+                                                       t-att-id="'family_%s' % family.id"
+                                                       t-att-data-filter="'family'"
+                                                       t-att-data-id="family.id"
+                                                       style="cursor: pointer;"/>
+                                                <span class="pxm-filter-text">
+                                                    <t t-esc="family.name"/>
+                                                </span>
+                                            </label>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORY FILTER (COLLAPSED BY DEFAULT) -->
+                                <div t-if="categories" class="pxm-filter-group mb-3">
+                                    <div class="pxm-filter-header d-flex justify-content-between align-items-center"
+                                         data-bs-toggle="collapse"
+                                         data-bs-target="#categoryGroup"
+                                         style="cursor: pointer;">
+                                        <span class="fw-semibold">
+                                            <i class="fa fa-tags me-2 text-primary"></i>
+                                            Category
+                                        </span>
+                                        <i class="fa fa-chevron-down pxm-toggle-icon"></i>
+                                    </div>
+
+                                    <div id="categoryGroup" class="collapse pxm-filter-body mt-2">
+                                        <t t-foreach="categories" t-as="category">
+                                            <label class="pxm-filter-item d-flex align-items-center py-2 px-3 rounded-3 mb-2"
+                                                   style="cursor: pointer;">
+                                                <input class="pxm-filter-input form-check-input me-3"
+                                                       type="checkbox"
+                                                       t-att-id="'category_%s' % category.id"
+                                                       t-att-data-filter="'category'"
+                                                       t-att-data-id="category.id"
+                                                       style="cursor: pointer;"/>
+                                                <span class="pxm-filter-text">
+                                                    <t t-esc="category.name"/>
+                                                </span>
+                                            </label>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- BRAND FILTER (COLLAPSED BY DEFAULT) -->
+                                <div t-if="brands" class="pxm-filter-group mb-3">
+                                    <div class="pxm-filter-header d-flex justify-content-between align-items-center"
+                                         data-bs-toggle="collapse"
+                                         data-bs-target="#brandGroup"
+                                         style="cursor: pointer;">
+                                        <span class="fw-semibold">
+                                            <i class="fa fa-industry me-2 text-primary"></i>
+                                            Brand
+                                        </span>
+                                        <i class="fa fa-chevron-down pxm-toggle-icon"></i>
+                                    </div>
+
+                                    <div id="brandGroup" class="collapse pxm-filter-body mt-2">
+                                        <t t-foreach="brands" t-as="brand">
+                                            <label class="pxm-filter-item d-flex align-items-center py-2 px-3 rounded-3 mb-2"
+                                                   style="cursor: pointer;">
+                                                <input class="pxm-filter-input form-check-input me-3"
+                                                       type="checkbox"
+                                                       t-att-id="'brand_%s' % brand.id"
+                                                       t-att-data-filter="'brand'"
+                                                       t-att-data-id="brand.id"
+                                                       style="cursor: pointer;"/>
+                                                <span class="pxm-filter-text">
+                                                    <t t-esc="brand.name"/>
+                                                </span>
+                                            </label>
+                                        </t>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- MOBILE FILTER PANEL (RIGHT-TO-LEFT SLIDING) - UPDATED DESIGN -->
+                    <div id="pxmMobileFilterPanel" class="pxm-mobile-filter-panel">
+                        <div class="pxm-mobile-filter-backdrop"></div>
+                        <div class="pxm-mobile-filter-sidebar">
+                            <!-- Header with Close Button -->
+                            <div class="pxm-mobile-filter-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0 fw-bold d-flex align-items-center">
+                                        <i class="fa fa-sliders me-2"></i>
+                                        Filters
+                                    </h5>
+                                    <button class="pxm-mobile-close-btn" id="pxmMobileFilterClose" type="button">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Scrollable Filter Content -->
+                            <div class="pxm-mobile-filter-scroll">
+                                <!-- FAMILY FILTER (Mobile) - COLLAPSIBLE -->
+                                <div t-if="families" class="pxm-mobile-filter-section">
+                                    <div class="pxm-mobile-section-header" data-bs-toggle="collapse"
+                                         data-bs-target="#mobileFamilyGroup">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-folder-open me-2 text-muted"></i>
+                                            <span class="fw-bold text-uppercase">FAMILY</span>
+                                        </div>
+                                        <i class="fa fa-chevron-down pxm-mobile-chevron"></i>
+                                    </div>
+                                    <div id="mobileFamilyGroup" class="collapse pxm-mobile-section-body">
+                                        <t t-foreach="families" t-as="family">
+                                            <label class="pxm-mobile-filter-option">
+                                                <input class="form-check-input pxm-filter-input"
+                                                       type="checkbox"
+                                                       t-att-id="'mobile_family_%s' % family.id"
+                                                       t-att-data-filter="'family'"
+                                                       t-att-data-id="family.id"/>
+                                                <span class="pxm-mobile-filter-label">
+                                                    <t t-esc="family.name"/>
+                                                </span>
+                                            </label>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORY FILTER (Mobile) - COLLAPSIBLE -->
+                                <div t-if="categories" class="pxm-mobile-filter-section">
+                                    <div class="pxm-mobile-section-header" data-bs-toggle="collapse"
+                                         data-bs-target="#mobileCategoryGroup">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-tags me-2 text-muted"></i>
+                                            <span class="fw-bold text-uppercase">CATEGORY</span>
+                                        </div>
+                                        <i class="fa fa-chevron-down pxm-mobile-chevron"></i>
+                                    </div>
+                                    <div id="mobileCategoryGroup" class="collapse pxm-mobile-section-body">
+                                        <t t-foreach="categories" t-as="category">
+                                            <label class="pxm-mobile-filter-option">
+                                                <input class="form-check-input pxm-filter-input"
+                                                       type="checkbox"
+                                                       t-att-id="'mobile_category_%s' % category.id"
+                                                       t-att-data-filter="'category'"
+                                                       t-att-data-id="category.id"/>
+                                                <span class="pxm-mobile-filter-label">
+                                                    <t t-esc="category.name"/>
+                                                </span>
+                                            </label>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- BRAND FILTER (Mobile) - COLLAPSIBLE -->
+                                <div t-if="brands" class="pxm-mobile-filter-section">
+                                    <div class="pxm-mobile-section-header" data-bs-toggle="collapse"
+                                         data-bs-target="#mobileBrandGroup">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-industry me-2 text-muted"></i>
+                                            <span class="fw-bold text-uppercase">BRAND</span>
+                                        </div>
+                                        <i class="fa fa-chevron-down pxm-mobile-chevron"></i>
+                                    </div>
+                                    <div id="mobileBrandGroup" class="collapse pxm-mobile-section-body">
+                                        <t t-foreach="brands" t-as="brand">
+                                            <label class="pxm-mobile-filter-option">
+                                                <input class="form-check-input pxm-filter-input"
+                                                       type="checkbox"
+                                                       t-att-id="'mobile_brand_%s' % brand.id"
+                                                       t-att-data-filter="'brand'"
+                                                       t-att-data-id="brand.id"/>
+                                                <span class="pxm-mobile-filter-label">
+                                                    <t t-esc="brand.name"/>
+                                                </span>
+                                            </label>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Apply Filters Button (Mobile) -->
+                            <div class="pxm-mobile-filter-footer">
+                                <button class="pxm-mobile-apply-btn" id="pxmMobileFilterApply" type="button">
+                                    <i class="fa fa-check me-2"></i>
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MAIN CONTENT -->
+                    <div class="col-md-9">
+                        <!-- SEARCH BAR + VIEW TOGGLE -->
+                        <div class="row align-items-center gx-2 mb-3">
+                            <div class="col-12 d-flex align-items-center justify-content-between flex-nowrap">
+                                <!-- SEARCH BAR -->
+                                <div class="pxm-search-box d-flex align-items-center flex-grow-1 me-2">
+                                    <i class="fa fa-search pxm-search-icon me-2"></i>
+                                    <input type="search"
+                                           name="search"
+                                           id="pxmSearchInput"
+                                           placeholder="Search for products..."
+                                           class="pxm-search-input flex-grow-1"/>
+                                </div>
+
+                                <!-- VIEW TOGGLE -->
+                                <div class="pxm-view-toggle d-flex align-items-center flex-shrink-0">
+                                    <button id="gridViewBtn" class="pxm-toggle-btn active me-1 d-none d-md-inline-flex"
+                                            title="Grid View" type="button">
+                                        <i class="fa fa-th-large"></i>
+                                    </button>
+                                    <button id="listViewBtn" class="pxm-toggle-btn me-2 d-none d-md-inline-flex"
+                                            title="List View" type="button">
+                                        <i class="fa fa-bars"></i>
+                                    </button>
+                                    <button class="pxm-toggle-btn d-inline-flex d-md-none" id="pxmMobileFilterToggle"
+                                            title="Filters" type="button">
+                                        <i class="fa fa-filter"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ACTIVE FILTERS + PRODUCT COUNT -->
+                        <div class="d-flex flex-wrap align-items-center mb-3">
+                            <h6 class="pxm-products-header me-3 mb-0">
+                                Loading products...
+                            </h6>
+                            <div class="pxm-active-filters d-flex flex-wrap"></div>
+                        </div>
+                        <!-- PRODUCT GRID/LIST -->
+                        <div id="productContainer" class="mb-4">
+                            <!-- Products will be loaded dynamically via JavaScript -->
+                        </div>
+                        <!-- PAGINATION -->
+                        <div class="pxm-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
+

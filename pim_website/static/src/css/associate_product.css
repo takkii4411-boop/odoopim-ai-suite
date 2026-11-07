@@ -1,0 +1,654 @@
+/* ============================================
+   PXM Modern Product Associations Styles
+   Odoo Default Color Scheme
+   ============================================ */
+
+:root {
+    /* Odoo Default Colors */
+    --pxm-primary: #714B67;
+    --pxm-primary-dark: #5a3c52;
+    --pxm-secondary: #875A7B;
+    --pxm-success: #28a745;
+    --pxm-info: #17a2b8;
+    --pxm-warning: #ffc107;
+    --pxm-danger: #dc3545;
+
+    /* Odoo-compatible Gradients */
+    --pxm-gradient-primary: linear-gradient(135deg, #875A7B 0%, #714B67 100%);
+    --pxm-gradient-secondary: linear-gradient(135deg, #714B67 0%, #5a3c52 100%);
+    --pxm-gradient-accent: linear-gradient(135deg, #875A7B 0%, #a06d94 100%);
+
+    /* Shadows with Odoo color tints */
+    --pxm-shadow-sm: 0 2px 8px rgba(113, 75, 103, 0.08);
+    --pxm-shadow-md: 0 4px 16px rgba(113, 75, 103, 0.12);
+    --pxm-shadow-lg: 0 8px 32px rgba(113, 75, 103, 0.16);
+    --pxm-shadow-hover: 0 12px 48px rgba(113, 75, 103, 0.2);
+
+    /* Design tokens */
+    --pxm-border-radius: 16px;
+    --pxm-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Odoo neutral colors */
+    --pxm-gray-50: #f9fafb;
+    --pxm-gray-100: #f3f4f6;
+    --pxm-gray-200: #e5e7eb;
+    --pxm-gray-300: #d1d5db;
+    --pxm-gray-400: #9ca3af;
+    --pxm-gray-500: #6b7280;
+    --pxm-gray-600: #4b5563;
+    --pxm-gray-700: #374151;
+    --pxm-gray-800: #1f2937;
+    --pxm-gray-900: #111827;
+}
+
+/* ============================================
+   Container & Wrapper
+   ============================================ */
+
+.pxm-modern-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.pxm-associations-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.pxm-section-block {
+    background: linear-gradient(to bottom, #ffffff 0%, var(--pxm-gray-50) 100%);
+    border-radius: var(--pxm-border-radius);
+    padding: 32px;
+    box-shadow: var(--pxm-shadow-sm);
+    transition: var(--pxm-transition);
+}
+
+.pxm-section-block:hover {
+    box-shadow: var(--pxm-shadow-md);
+}
+
+
+.pxm-modern-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.pxm-header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.pxm-header-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pxm-gradient-primary);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(113, 75, 103, 0.3);
+}
+
+.pxm-section-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--pxm-primary);
+}
+
+.pxm-product-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: var(--pxm-gradient-primary);
+    color: white;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(113, 75, 103, 0.3);
+}
+
+/* ============================================
+   Navigation Controls
+   ============================================ */
+
+.pxm-nav-controls {
+    display: flex;
+    gap: 12px;
+}
+
+
+
+/* ============================================
+   Products Grid/Scroll
+   ============================================ */
+.pxm-products-grid {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 8px 4px 24px 4px;
+
+    /* Smooth snap for each card */
+    scroll-snap-type: x mandatory;
+
+    /* Hide scrollbar for all browsers */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.pxm-products-grid::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+}
+
+.pxm-product-card-wrapper {
+    flex: 0 0 auto;
+    width: 300px;
+
+    /* Snap each card */
+    scroll-snap-align: start;
+}
+
+
+/* ============================================
+   Product Card
+   ============================================ */
+
+.pxm-product-card-wrapper {
+    flex: 0 0 auto;
+    width: 300px;
+}
+
+.pxm-modern-card {
+    position: relative;
+    background: white;
+    border-radius: var(--pxm-border-radius);
+    overflow: hidden;
+    box-shadow: var(--pxm-shadow-sm);
+    transition: var(--pxm-transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--pxm-gray-100);
+}
+
+.pxm-modern-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--pxm-shadow-hover);
+    border-color: var(--pxm-secondary);
+}
+
+/* Card Badge */
+.pxm-card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+}
+
+.pxm-card-badge .badge {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.bg-gradient-primary {
+    background: var(--pxm-gradient-primary);
+}
+
+/* Image Container */
+.pxm-card-image-link {
+    display: block;
+    text-decoration: none;
+}
+
+.pxm-card-image-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+}
+
+.pxm-card-image {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    object-fit: contain;
+    transition: var(--pxm-transition);
+}
+
+.pxm-modern-card:hover .pxm-card-image {
+    transform: scale(1.08);
+}
+
+/* Overlay */
+.pxm-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(113, 75, 103, 0.85) 0%, transparent 60%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: var(--pxm-transition);
+}
+
+.pxm-modern-card:hover .pxm-card-overlay {
+    opacity: 1;
+}
+
+.pxm-view-details {
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Card Body */
+.pxm-card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-grow: 1;
+}
+
+.pxm-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.4;
+    color: var(--pxm-gray-800);
+    min-height: 50px;
+}
+
+.pxm-title-link {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--pxm-transition);
+}
+
+.pxm-title-link:hover {
+    color: var(--pxm-primary);
+}
+
+/* Price */
+.pxm-card-price {
+    margin-top: auto;
+}
+
+.pxm-price-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--pxm-primary);
+}
+
+.pxm-attr-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--pxm-gray-100);
+    border: 1px solid var(--pxm-gray-200);
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
+.pxm-attr-badge strong {
+    color: var(--pxm-primary);
+    font-weight: 700;
+}
+
+
+
+/* Card Actions */
+.pxm-card-actions {
+    margin-top: 8px;
+}
+
+.pxm-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--pxm-gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: var(--pxm-transition);
+    box-shadow: 0 4px 12px rgba(113, 75, 103, 0.3);
+}
+
+.pxm-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(113, 75, 103, 0.4);
+    color: white;
+    background: var(--pxm-gradient-secondary);
+}
+
+.pxm-btn-primary svg {
+    transition: var(--pxm-transition);
+}
+
+.pxm-btn-primary:hover svg {
+    transform: translateX(4px);
+}
+
+/* ============================================
+   Scroll Indicators
+   ============================================ */
+
+.pxm-scroll-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.pxm-indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pxm-gray-300);
+    transition: var(--pxm-transition);
+    cursor: pointer;
+}
+
+.pxm-indicator-dot:hover {
+    background: var(--pxm-secondary);
+}
+
+.pxm-indicator-dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--pxm-gradient-primary);
+}
+
+/* ============================================
+   Empty State
+   ============================================ */
+
+.pxm-empty-state {
+    padding: 80px 20px;
+}
+
+.pxm-empty-content {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--pxm-gray-500);
+}
+
+.pxm-empty-content svg {
+    margin-bottom: 24px;
+    color: var(--pxm-gray-300);
+}
+
+.pxm-empty-content h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--pxm-gray-700);
+    margin-bottom: 12px;
+}
+
+.pxm-empty-content p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .pxm-product-card-wrapper {
+        width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pxm-modern-container {
+        padding: 0 16px;
+    }
+
+    .pxm-section-block {
+        padding: 24px 16px;
+    }
+
+    .pxm-modern-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .pxm-header-content {
+        flex-wrap: wrap;
+    }
+
+    .pxm-section-title {
+        font-size: 22px;
+    }
+
+    .pxm-product-card-wrapper {
+        width: 260px;
+    }
+
+    .pxm-card-image-container {
+        height: 220px;
+    }
+
+    .pxm-nav-controls {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .pxm-associations-wrapper {
+        gap: 32px;
+    }
+
+    .pxm-section-block {
+        padding: 20px 12px;
+    }
+
+    .pxm-header-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .pxm-section-title {
+        font-size: 20px;
+    }
+
+    .pxm-product-card-wrapper {
+        width: 240px;
+    }
+
+    .pxm-card-body {
+        padding: 16px;
+    }
+
+    .pxm-card-title {
+        font-size: 16px;
+        min-height: auto;
+    }
+
+    .pxm-price-value {
+        font-size: 20px;
+    }
+}
+
+/* ============================================
+   Animation Keyframes
+   ============================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pxm-section-block {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.pxm-modern-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Stagger animation for cards */
+.pxm-product-card-wrapper:nth-child(1) .pxm-modern-card { animation-delay: 0.1s; }
+.pxm-product-card-wrapper:nth-child(2) .pxm-modern-card { animation-delay: 0.2s; }
+.pxm-product-card-wrapper:nth-child(3) .pxm-modern-card { animation-delay: 0.3s; }
+.pxm-product-card-wrapper:nth-child(4) .pxm-modern-card { animation-delay: 0.4s; }
+.pxm-product-card-wrapper:nth-child(5) .pxm-modern-card { animation-delay: 0.5s; }
+
+.pxm-products-grid::after {
+    content: '';
+    position: sticky;
+    right: 0;
+    width: 40px;
+    background: linear-gradient(to right, transparent, white);
+}
+
+/* ============================================
+   Odoo-specific Enhancements
+   ============================================ */
+
+/* Integrate with Odoo's button styles */
+.pxm-btn-primary.btn-odoo {
+    background: var(--pxm-primary);
+    border: none;
+}
+
+.pxm-btn-primary.btn-odoo:hover {
+    background: var(--pxm-primary-dark);
+}
+
+/* Odoo badge variants */
+.pxm-badge-success {
+    background: var(--pxm-success);
+}
+
+.pxm-badge-info {
+    background: var(--pxm-info);
+}
+
+.pxm-badge-warning {
+    background: var(--pxm-warning);
+    color: var(--pxm-gray-800);
+}
+
+.pxm-badge-danger {
+    background: var(--pxm-danger);
+}
+
+/* Odoo form integration */
+.o_website_sale .pxm-modern-card {
+    border-color: var(--pxm-gray-200);
+}
+
+.o_website_sale .pxm-modern-card:hover {
+    border-color: var(--pxm-primary);
+}
+
+
+
+/* Print styles for Odoo reports */
+@media print {
+    .pxm-nav-controls,
+    .pxm-scroll-indicators {
+        display: none;
+    }
+
+    .pxm-products-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .pxm-modern-card {
+        break-inside: avoid;
+    }
+}
+
+@media (max-width: 768px) {
+    .pxm-modern-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .pxm-nav-controls {
+        margin: 2%;
+        align-self: center;
+        gap: 8px;
+        display:none !important;
+    }
+
+    .pxm-nav-btn {
+        transform: translateY(0); /* Reset any downward shift */
+    }
+}
+
+
+
+/*----------------------------------------------------*/
+
+
+
+
+.pxm-nav-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.pxm-nav-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid #E5E7EB;
+    background: white;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.pxm-nav-btn:hover {
+    background: #F3F4F6;
+    color:black;
+    transform: translateY(-1px);
+}
+
+.pxm-nav-view {
+    background: #EEF2FF;
+    color: #3B5BDB;
+}
+.pxm-products-scroll-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+

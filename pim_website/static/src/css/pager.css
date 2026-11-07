@@ -1,0 +1,476 @@
+/* Enhanced Realistic Pager Styles for Odoo 18 */
+
+.enhanced-pager-container {
+    width: 100%;
+    margin: 2rem 0;
+    padding: 1rem 0;
+}
+
+.enhanced-pager-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Page Info */
+.pager-info {
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.pager-info-text strong {
+    color: #212529;
+    font-weight: 600;
+}
+
+/* Main Pager List */
+.enhanced-pager {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.pager-item {
+    display: inline-flex;
+}
+
+.pager-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #495057;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    gap: 0.25rem;
+}
+
+.pager-link:hover:not(.disabled):not(.active) {
+    background:  #714B67;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.pager-link:active:not(.disabled):not(.active) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.15);
+}
+
+/* Active Page */
+.pager-item.active .pager-link {
+    color: #ffffff;
+    background:  #714B67;
+    font-weight: 600;
+    cursor: default;
+}
+
+/* Disabled State */
+.pager-item.disabled .pager-link,
+.pager-link.disabled {
+    color: #adb5bd;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pager-link.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Ellipsis */
+.pager-ellipsis .pager-link {
+    cursor: default;
+    border: none;
+    background: transparent;
+}
+
+.pager-ellipsis .pager-link:hover {
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+/* First/Last Buttons */
+.pager-first .pager-link,
+.pager-last .pager-link {
+    min-width: 40px;
+    font-size: 1rem;
+}
+
+/* Previous/Next Buttons */
+.pager-prev .pager-link,
+.pager-next .pager-link {
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+}
+
+.pager-text {
+    display: none;
+}
+
+/* Page Jump Section */
+.pager-jump {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.pager-jump-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin: 0;
+    font-weight: 500;
+}
+
+.pager-jump-input {
+    width: 70px;
+    height: 40px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.pager-jump-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.pager-jump-btn {
+    height: 40px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #ffffff;
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pager-jump-btn:hover {
+    background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.pager-jump-btn:active {
+    transform: translateY(0);
+}
+
+/* Compact Version */
+.enhanced-pager-container.compact .enhanced-pager {
+    gap: 0.5rem;
+}
+
+.enhanced-pager-container.compact .pager-link {
+    min-width: 36px;
+    height: 36px;
+    padding: 0.375rem 0.625rem;
+}
+
+/* Responsive Design */
+@media (min-width: 576px) {
+    .pager-text {
+        display: inline;
+    }
+
+    .pager-prev .pager-link,
+    .pager-next .pager-link {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 575px) {
+    .enhanced-pager-wrapper {
+        gap: 0.75rem;
+    }
+
+    .enhanced-pager {
+        gap: 0.125rem;
+    }
+
+    .pager-link {
+        min-width: 36px;
+        height: 36px;
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8125rem;
+    }
+
+    .pager-info {
+        font-size: 0.8125rem;
+    }
+
+    .pager-jump {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .pager-jump-input {
+        width: 60px;
+        height: 36px;
+    }
+
+    .pager-jump-btn {
+        height: 36px;
+        padding: 0.375rem 0.75rem;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .pager-link {
+        color: #adb5bd;
+        background-color: #212529;
+        border-color: #495057;
+    }
+
+    .pager-link:hover:not(.disabled):not(.active) {
+        color: #ffffff;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .pager-item.active .pager-link {
+        color: #ffffff;
+        background:  #714B67;
+    }
+
+    .pager-item.disabled .pager-link,
+    .pager-link.disabled {
+        color: #6c757d;
+        background-color: #343a40;
+        border-color: #495057;
+    }
+
+    .pager-info-text,
+    .pager-info-text strong {
+        color: #adb5bd;
+    }
+
+    .pager-jump-label {
+        color: #adb5bd;
+    }
+
+    .pager-jump-input {
+        color: #ffffff;
+        background-color: #212529;
+        border-color: #495057;
+    }
+}
+
+/* Accessibility */
+.pager-link:focus-visible {
+    outline: 2px solid #0d6efd;
+    outline-offset: 2px;
+    z-index: 1;
+}
+
+/* Animation for page transitions */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.enhanced-pager-container {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Loading State */
+.pager-loading .pager-link {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.pager-loading .pager-link::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #0d6efd;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Enhanced Filter Panel Styles */
+
+.pxm-filter-panel {
+    background: aliceblue;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: sticky;
+    top: 20px;
+}
+
+.pxm-filter-panel:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Filter Header */
+.pxm-filter-panel h6 {
+    color: #2c3e50;
+    letter-spacing: 0.5px;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.pxm-badge-reset {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.pxm-badge-reset:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+}
+
+/* Filter Group */
+.pxm-filter-group {
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pxm-filter-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+/* HIERARCHY STYLE PANEL */
+.pxm-filter-panel {
+    border-left: 4px solid #0d6efd;
+}
+
+/* Section header */
+.pxm-filter-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+}
+
+/* Tree / hierarchy container */
+.pxm-hierarchy-group {
+    border-left: 2px solid #d8d8d8;
+    padding-left: 15px;
+    margin-bottom: 20px;
+}
+
+/* Label style */
+.pxm-hierarchy-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+/* Dropdown trigger box */
+.pxm-dropdown-trigger {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #dedede;
+    background: #fff;
+    cursor: pointer;
+}
+
+/* Dropdown menu as hierarchy children */
+.pxm-dropdown-menu {
+    margin-top: 5px;
+    margin-left: 7px;
+    border-left: 2px dashed #ccc;
+    padding-left: 10px;
+}
+
+/* Item style */
+.pxm-dropdown-item {
+    padding: 7px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.pxm-dropdown-item:hover {
+    background: #f4f4f4;
+}
+
+@media (max-width: 767.98px) {
+    .o_searchbar_form {
+        min-width: 0;       /* allow input to shrink */
+    }
+    .pxm-search-input {
+        font-size: 0.9rem;  /* optional: smaller font on mobile */
+    }
+    .pxm-view-toggle button {
+        padding: 0.35rem 0.5rem; /* smaller buttons on mobile */
+    }
+    .pxm-view-toggle {
+        gap: 0.25rem;        /* reduce spacing between buttons */
+    }
+}
+
+
+
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="html_editor.VideoOption" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('mb-1')]" position="replace">
+            <div class="mb-1">
+                <label class="d-flex align-items-start gap-2 cursor-pointer" t-on-change="props.onChangeOption">
+                    <div class="o_switch flex-shrink-0">
+                        <input type="checkbox" t-att-checked="props.value"/>
+                        <span/>
+                    </div>
+                    <span t-esc="props.label"/>
+                    <span t-if="props.description" class="text-muted" t-esc="props.description"/>
+                </label>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-inherit="html_editor.VideoIframe" t-inherit-mode="extension">
+        <xpath expr="//iframe" position="replace">
+            <t t-if="props.isUploaded">
+                <video controls="controls" class="o_video_dialog_iframe mw-100 mh-100 overflow-hidden shadow">
+                    <source t-att-src="props.src" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video>
+            </t>
+            <t t-else="">
+                <iframe t-att-src="props.src"
+                        class="o_video_dialog_iframe mw-100 mh-100 overflow-hidden shadow"
+                        width="1280" height="720"
+                        allowfullscreen="allowfullscreen"
+                        frameborder="0"/>
+            </t>
+        </xpath>
+    </t>
+
+    <t t-inherit="html_editor.VideoSelector" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_video_dialog_form')]/div[hasclass('mb-2')]" position="after">
+            <div class="mb-3">
+                <label class="form-label"><b>Or upload a video</b></label>
+                <input type="file" class="form-control" accept="video/mp4,video/webm,video/ogg" t-on-change="onFileUploaded"/>
+                <small class="text-muted">Supported formats: MP4, WebM, Ogg</small>
+                <t t-if="state.uploadError">
+                    <div class="text-danger" t-esc="state.uploadError"/>
+                </t>
+            </div>
+        </xpath>
+        <xpath expr="//VideoIframe" position="attributes">
+            <attribute name="isUploaded">state.platform === 'uploaded'</attribute>
+        </xpath>
+    </t>
+</templates>

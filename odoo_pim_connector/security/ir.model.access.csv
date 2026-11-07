@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_platform_credentials,access.platform.credentials,model_platform_credentials,base.group_user,1,1,1,1
+access_push_to_channel_wizard,access.push.to.channel.wizard,model_push_to_channel_wizard,base.group_user,1,1,1,1
+access_coming_soon_wizard,access.coming.soon.wizard,model_coming_soon_wizard,base.group_user,1,0,1,0
+access_pim_sync_log,access.pim.sync.log,model_pim_sync_log,base.group_user,1,1,1,1
+access_pim_field_mapping,access.pim.field.mapping,model_pim_field_mapping,base.group_user,1,1,1,1
+access_pim_platform_mapping,access.pim.platform.mapping,model_pim_platform_mapping,base.group_user,1,1,1,1
+access_pim_field_mapping_line,access.pim.field.mapping.line,model_pim_field_mapping_line,base.group_user,1,1,1,1
+access_n8n_workflow_config_user,n8n.workflow.config user,model_n8n_workflow_config,base.group_user,1,1,1,1

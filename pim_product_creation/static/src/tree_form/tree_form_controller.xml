@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="pim_product_creation.TreeFormView"
+       t-inherit="odoopim_split_widget.TreeFormView"
+       t-inherit-mode="extension">
+        <xpath expr="//button[@t-on-click.stop='toggleFilter']" position="after">
+            <t t-if="window.localStorage.getItem('ai_enrichment_done') === 'true'">
+                <button class="btn btn-primary ms-1"
+                        style="width:80px;"
+                        t-on-click.stop="openSyncLogs">
+                    Sync Logs
+                </button>
+            </t>
+
+            <button class="btn btn-primary ms-1"
+                    style="width:150px;"
+                    t-on-click.stop="toggleCreateProduct">
+                Create <t t-esc="this.env.config.actionName"/>
+            </button>
+        </xpath>
+    </t>
+</templates>

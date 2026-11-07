@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<menuitem id="menu_act_server_update_registry" action="act_server_update_registry" parent="base.next_id_9" sequence="99" />
+	
+	<menuitem id="menu_act_ir_model_fields_attribute" action="act_ir_model_fields_attribute" parent="base.next_id_9" sequence="11" />
+
+</odoo>

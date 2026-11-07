@@ -1,0 +1,1181 @@
+/* ===========================================
+   ENHANCED SPLIT VIEW - COMPLETE REDESIGN
+   =========================================== */
+.o_pim_attribute_split_view {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  /* Main container */
+  > .o_content {
+    display: flex;
+    align-items: stretch;
+    height: calc(100vh - 140px);
+    background: #f5f6f8;
+    padding: 10px;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ===========================================
+     LIST PANEL - SOFT PURPLE ALTERNATING ROWS
+     =========================================== */
+  .attribute-split-list {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: auto;
+    position: relative;
+    will-change: width;
+    transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: transparent transparent;
+  }
+
+  .attribute-split-list.no-transition {
+    transition: none;
+  }
+
+  /* Hover-only scrollbars - Vertical and Horizontal */
+  .attribute-split-list::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .attribute-split-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .attribute-split-list::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  .attribute-split-list:hover::-webkit-scrollbar-thumb {
+    background: rgba(118, 83, 120, 0.5);
+  }
+
+  .attribute-split-list:hover::-webkit-scrollbar-track {
+    background: rgba(118, 83, 120, 0.1);
+  }
+
+  /* Smooth scrolling */
+  .attribute-split-list {
+    scroll-behavior: smooth;
+  }
+
+  /* List table styling */
+  .attribute-split-list .o_list_table {
+    font-size: 0.9rem;
+  }
+
+  /* TABLE HEADER - COOL BOLD FONT */
+  .attribute-split-list .o_list_table thead {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #f8f9fa !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .attribute-split-list .o_list_table thead th {
+    padding: 16px 14px !important;
+    font-weight: 700 !important; /* Bolder */
+    font-size: 0.95rem !important; /* Slightly bigger */
+    color: #2c3e50 !important;
+    text-transform: none !important;
+    letter-spacing: 0.5px; /* Cool spacing */
+    border-bottom: 2px solid #e9ecef !important;
+    background: #f8f9fa !important;
+    font-family: inherit;
+  }
+
+  /* TABLE BODY - SOFT PURPLE ALTERNATING ROWS */
+  .attribute-split-list .o_list_table tbody tr {
+    height: 56px !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+    border-bottom: 1px solid #f1f3f5 !important;
+  }
+
+  /* ODD ROWS - SOFT PURPLE (VERY LIGHT) */
+  .attribute-split-list .o_list_table tbody tr:nth-child(odd) {
+    background-color: rgba(118, 83, 120, 0.04) !important;
+  }
+
+  /* EVEN ROWS - WHITE/LIGHTER */
+  .attribute-split-list .o_list_table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  /* HOVER EFFECT - SMOOTH */
+  .attribute-split-list .o_list_table tbody tr:hover:not(.o_data_row_active) {
+    background-color: rgba(118, 83, 120, 0.08) !important;
+    transform: translateX(3px) scale(1.002) !important;
+    box-shadow: inset 4px 0 0 #765378,
+    0 3px 12px rgba(118, 83, 120, 0.15) !important;
+    z-index: 10 !important;
+  }
+
+  /* SELECTED ROW - ELEGANT HIGHLIGHT */
+  .attribute-split-list .o_list_table tbody tr.o_data_row_active {
+    background: linear-gradient(90deg,
+            rgba(118, 83, 120, 0.12) 0%,
+            rgba(118, 83, 120, 0.06) 100%) !important;
+    border-left: 4px solid #765378 !important;
+    box-shadow: 0 6px 20px rgba(118, 83, 120, 0.15),
+    inset 0 0 0 1px rgba(118, 83, 120, 0.2) !important;
+    transform: translateX(2px) !important;
+    z-index: 20 !important;
+  }
+
+  .attribute-split-list .o_list_table tbody tr.o_data_row_active:hover {
+    background: linear-gradient(90deg,
+            rgba(118, 83, 120, 0.16) 0%,
+            rgba(118, 83, 120, 0.10) 100%) !important;
+  }
+
+  .attribute-split-list .o_list_table tbody tr td {
+    padding: 14px !important;
+    font-size: 0.9rem !important;
+    color: #2c3e50 !important;
+    vertical-align: middle !important;
+  }
+
+  /* Boolean toggle in list */
+  .attribute-split-list .form-switch .form-check-input:checked {
+    background-color: #765378 !important;
+    border-color: #765378 !important;
+  }
+
+  /* ===========================================
+     PENCIL ICON COLUMN
+     =========================================== */
+//   .o_list_record_edit_action_header {
+//     width: 48px !important;
+//     min-width: 48px !important;
+//     max-width: 48px !important;
+//     text-align: center !important;
+//     padding: 12px 4px !important;
+//   }
+
+  .o_list_record_edit_action {
+    width: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    text-align: center !important;
+    padding: 12px 4px !important;
+    cursor: pointer !important;
+  }
+
+  .o_list_record_edit_action .o_list_record_pencil_icon {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+  }
+
+  .o_list_record_edit_action .o_list_record_pencil_icon i.fa-pencil {
+    font-size: 14px !important;
+    color: #adb5bd !important;
+    transition: color 0.3s ease;
+  }
+
+  .o_list_record_edit_action .o_list_record_pencil_icon:hover {
+    background: rgba(118, 83, 120, 0.12) !important;
+    transform: scale(1.15) rotate(5deg);
+  }
+
+  .o_list_record_edit_action .o_list_record_pencil_icon:hover i.fa-pencil {
+    color: #765378 !important;
+  }
+
+  .o_list_record_edit_action .o_list_record_pencil_icon:active {
+    transform: scale(0.9);
+  }
+
+  /* ===========================================
+     RESIZE HANDLE - IMPROVED
+     =========================================== */
+  .attribute-split-resize {
+    width: 20px;
+    cursor: col-resize;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    z-index: 99;
+    margin: 0 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .attribute-split-resize::before {
+    content: '⋮';
+    color: #adb5bd;
+    font-weight: bold;
+    font-size: 20px;
+    transition: color 0.3s ease;
+  }
+
+  .attribute-split-resize:hover {
+    opacity: 1;
+    background: rgba(118, 83, 120, 0.1);
+    border-radius: 10px;
+  }
+
+  .attribute-split-resize:hover::before {
+    color: #765378;
+  }
+
+  .o_pim_attribute_split_view:has(.attribute-split-form) .attribute-split-resize {
+    opacity: 0.6;
+  }
+
+  /* ===========================================
+     FORM PANEL - COMPLETELY REDESIGNED
+     =========================================== */
+  .attribute-split-form {
+    width: 41.67%;
+    height: 100%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    box-shadow: -6px 0 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    margin-left: -1px;
+    will-change: width, transform, opacity;
+    transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.4s ease;
+  }
+
+  .attribute-split-form.no-transition {
+    transition: none;
+  }
+
+  .attribute-split-form.slide-in-right {
+    animation: slideInRightSmooth 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .attribute-split-form.closing-animation {
+    animation: slideOutRightSmooth 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+  }
+
+  .attribute-split-form.record-switching .split-form-content {
+    animation: fadeSwitch 0.4s ease;
+  }
+
+  .attribute-split-form .split-header {
+    padding: 10px 20px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    flex-shrink: 0;
+  }
+
+  .attribute-split-form .split-header h5 {
+    margin: 0;
+    font-size: 1.45rem; /* Slightly bigger */
+    font-weight: 700; /* Bolder */
+    color: #2c3e50;
+    letter-spacing: -0.3px;
+    font-family: inherit;
+  }
+
+  .attribute-split-form .split-header h5 i {
+    color: #765378;
+  }
+
+  .attribute-split-form .split-header button {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+  }
+
+  .attribute-split-form .split-header button:hover {
+    background: #765378;
+    border-color: #765378;
+    color: white;
+    transform: scale(1.1) rotate(90deg);
+  }
+
+  .attribute-split-form .split-header p {
+    margin: 10px 0 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+
+  .attribute-split-form .split-form-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 32px 36px 48px;
+    background: white;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: transparent transparent;
+  }
+
+  .attribute-split-form .split-form-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .attribute-split-form .split-form-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .attribute-split-form .split-form-content::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  .attribute-split-form .split-form-content:hover::-webkit-scrollbar-thumb {
+    background: rgba(118, 83, 120, 0.5);
+  }
+
+  .attribute-split-form .split-form-content:hover::-webkit-scrollbar-track {
+    background: rgba(118, 83, 120, 0.1);
+  }
+
+  /* Smooth scrolling */
+  .attribute-split-form .split-form-content {
+    scroll-behavior: smooth;
+  }
+
+  .attribute-split-form .split-form-content .pim_bg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+  }
+
+  .attribute-split-form .split-form-content .pim_container {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .attribute-split-form .split-form-content .pim_title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+    font-family: inherit;
+  }
+
+  .attribute-split-form .split-form-content .pim_subtitle {
+    font-size: 1.05rem;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 36px;
+    font-weight: 400;
+  }
+
+  .attribute-split-form .split-form-content .pim_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 18px;
+  }
+
+  .attribute-split-form .split-form-content .pim_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border: 2px solid #e9ecef;
+    border-radius: 14px;
+    background: white;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+  }
+
+  .attribute-split-form .split-form-content .pim_card:hover {
+    border-color: #765378;
+    box-shadow: 0 10px 30px rgba(118, 83, 120, 0.18);
+    transform: translateY(-6px) scale(1.02);
+    background: linear-gradient(135deg, rgba(118, 83, 120, 0.02) 0%, white 100%);
+  }
+
+  .attribute-split-form .split-form-content .pim_card img {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 12px;
+    filter: grayscale(100%) opacity(0.6);
+    transition: filter 0.3s ease;
+  }
+
+  .attribute-split-form .split-form-content .pim_card span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #495057;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .attribute-split-form .split-form-content .pim_card:hover img {
+    filter: none;
+  }
+
+  .attribute-split-form .split-form-content .pim_card:hover span {
+    color: #765378;
+    font-weight: 600;
+  }
+
+  /* ===========================================
+     FORM VIEW - ENHANCED TYPOGRAPHY & RESPONSIVE
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view {
+    font-size: 15px !important; /* Increased font size */
+    line-height: 1.6 !important; /* Calmer line height */
+    font-family: inherit;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_form_sheet_bg {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_form_sheet {
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+    max-width: 100% !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_form_renderer {
+    padding: 0 !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_group {
+    margin-bottom: 32px;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #000000 !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_group .o_horizontal_separator {
+    color: #765378 !important; /* Theme purple */
+  }
+
+  /* ===========================================
+     GROUP HEADER STYLING - THEME COLOR, UNDERLINE
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view .o_group > tbody > tr:first-child td.o_td_label {
+    font-size: 1.3rem !important; /* Slightly smaller for calm */
+    font-weight: 700 !important;
+    color: #765378 !important; /* Theme purple */
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding-bottom: 14px !important;
+    border-bottom: 2px solid #765378 !important; /* Theme underline */
+    margin-bottom: 28px !important;
+    background: linear-gradient(to right, #765378 0%, transparent 100%) !important;
+    background-size: 100% 1px !important;
+    background-repeat: no-repeat !important;
+    background-position: bottom !important;
+    padding-left: 0 !important;
+    position: relative;
+    display: block !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  /* Decorative element */
+  .attribute-split-form .split-form-content .o_form_view .o_group > tbody > tr:first-child td.o_td_label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 60px;
+    height: 3px;
+    background: #765378;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(118, 83, 120, 0.3);
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_group > tbody > tr:first-child {
+    background: linear-gradient(to right, rgba(118, 83, 120, 0.06) 0%, rgba(118, 83, 120, 0.02) 100%) !important;
+    border-radius: 8px !important;
+    margin-bottom: 25px !important;
+    padding: 8px 0 !important;
+    border: unset !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_group > tbody > tr:first-child td {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Form field labels - Bold and calm */
+  .attribute-split-form .split-form-content .o_form_view .o_form_label {
+    font-weight: 600 !important; /* Slightly bold */
+    font-size: 0.95rem !important;
+    color: #2c3e50 !important;
+    letter-spacing: 0.1px !important;
+    font-family: inherit;
+  }
+
+  /* ===========================================
+     FIX FOR ONE2MANY/MANY2MANY TABLES - CORRECT SELECTORS
+     =========================================== */
+
+  /* Target One2many and Many2many fields - using actual Odoo classes */
+  .attribute-split-form .split-form-content .o_field_one2many,
+  .attribute-split-form .split-form-content .o_field_many2many,
+  .attribute-split-form .split-form-content .o_field_x2many {
+    background: #ffffff !important;
+    border-radius: 15px !important;
+    padding: 20px !important;
+    box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+    display: block !important;
+    border: unset !important;
+  }
+
+  /* Target the list view wrapper inside x2many fields */
+  .attribute-split-form .split-form-content .o_field_one2many .o_list_view,
+  .attribute-split-form .split-form-content .o_field_many2many .o_list_view,
+  .attribute-split-form .split-form-content .o_field_x2many .o_list_view {
+    width: 100% !important;
+    background: white !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    border: unset !important;
+  }
+
+  /* Table styling - target actual Odoo table classes */
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table {
+    width: 100% !important;
+    background: white !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  /* Table header styling */
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table thead,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table thead,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table thead {
+    background: #f8f9fa !important;
+    border-bottom: 2px solid #e9ecef !important;
+  }
+
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table thead th,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table thead th,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table thead th {
+    padding: 12px 14px !important;
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    background: #f8f9fa !important;
+    border-bottom: 2px solid #e9ecef !important;
+    font-size: 13px !important;
+  }
+
+  /* Table body row styling */
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table tbody tr,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table tbody tr,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table tbody tr {
+    transition: all 0.2s ease !important;
+    border-bottom: 1px solid #f1f3f5 !important;
+  }
+
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table tbody tr:hover,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table tbody tr:hover,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table tbody tr:hover {
+    background-color: rgba(118, 83, 120, 0.04) !important;
+  }
+
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table tbody tr td,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table tbody tr td,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table tbody tr td {
+    padding: 12px 14px !important;
+    border-bottom: 1px solid #f1f3f5 !important;
+    vertical-align: middle !important;
+  }
+
+  /* Remove border from last row */
+  .attribute-split-form .split-form-content .o_field_x2many table.o_list_table tbody tr:last-child td,
+  .attribute-split-form .split-form-content .o_field_one2many table.o_list_table tbody tr:last-child td,
+  .attribute-split-form .split-form-content .o_field_many2many table.o_list_table tbody tr:last-child td {
+    border-bottom: none !important;
+  }
+
+
+  /* Many2one fields in x2many lists */
+  .attribute-split-form .split-form-content table.o_list_table .o_field_many2one input {
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    transition: border-color 0.2s ease !important;
+  }
+
+  .attribute-split-form .split-form-content table.o_list_table .o_field_many2one input:focus {
+    border-color: #765378 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(118, 83, 120, 0.1) !important;
+  }
+
+  /* Char fields in x2many lists */
+  .attribute-split-form .split-form-content table.o_list_table .o_field_char input {
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    width: 100% !important;
+    transition: border-color 0.2s ease !important;
+  }
+
+  .attribute-split-form .split-form-content table.o_list_table .o_field_char input:focus {
+    border-color: #765378 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(118, 83, 120, 0.1) !important;
+  }
+
+  /* Action buttons in rows (delete, etc.) */
+  .attribute-split-form .split-form-content table.o_list_table .o_list_record_remove button {
+    color: #dc3545 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .attribute-split-form .split-form-content table.o_list_table .o_list_record_remove button:hover {
+    color: #c82333 !important;
+    transform: scale(1.1) !important;
+  }
+
+  /* Alternative: Target by field name if needed */
+  .attribute-split-form .split-form-content .o_field_widget[name="value_ids"],
+  .attribute-split-form .split-form-content .o_field_widget[name="attribute_value_ids"],
+  .attribute-split-form .split-form-content .o_field_widget[name="product_attribute_value_ids"] {
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+    border: unset !important;
+    margin-top: 10px !important;
+  }
+
+  /* ===========================================
+     ALIGNMENT FIXES - FIXED GAP
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 16px !important; /* Increased row spacing */
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group > tbody {
+    display: table-row-group !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group > tbody > tr {
+    display: table-row !important;
+    width: 100% !important;
+  }
+
+  /* LABEL - FIXED WIDTH & GAP */
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group > tbody > tr > td.o_td_label {
+    display: table-cell !important;
+    width: 220px !important; /* Fixed width for better alignment */
+    min-width: 220px !important;
+    max-width: 220px !important;
+    padding-right: 10px !important; /* Fixed gap */
+    padding-bottom: 0 !important;
+    padding-top: 8px !important;
+    vertical-align: top !important;
+    text-align: left !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group > tbody > tr > td.o_td_label label.o_form_label {
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0 !important;
+    display: block !important;
+    line-height: 1.5 !important;
+    word-wrap: break-word !important;
+    padding-top: 4px !important;
+  }
+
+  /* INPUT - FILLS REMAINING SPACE */
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group > tbody > tr > td:not(.o_td_label) {
+    display: table-cell !important;
+    width: auto !important;
+    padding-bottom: 0 !important;
+    padding-top: 8px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    vertical-align: top !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_inner_group > tbody > tr > td:not(.o_td_label) .o_field_widget {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 40px !important; /* Consistent height */
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_group_col_6 {
+    display: table-cell !important;
+    width: 50% !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_wrap_field {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 10px !important; /* Fixed gap */
+    margin-bottom: 18px !important;
+    width: 100% !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_wrap_field > label {
+    flex: 0 0 220px !important; /* Match label width */
+    max-width: 220px !important;
+    min-width: 220px !important;
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0 !important;
+    padding-top: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_wrap_field > .o_field_widget,
+  .attribute-split-form .split-form-content .o_form_view .o_wrap_field > div {
+    flex: 1 !important;
+    min-width: 0 !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Fix for nested groups (row structure) */
+  .attribute-split-form .split-form-content .o_form_view .o_group .o_group {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* ===========================================
+     INPUT FIELDS - THEME HIGHLIGHT, NO BLACK UNDERLINE
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view input.o_field_widget,
+  .attribute-split-form .split-form-content .o_form_view select.o_field_widget,
+  .attribute-split-form .split-form-content .o_form_view textarea.o_field_widget {
+    border: 1.5px solid #ced4da !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    background: white !important;
+    min-height: 40px !important;
+    box-sizing: border-box !important;
+    font-weight: 400 !important;
+    font-family: inherit;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view input.o_field_widget:focus,
+  .attribute-split-form .split-form-content .o_form_view select.o_field_widget:focus,
+  .attribute-split-form .split-form-content .o_form_view textarea.o_field_widget:focus {
+    border-color: #765378 !important; /* Theme color, no black */
+    box-shadow: 0 0 0 3px rgba(118, 83, 120, 0.10) !important; /* Subtle theme glow */
+    outline: none !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view input.o_field_widget:hover:not(:focus),
+  .attribute-split-form .split-form-content .o_form_view select.o_field_widget:hover:not(:focus),
+  .attribute-split-form .split-form-content .o_form_view textarea.o_field_widget:hover:not(:focus) {
+    border-color: #adb5bd !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view textarea.o_field_widget {
+    min-height: 80px !important;
+    resize: vertical;
+    font-size: 15px !important;
+  }
+
+  /* ===========================================
+     CHECKBOX STYLING - ALIGNED WITH FIXED GAP
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view .o_field_boolean {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    min-height: 40px !important;
+    padding-top: 8px !important;
+    width: 100% !important;
+    gap: 12px !important; /* Fixed gap for checkbox */
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_boolean .form-check-input {
+    border: 2px solid #ced4da !important;
+    border-radius: 6px !important;
+    width: 20px !important;
+    height: 20px !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    position: static !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_boolean .form-check-input:checked {
+    background-color: #765378 !important;
+    border-color: #765378 !important;
+    box-shadow: 0 0 0 3px rgba(118, 83, 120, 0.15) !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_boolean .form-check-input:focus {
+    box-shadow: 0 0 0 3px rgba(118, 83, 120, 0.15) !important;
+    outline: none !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_boolean .form-check-input:hover:not(:checked) {
+    border-color: #765378 !important;
+    background-color: rgba(118, 83, 120, 0.05) !important;
+  }
+
+  /* ===========================================
+     MANY2ONE & SELECTION FIELDS
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one,
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection {
+    width: 100% !important;
+    display: block !important;
+    min-height: 40px !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one .o_input,
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection .o_input_dropdown {
+    border: 1.5px solid #ced4da !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    background: white !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    font-weight: 400 !important;
+    font-family: inherit;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one .o_input input,
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection .o_input_dropdown input {
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    min-height: unset !important;
+    flex: 1 !important;
+    font-size: 15px !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one .o_input input:focus,
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection .o_input_dropdown input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one .o_input:focus,
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection .o_input_dropdown:focus,
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one .o_input:focus-within,
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection .o_input_dropdown:focus-within {
+    border-color: #765378 !important;
+    box-shadow: 0 0 0 3px rgba(118, 83, 120, 0.10) !important;
+    outline: none !important;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_field_many2one .o_input:hover:not(:focus-within),
+  .attribute-split-form .split-form-content .o_form_view .o_field_selection .o_input_dropdown:hover:not(:focus-within) {
+    border-color: #adb5bd !important;
+  }
+
+  /* ===========================================
+     NOTEBOOK/TABS STYLING - BETTER FONT
+     =========================================== */
+  .attribute-split-form .split-form-content .o_form_view .o_notebook {
+    margin-top: 32px;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .o_notebook_headers {
+
+    border-bottom: 1px solid #765378;
+  }
+
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .nav-tabs {
+    border: none !important;
+    gap: 6px;
+    background: #ffffff;
+    padding: 8px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .nav-tabs .nav-link {
+    border: none !important;
+    border-radius: 10px;
+    padding: 12px 22px;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    color: #6c757d;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background: transparent;
+    font-family: inherit;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .nav-tabs .nav-link:hover:not(.active) {
+    background: white;
+    color: #765378;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .nav-tabs .nav-link.active {
+    background: #765378 !important;
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    box-shadow: 0 4px 12px rgba(118, 83, 120, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .tab-content {
+    padding: 10px 0;
+  }
+
+  .attribute-split-form .split-form-content .o_form_view .o_notebook .tab-content .tab-pane {
+    background: #FFFFFF;
+    padding: 10px;
+    border-radius: 12px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  /* ===========================================
+     CONTROL PANEL BUTTONS - ICON ONLY FOR SAVE/DISCARD
+     =========================================== */
+  .o_cp_action_menus {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .o_cp_action_menus .o_list_button_create {
+    background: #765378;
+    color: white;
+    border: none;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 8px rgba(118, 83, 120, 0.25);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .o_cp_action_menus .o_list_button_create:hover {
+    background: #5a3f5c;
+    box-shadow: 0 6px 16px rgba(118, 83, 120, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .o_cp_action_menus .o_list_button_create:active {
+    transform: translateY(0);
+  }
+
+  .o_cp_action_menus .o_list_button_create i {
+    font-size: 14px;
+  }
+
+  .o_cp_action_menus .o_list_button_save,
+  .o_cp_action_menus .o_list_button_discard {
+    background: transparent !important;
+    color: #6c757d !important;
+    border: 1px solid #e9ecef !important;
+    font-weight: 500;
+    padding: 8px !important; /* Smaller for icon-only */
+    border-radius: 8px !important;
+    font-size: 0.8rem !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .o_cp_action_menus .o_list_button_save:hover,
+  .o_cp_action_menus .o_list_button_discard:hover {
+    background: #765378 !important;
+    color: white !important;
+    border-color: #765378 !important;
+    transform: scale(1.1);
+  }
+
+  .o_cp_action_menus .o_list_button_save i,
+  .o_cp_action_menus .o_list_button_discard i {
+    font-size: 14px !important;
+    margin: 0 !important;
+  }
+
+  .o_cp_action_menus .o_list_button_save span,
+  .o_cp_action_menus .o_list_button_discard span {
+    display: none !important; /* Icon only */
+  }
+}
+
+/* ===========================================
+   ANIMATIONS - IMPROVED, NO BLINK
+   =========================================== */
+@keyframes slideInRightSmooth {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRightSmooth {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeSwitch {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dragging state */
+body.dragging-resize {
+  cursor: col-resize !important;
+  user-select: none;
+}
+
+body.dragging-resize * {
+  cursor: col-resize !important;
+  user-select: none;
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN
+   =========================================== */
+@media (max-width: 768px) {
+  .o_pim_attribute_split_view > .o_content {
+    padding: 12px !important;
+    flex-direction: column !important;
+    height: auto !important;
+  }
+  .o_pim_attribute_split_view .attribute-split-list,
+  .o_pim_attribute_split_view .attribute-split-form {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 400px !important;
+    border-radius: 12px !important;
+  }
+  .o_pim_attribute_split_view .attribute-split-resize {
+    display: none !important;
+  }
+  .attribute-split-form .split-form-content {
+    padding: 20px !important;
+  }
+  .attribute-split-form .split-form-content .o_inner_group > tbody > tr > td.o_td_label {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-right: 0 !important;
+    padding-bottom: 8px !important;
+  }
+  .attribute-split-form .split-form-content .o_wrap_field {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .attribute-split-form .split-form-content .o_wrap_field > label {
+    flex: none !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+/* ===========================================
+   GLOBAL IMPROVEMENTS
+   =========================================== */
+.attribute-split-list .form-switch .form-check-input:checked {
+  background-color: #765378;
+  border-color: #765378;
+}
+
+/* Card shape maintenance */
+.o_pim_attribute_split_view .attribute-split-list,
+.o_pim_attribute_split_view .attribute-split-form {
+  box-sizing: border-box;
+  border-radius: 16px !important;
+}
+
+/* Smooth transitions for all interactive elements */
+.o_pim_attribute_split_view * {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.attribute-split-form .split-form-content .o_form_view :not(.o_field_highlight) .o_field_widget:not(.o_field_invalid):not(.o_field_highlight) .o_input:not(:hover):not(:focus) {
+  --o-input-border-color: #0000002b !important;
+}

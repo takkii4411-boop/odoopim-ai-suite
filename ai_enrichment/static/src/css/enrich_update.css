@@ -1,0 +1,39 @@
+/* Target the specific radio inside the update_field widget */
+div[name="update_field"] input[type="radio"].o_radio_input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    vertical-align: middle;
+}
+
+/* Green checkmark icon using :checked::after */
+div[name="update_field"] input[type="radio"].o_radio_input:checked::after {
+    content: '✔'; /* Unicode checkmark */
+    position: absolute;
+    color: green;
+    font-size: 14px;
+    top: -1px;
+    left: 2px;
+    font-weight: bold;
+}
+
+.o_dashboard_container {
+    overflow-y: auto !important;
+    max-height: calc(100vh - 50px);
+    padding: 20px;
+}
+
+/* For smaller screens */
+@media (max-height: 768px) {
+    .o_dashboard_container {
+        max-height: calc(100vh - 70px);
+    }
+}

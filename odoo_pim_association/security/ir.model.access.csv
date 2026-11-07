@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_association_type_user,product.association.type.user,model_product_association_type,base.group_user,1,0,0,0
+access_product_association_type_manager,product.association.type.manager,model_product_association_type,sales_team.group_sale_manager,1,1,1,1
+access_product_association_type_system,product.association.type.system,model_product_association_type,base.group_system,1,1,1,1
+access_product_association_user,product.association.user,model_product_association,base.group_user,1,1,1,1
+access_product_association_manager,product.association.manager,model_product_association,sales_team.group_sale_manager,1,1,1,1
+access_product_association_system,product.association.system,model_product_association,base.group_system,1,1,1,1

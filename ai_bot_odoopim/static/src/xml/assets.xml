@@ -1,0 +1,18 @@
+<!-- static/src/xml/assets.xml -->
+<odoo>
+    <template id="assets_backend" name="your_module_assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it-multimd-table/3.0.0/markdown-it-multimd-table.min.js"></script>
+            <!-- <script src="/your_module/static/src/js/markdown_handler.js"></script> -->
+        </xpath>
+    </template>
+
+    <template id="assets_frontend" name="your_module_assets" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it-multimd-table/3.0.0/markdown-it-multimd-table.min.js"></script>
+            <!-- <script src="/your_module/static/src/js/markdown_handler.js"></script> -->
+        </xpath>
+    </template>
+</odoo>

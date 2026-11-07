@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="n8n_pim_connector.PimDashboardView" owl="1">
+        <div class="o_pim_dashboard_v2 vh-100 p-4" style="background-color: #f0f2f5; font-family: 'Inter', sans-serif;">
+            <!-- Custom CSS for the dashboard style -->
+            <style>
+                .kpi-card { border-radius: 12px; color: white; padding: 25px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+                .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+                .kpi-title { font-size: 1rem; font-weight: 500; opacity: 0.9; }
+                .kpi-value { font-size: 3rem; font-weight: 700; margin-top: 8px; }
+                /* Gradient Colors from the sample image */
+                .card-color-1 { background: linear-gradient(135deg, #6a76e9 0%, #834d9b 100%); }
+                .card-color-2 { background: linear-gradient(135deg, #21c4ff 0%, #00a4ff 100%); }
+                .card-color-3 { background: linear-gradient(135deg, #ff7e5f 0%, #ff5f6d 100%); }
+                .card-color-4 { background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); }
+                .card-color-5 { background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%); }
+                .card-color-6 { background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); }
+                .chart-container { background-color: #ffffff; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); height: 450px; }
+                .chart-title { font-size: 1.1rem; font-weight: 600; color: #495057; margin-bottom: 20px; text-align: center; text-transform: uppercase; }
+            </style>
+
+            <!-- Loading Spinner -->
+            <t t-if="state.isLoading">
+                <div class="d-flex justify-content-center align-items-center vh-100">
+                    <div class="fa fa-spinner fa-spin fa-3x text-primary"/>
+                </div>
+            </t>
+            
+            <t t-if="!state.isLoading">
+                <!-- KPI Cards Row -->
+                <div class="row">
+                    <t t-foreach="state.kpiData" t-as="kpi" t-key="kpi.title">
+                        <div class="col-lg-4 col-md-6">
+                            <div t-att-class="'kpi-card ' + kpi.colorClass">
+                                <div class="kpi-title"><t t-esc="kpi.title"/></div>
+                                <div class="kpi-value"><t t-esc="kpi.value"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mt-3 g-4">
+                    <div class="col-lg-6">
+                        <div class="chart-container d-flex flex-column">
+                            <div class="chart-title">Sync Success &amp; Failure Trends</div>
+                            <div class="flex-grow-1 position-relative">
+                                <canvas t-ref="syncTrendChart" id="syncTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="chart-container d-flex flex-column">
+                            <div class="chart-title">Date-wise Product Sync Count</div>
+                            <div class="flex-grow-1 position-relative">
+                                 <canvas t-ref="productUpdateChart" id="productUpdateChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="pim_ext.BooleanRadioFieldTemplate" owl="1">
+        <div t-if="!this.isVertical" class="d-flex align-items-center gap-2">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input form-check-input-lg" type="radio"
+                       t-att-disabled="this.props.readonly"
+                       t-att-name="props.name" t-att-id="props.name +'_true'"
+                       t-on-click="() => this.onChange(true)"
+                       t-att-checked="this.state.value"/>
+                <label class="form-check-label" t-att-for="props.name+'_true'" t-esc="props.true_label"/>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio"
+                       t-att-disabled="this.props.readonly"
+                       t-att-checked="!this.state.value"
+                       t-on-click="() => this.onChange(false)"
+                       t-att-name="props.name" t-att-id="props.name+'_false'"/>
+                <label class="form-check-label" t-att-for="props.name+'_false'" t-esc="props.false_label"/>
+            </div>
+        </div>
+        <div t-if="this.isVertical" class="d-flex flex-column gap-2">
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       t-att-name="props.name"
+                       t-on-click="() => this.onChange(true)"
+                       t-att-disabled="this.props.readonly"
+                       t-att-id="props.name+'_true'" t-att-checked="this.state.value"/>
+                <label class="form-check-label" t-att-for="props.name+'_true'" t-esc="props.true_label"/>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       t-att-name="props.name"
+                       t-on-click="() => this.onChange(false)"
+                       t-att-disabled="this.props.readonly"
+                       t-att-id="props.name+'_false'" t-att-checked="!this.state.value"/>
+                <label class="form-check-label" t-att-for="props.name+'_false'" t-esc="props.false_label"/>
+            </div>
+        </div>
+        <small>
+            <em t-att-class="props.true_text_class" t-esc="props.true_text" t-if="this.state.value"/>
+            <em t-att-class="props.false_text_class" t-esc="props.false_text" t-else=""/>
+        </small>
+    </t>
+</templates>

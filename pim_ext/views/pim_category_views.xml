@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pim_category_split_custom_create" model="ir.ui.view">
+        <field name="name">pim.category.split.custom.layout</field>
+        <field name="model">pim.category</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form string="Category" create="false" class="page_form">
+                <div class="d-flex align-items-start h-100 col-12">
+
+                   <div class="left-column col-6" style="border-right: 1px solid #dee2e6; height: 100%; overflow: hidden;">
+                        <field name="complete_name" widget="category_tree_nav" nolabel="1" class="h-100 w-100"/>
+                    </div>
+
+                    <div class="right-column flex-grow-1 h-100 col-6 attribute-main" style="overflow-y: auto; background: white;">
+                        <div class="attribute_type p-3">
+                            <header>
+                                <button string="Back" type="object" icon="fa-arrow-left"
+                                        name="action_back_to_category_menu" class="btn btn-link text-decoration-none text-muted p-0"/>
+                            </header>
+
+                            <div class="pim_oe_title mt-2">
+                                <h2 class="pim_create_attribute">
+                                    <span class="attr_title">
+                                        <field name="name" readonly="1" invisible="not id" class="text-dark"/>
+                                        <span invisible="id">Create Category</span>
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="p-4">
+                            <div class="o_col_6 col-12 attr_form">
+                                <div class="attr_properties">
+                                    <sheet class="attr_sheet bg-transparent shadow-none p-0">
+
+                                        <div class="oe_title mb-4">
+                                            <h1>
+                                                <field name="name" placeholder="Category Name" required="1" class="text-dark bg-transparent border-0 w-100"/>
+                                            </h1>
+                                        </div>
+
+                                        <notebook class="type_properties">
+                                            <page name="properties" string="Properties">
+                                                <div class="attr_form_values py-3">
+
+                                                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">General Parameters</h6>
+
+                                                    <div class="mb-3">
+                                                        <label for="code" string="Code" class="text-muted small fw-bold mb-1"/>
+                                                        <div class="p-2 bg-light rounded border">
+                                                            <field name="code" class="w-100 bg-transparent border-0" placeholder="e.g. rttaccessories"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="parent_id" string="Parent Category" class="text-muted small fw-bold mb-1"/>
+                                                        <field name="parent_id" options="{'no_create': True}" class="form-control" domain="[('company_id', '=', company_id)]"/>
+                                                    </div>
+
+                                                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">Node values</h6>
+
+                                                    <div class="mb-3">
+                                                        <label for="display_name" string="English (United States)" class="text-muted small mb-1"/>
+                                                        <field name="display_name" class="form-control bg-white"/>
+                                                    </div>
+
+                                                    <field name="active" invisible="1"/>
+                                                    <field name="company_id" invisible="1"/>
+                                                </div>
+                                            </page>
+
+                                            <page string="History" name="history">
+                                                <group>
+                                                    <field name="history_log" nolabel="1" readonly="1"/>
+                                                </group>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="view_categories_master_unlink_wizard_form" model="ir.ui.view">
+        <field name="name">category.master.unlink.wizard.form</field>
+        <field name="model">category.master.unlink.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Deletion">
+                <group>
+                    <div style="justify-content: center; align-items: center; white-space: nowrap; margin: 10px 0;">
+                        <p style="margin: 0; font-size: 14px;">
+                            Are you sure you want to delete this category?
+                        </p>
+                    </div>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button string="Delete" class="btn-primary" type="object" name="confirm_unlink"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+<!--    <record id="action_pim_categories" model="ir.actions.act_window">-->
+<!--        <field name="name">Category</field>-->
+<!--        <field name="res_model">pim.category</field>-->
+<!--        <field name="view_mode">list,form</field>-->
+<!--        <field name="domain">[('company_id', 'in', allowed_company_ids)]</field>-->
+<!--&lt;!&ndash;            <field name="view_id" ref="pim_ext.view_form_pim_categories"/>&ndash;&gt;-->
+<!--        <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'list', 'view_id': ref('view_tree_pim_categories')}),-->
+<!--            (0, 0, {'view_mode': 'form', 'view_id': ref('view_form_pim_categories')}),-->
+<!--            (0, 0, {'view_mode': 'hierarchy', 'view_id': ref('view_hierarchy_pim_categories')}),-->
+<!--            ]"/>-->
+<!--    </record>-->
+
+    <record id="view_pim_category_split_custom" model="ir.ui.view">
+        <field name="name">pim.category.split.custom.layout</field>
+        <field name="model">pim.category</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form string="Category Master" create="false" edit="true" delete="false" class="page_form">
+                <div class="d-flex align-items-start attribute-main col-12">
+
+                    <div class="left-column col-6" style="border-right: 1px solid #dee2e6; height: 100%; overflow: hidden;">
+                        <field name="complete_name" widget="category_tree_nav" nolabel="1" class="h-100 w-100"/>
+                    </div>
+
+                    <div class="right-column col-6 h-100" style="overflow-y: auto;">
+                        <div class="attribute_type p-3">
+                            <header>
+                                 <button string="Back" type="object" icon="fa-arrow-left"
+                                        name="action_back_to_category_menu"/>
+                            </header>
+                           <div class="pim_oe_title">
+                                <h2 class="pim_create_attribute">
+                                    <span class="attr_title">Edit Category</span>
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="p-4">
+                            <div class="o_col_6 col-12 attr_form">
+                                <div class="attr_properties">
+                                    <sheet class="attr_sheet bg-transparent shadow-none p-0">
+                                        <div class="oe_title mb-4">
+                                            <h1 class="name">
+                                                <field name="name" placeholder="Category Name" class="oe_inline text-dark bg-transparent border-0"/>
+                                            </h1>
+                                        </div>
+
+                                        <notebook class="type_properties">
+                                            <page name="properties" string="Properties">
+                                                <div class="attr_form_values py-3">
+                                                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">General Properties</h6>
+
+                                                    <div class="mb-3">
+                                                        <label for="code" string="Code (required)" class="text-muted small fw-bold mb-1"/>
+                                                        <div class="p-2 bg-light rounded border">
+                                                            <field name="code" class="w-100 bg-transparent border-0" placeholder="e.g. rttaccessories"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-4">
+                                                        <label for="parent_id" string="Parent Category" class="text-muted small fw-bold mb-1"/>
+                                                        <field name="parent_id" options="{'no_create': True}" class="form-control" domain="[('company_id', '=', company_id)]"/>
+                                                    </div>
+
+                                                    <h6 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">Node values</h6>
+
+                                                    <div class="mb-3">
+                                                        <label for="display_name" string="English (United States)" class="text-muted small mb-1"/>
+                                                        <div class="p-1">
+                                                            <field name="display_name" class="form-control bg-white"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <field name="active" invisible="1"/>
+                                                    <field name="company_id" invisible="1"/>
+                                                </div>
+                                            </page>
+                                            <page name="History">
+                                                <group>
+                                                    <field name="history_log" nolabel="1" readonly="1"/>
+                                                </group>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="pim_category_tree_split" model="ir.ui.view">
+    <field name="name">pim.category.list.split</field>
+    <field name="model">pim.category</field>
+    <field name="arch" type="xml">
+        <list string="Categories"
+              create="false"
+              edit="false"
+              delete="false"
+              js_class="category_list_view">
+            <field name="name"/>
+            <field name="code"/>
+            <field name="parent_id" column_invisible="1"/>
+        </list>
+    </field>
+</record>
+
+    <record id="action_pim_categories_split" model="ir.actions.act_window">
+        <field name="name">Manage Categories</field>
+        <field name="res_model">pim.category</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('parent_id', '=', False)]</field>
+        <field name="view_id" ref="pim_category_tree_split"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('pim_category_tree_split')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_pim_category_split_custom')}),
+                ]"/>
+    </record>
+
+    <record id="action_create_category" model="ir.actions.act_window">
+        <field name="name">Create Category</field>
+        <field name="res_model">pim.category</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_pim_category_split_custom_create"/>
+        <field name="target">current</field>
+        <field name="context">{
+            'form_view_initial_mode': 'edit',
+            'default_parent_id': False,
+        }</field>
+    </record>
+
+    <menuitem id="menu_pim_categories"
+              name="Manage Categories"
+              action="action_pim_categories_split"
+              parent="pim_ext.menu_root_product_management"
+              sequence="40"/>
+</odoo>

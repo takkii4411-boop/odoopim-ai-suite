@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="my_module.FieldProgress" owl="1">
+        <div class="o_field_progress_wrapper">
+            <div class="o_field_progress">
+                <div class="o_field_progress_bar" t-att-class="this.getBgClass"
+                     t-att-style="'width:' + progressWidth"/>
+            </div>
+            <span class="o_field_progress_text">
+                <t t-esc="displayValue"/>
+            </span>
+        </div>
+    </t>
+</templates>

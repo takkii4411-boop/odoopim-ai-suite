@@ -1,0 +1,28 @@
+<odoo>
+    <template id="product_catalogue_modal" name="Product Catalogue Modal">
+        <div class="modal fade" id="productCatalogueModal" tabindex="-1">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content rounded-3 shadow">
+
+                    <!-- Header -->
+                    <div class="modal-header border-bottom-0">
+                        <h5 class="modal-title fw-semibold">
+                            <i class="fa fa-book me-2 text-primary"></i>
+                            Product Catalogue
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"/>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div id="catalogueContent" class="text-center py-4">
+                            <i class="fa fa-spinner fa-spin fa-2x text-muted"></i>
+                            <p class="mt-2 text-muted">Loading catalogue...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

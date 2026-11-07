@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<templates xml:space="preserve">
+    <t t-name="pim_locales_channels.TextField" t-inherit="web.TextField" t-inherit-mode="extension">
+        <xpath expr="//TranslationButton" position="after">
+            <ChannelTranslationButton
+                    fieldName="props.name"
+                    record="props.record"
+            />
+        </xpath>
+    </t>
+</templates>

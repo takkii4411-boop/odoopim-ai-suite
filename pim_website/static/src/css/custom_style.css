@@ -1,0 +1,269 @@
+.product-card {
+    display: flex;
+    border: 2px solid var(--border-color, #dadada);
+    border-radius: 16px;
+    padding: 14px;
+    background: #fff;
+    transition: all 0.35s ease;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
+}
+
+.product-card:hover {
+    transform: translateY(-6px) scale(1.03) rotate3d(1, 1, 0, 4deg);
+    border-color: var(--border-color-hover, #4b9cff);
+    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
+.product-card:hover .card-image img {
+    transform: scale(1.08);
+    opacity: 0.95;
+}
+
+.card-image img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    transition: all 0.35s ease;
+}
+
+.card-content {
+    margin-left: 14px;
+    flex: 1;
+}
+
+.product-card,
+.product-card * {
+    transition: all 0.3s ease-in-out !important;
+}
+
+
+
+
+
+
+
+
+
+/* LIST VIEW — CLEAN FIXED VERSION */
+#productContainer.list-view .product-item {
+    flex: 1 0 100%;
+}
+
+#productContainer.list-view .pxm-product-card {
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+    height: auto;
+}
+
+/* SMALL IMAGE */
+#productContainer.list-view .pxm-product-image {
+    width: 110px;
+    height: 110px;
+    margin-right: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#productContainer.list-view .pxm-product-image img,
+#productContainer.list-view .pxm-product-image span img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* TEXT AREA */
+#productContainer.list-view .card-body {
+    flex: 1;
+    padding: 4px 0;
+}
+
+/* Allow multi-line text in list */
+#productContainer.list-view .card-title,
+#productContainer.list-view h6 {
+    white-space: normal;
+}
+
+/* price block spacing fix */
+#productContainer.list-view .price-block {
+    margin-top: 6px;
+}
+
+/* Kanban product image wrapper */
+.pxm-product-image {
+    width: 100%;
+    height: 180px;          /* cleaner than 230px */
+    overflow: hidden;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* The product image itself */
+.pxm-product-image .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;     /* prevents distortion */
+    padding: 10px;
+}
+
+
+/* Premium Filter Panel */
+.pxm-filter-panel {
+    background: #ffffff;
+    border: 1px solid #e8e8e8;
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: all .3s ease;
+}
+
+.pxm-filter-panel:hover {
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+}
+
+/* Section Labels */
+.pxm-filter-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #444;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Filter Select Box */
+.pxm-filter-select {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #dcdcdc;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    background: #f9f9f9;
+    transition: all .2s;
+}
+
+.pxm-filter-select:hover,
+.pxm-filter-select:focus {
+    border-color: #0a74ff;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(10,116,255,0.15);
+}
+
+/* Reset Badge */
+.pxm-badge-reset {
+    cursor: pointer;
+    font-size: 0.7rem;
+    background: #f0f0f0;
+    border-radius: 50px;
+    padding: 5px 10px;
+    transition: .2s ease-in-out;
+    color: #555;
+}
+
+.pxm-badge-reset:hover {
+    background: #e1e1e1;
+    color: #111;
+}
+
+/* Divider */
+.pxm-filter-group {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+
+/* Container */
+.pxm-dropdown {
+    position: relative;
+    user-select: none;
+}
+
+/* Trigger Display */
+.pxm-dropdown-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.pxm-dropdown-trigger:hover {
+    border-color: #0a74ff;
+    box-shadow: 0 0 0 3px rgba(10,116,255,0.15);
+}
+
+/* Selected Value */
+.pxm-dropdown-value {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* Floating Menu */
+.pxm-dropdown-menu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+    padding: 10px 0 6px;
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.11);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: .25s ease;
+    z-index: 999;
+}
+
+/* Menu opened state */
+.pxm-dropdown.open .pxm-dropdown-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Search box */
+.pxm-dropdown-search {
+    width: 90%;
+    margin: 0 auto 8px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.pxm-dropdown-search:focus {
+    border-color: #0a74ff;
+}
+
+/* Items */
+.pxm-dropdown-item {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #333;
+    transition: .2s;
+}
+
+.pxm-dropdown-item:hover {
+    background: #f2f7ff;
+}
+
+/* Selected item */
+.pxm-dropdown-item.active {
+    background: #e8f0ff;
+    font-weight: 600;
+    color: #0a74ff;
+}
+

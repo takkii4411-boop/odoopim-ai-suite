@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_template_kanban_view" model="ir.ui.view">
+        <field name="name">product.template.product.kanban</field>
+        <field name="model">product.template</field>
+        <field name="priority">1000</field>
+        <field name="arch" type="xml">
+            <kanban js_class="product_kanban">
+                <field name="id"/>
+                <field name="image_128"/>
+                <field name="categ_id"/>
+                <field name="type"/>
+                <field name="list_price"/>
+                <field name="product_variant_count"/>
+                <field name="product_variant_ids"/>
+                <field name="currency_id"/>
+                <field name="sale_ok"/>
+                <field name="purchase_ok"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_area">
+                            <div class="o_kanban_image" title="Click to open product form">
+                                <img t-att-src="kanban_image('product.template', 'image_128', record.id.raw_value)" alt="Product"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_title">
+                                    <i class="fa fa-lg fa-square-o jstr-pull-right jstr-hide-mobile jstr-hide-tablet">
+                                    </i>
+                                    <i class="fa fa-lg fa-check-square-o jstr-pull-right jstr-hide-mobile jstr-hide-tablet">
+                                    </i>
+                                    <span class="jstr-overalyed">
+                                        <field name="name"/>
+                                    </span>
+                                    <small t-if="record.default_code.value">[<field name="default_code"/>]</small>
+                                </div>
+                                <div t-if="record.product_variant_count.value &gt; 1" groups="product.group_product_variant">
+                                    <strong>
+                                        <t t-out="record.product_variant_count.value"/> Variants
+                                    </strong>
+                                </div>
+                                <div name="tags"/>
+                                <ul name="product_properties">
+                                    <li>
+                                        Category: <field name="categ_id"/>
+                                    </li>
+                                    <li>
+                                        Type: <field name="type"/>
+                                    </li>
+                                    <li name="price">
+                                        Price:
+                                        <field name="list_price" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                                    </li>
+                                </ul>
+                                <ul name="custom_properties" invisible="1"/>
+                                <div name="tags"/>
+                                <ul name="product_checkboxes">
+                                    <li name="might_be_sold">
+                                        <field name="sale_ok" widget="boolean"/>Can be sold
+                                    </li>
+                                </ul>
+                                <ul name="custom_checkboxes" invisible="1"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="product_product_mntn_action" model="ir.actions.act_window">
+        <field name="name">Product Management</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="context">{"kanban_view_ref": "product_management.product_template_kanban_view"}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the form view for attribute.details -->
+        <record id="view_form_attribute_details" model="ir.ui.view">
+            <field name="name">attribute.details.form</field>
+            <field name="model">attribute.details</field>
+            <field name="arch" type="xml">
+                <form create="false" edit="false" delete="false">
+                    <div class="pim_oe_title">
+                        <h3 class="pim_create_attribute" style="text-align:center;">CREATE ATTRIBUTE</h3>
+                        <h2 class="choose_pim_attribute_type" style="text-align:center;">Create</h2>
+                    </div>
+<!--                    <group>-->
+                    <div style="width: 100%; margin: 50px auto;">
+                        <div style="text-align: left;">
+                            <img src="/pim_ext/static/src/img/icon.png" alt="Attribute Image" style="max-width: 200px;" />
+                        </div>
+                        <div style="padding: 15px; text-align: center; border-radius: 5px; width:100%">
+                            <label class="label_res" for="name">Label</label>
+                            <div>
+                                <field name="name" class="oe_inline" style="width: 50%; border: 1px solid;"/>
+                            </div>
+                        </div>
+
+                        <div style="padding: 15px; text-align: center; border-radius: 5px; width:100%">
+                            <label class="label_res" for="code">Code</label>
+                            <div>
+                                <field name="code" class="oe_inline" style="width: 50%; border: 1px solid;"/>
+                            </div>
+                        </div>
+
+                        <div style="padding: 15px; text-align: center; border-radius: 5px; width:100%">
+                            <field name="attribute_id" invisible="1"/>
+                            <field name="type" invisible="1"/>
+                        </div>
+
+                        <div class="form-group" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+                            <button name="action_confirm" string="Confirm" type="object" class="btn btn-primary" style="width: 120px;" />
+                            <button name="action_cancel" string="Cancel" type="object" class="btn btn-secondary" style="width: 120px;" />
+                        </div>
+                    </div>
+<!--                    </group>-->
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

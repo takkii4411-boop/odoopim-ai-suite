@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template id="ProductionDashboardMain" name="Production Dashboard">
+    <t t-name="AI_Enrichment.ProductionDashboardMain" owl="1">
+        <div class="o_dashboard_container" t-ref="root">
+            <style>
+                .kpi-card {
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: none;
+                border-radius: 12px;
+                }
+
+                .kpi-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+                }
+
+                .kpi-card[data-clickable="true"] {
+                border: 2px solid #007bff;
+                }
+
+                .card-total-sync {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                }
+
+                .card-total-updated {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                }
+
+                .card-total-failed {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+                }
+
+                /* ADDED MISSING DOTS (.) */
+                .card-enrichment-attr {
+                background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); /* Orange → Yellow */
+                }
+
+                .card-ai-providers {
+                background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); /* Teal → Green */
+                }
+
+                .card-overall-products {
+                background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); /* Pink → Rose */
+                }
+
+            </style>
+
+
+            <!-- KPI Cards -->
+            <hr class="my-4"/>
+            <div class="row mb-4">
+                <t t-foreach="state.kpiData" t-as="kpi" t-key="kpi.title">
+                    <div class="col-md-4">
+                        <!--                        <div class="card bg-info text-white mb-3" t-on-click="() => onKpiClick(kpi)">-->
+                        <!--                        <div class="card info-card text-center p-3 h-100">-->
+                        <div class="card bg-info text-white mb-3 kpi-card" t-on-click="onKpiClick.bind(this, kpi)"
+                             t-att-class="{
+                     'card-total-sync': kpi.title === 'Total Sync',
+                     'card-total-updated': kpi.title === 'Total Updated Product',
+                     'card-total-failed': kpi.title === 'Total Failed Product',
+                     'card-enrichment-attr': kpi.title === 'Available Enrichment Attribute',
+                     'card-ai-providers': kpi.title === 'Available AI Providers',
+                     'card-overall-products': kpi.title === 'Overall Enrichment Products'
+                 }">
+                            <!--                        <div class="card bg-info text-white mb-3">-->
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <t t-esc="kpi.title"/>
+                                </h5>
+                                <p class="card-text display-6">
+                                    <t t-esc="kpi.value"/>
+                                </p>
+                            </div>
+                        </div>
+                        <!--                            </div>-->
+                    </div>
+                </t>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row">
+                <!-- Line Chart -->
+                <div class="col-md-6">
+                    <div class="card border-0 h-100">
+                        <div class="card-body text-center">
+                            <h3 class="card-title text-uppercase fw-bold">Sync Success &amp; Failure Trends</h3>
+                            <div style="max-width: 100%; height: 400px;">
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="col-md-6">
+                    <div class="card border-0 h-100">
+                        <div class="card-body text-center">
+                            <h3 class="card-title text-uppercase fw-bold">Date-wise Product Update Count</h3>
+                            <div style="max-width: 100%; height: 400px;">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="odoopim_split_widget.EditAttribute">
+        <!--            Breadcrumb-->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <div class="d-flex align-items-center justify-content-start">
+                <small>Products Bulk Actions</small>
+                <div class="px-2" style="flex-grow: 1;">
+                    <hr/>
+                </div>
+            </div>
+        </nav>
+
+        <!--            Main Title-->
+        <h2 class="mb-4 fw-bold">Change the <t t-esc="props.action.label"/> of <t t-esc="props.renderer.env.model.root.selection.length"/> products</h2>
+        <small class="text-muted py-2">The family of the selected products will be changed to the chosen Attributes</small>
+            <t t-if="state.loading">
+                <div class="d-flex justify-content-center m-5">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+            </t>
+
+            <div class="mt-2 mb-5">
+                <label for="attributes">Attributes</label>
+                <select id="attributes" name="attributes" data-placeholder="Select attributes" multiple="1" data-multi-select="1">
+                </select>
+            </div>
+
+
+            <t t-if="state.selectedAttributesObjects and state.selectedAttributesObjects.length">
+                <div>
+                    <hr/>
+                    <t t-foreach="state.selectedAttributesObjects" t-as="attribute" t-key="attribute.id">
+                        <t t-call="AttributeField">
+                            <t t-set="attribute" t-value="attribute"/>
+                        </t>
+                    </t>
+                </div>
+            </t>
+         <div class="d-flex justify-content-between">
+            <button class="btn btn-outline-secondary px-5" t-on-click="()=>this.changeStep(-1)">Previous</button>
+            <button class="btn btn-success px-5" t-on-click="()=>this.applyChanges()">Confirm</button>
+        </div>
+    </t>
+
+<t t-name="AttributeField">
+    <t t-if="attribute.display_type === 'yes_no'">
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" t-att-id="'attr-' + attribute.id" t-att-name="attribute.original_name" t-on-change="(e) => this.onValueChange(e)"/>
+            <label class="form-check-label" t-att-for="'attr-' + attribute.id" t-esc="attribute.name"/>
+        </div>
+    </t>
+    <t t-elif="attribute.display_type === 'image'">
+        <div class="mb-3">
+            <label t-att-for="'attr-' + attribute.id" class="form-label" t-esc="attribute.name"/>
+            <input class="form-control form-input" type="file" accept="image/png, image/gif, image/jpeg" t-att-id="'attr-' + attribute.id" t-att-name="attribute.original_name" t-on-change="(e) => this.onValueChange(e)"/>
+        </div>
+    </t>
+    <t t-elif="attribute.display_type === 'color'">
+        <div class="mb-3">
+            <label t-att-for="'attr-' + attribute.id" class="form-label" t-esc="attribute.name"/>
+            <select class="form-control form-select" t-att-id="'attr-' + attribute.id" t-att-name="attribute.original_name" t-on-change="(e) => this.onValueChange(e)">
+                <option value="">Select</option>
+                <t t-if="attribute.all_values">
+                    <t t-foreach="attribute.all_values" t-as="value" t-key="value.id">
+                        <option t-att-value="value.name" t-esc="value.name"/>
+                    </t>
+                </t>
+            </select>
+        </div>
+    </t>
+    <t t-elif="attribute.display_type === 'simple_select'">
+        <div class="mb-3">
+            <label t-att-for="'attr-' + attribute.id" class="form-label" t-esc="attribute.name"/>
+            <select class="form-control form-select" t-att-id="'attr-' + attribute.id" t-att-name="attribute.original_name" t-on-change="(e) => this.onValueChange(e)">
+                <option value="">Select</option>
+                <t t-if="attribute.all_values">
+                    <t t-foreach="attribute.all_values" t-as="value" t-key="value.id">
+                        <option t-att-value="value.id" t-esc="value.name"/>
+                    </t>
+                </t>
+            </select>
+        </div>
+    </t>
+    <t t-elif="attribute.display_type === 'multi_select'">
+        <div class="dropdown mb-3">
+          <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <t t-esc="attribute.name"/>
+
+          </button>
+          <ul class="dropdown-menu">
+              <t t-if="attribute.all_values">
+                    <t t-foreach="attribute.all_values" t-as="value" t-key="value.id">
+                        <li class="dropdown-item">
+                            <input type="checkbox" class="form-check-input" t-att-value="value.id" t-att-name="attribute.original_name" t-att-id="'attr-' + value.id" autocomplete="off" t-on-change="(e) => this.onMultiSelectChange(e)"/>
+                            <label class="form-check-label mx-2" t-att-for="'attr-' + value.id"><t t-esc="value.name"/></label>
+                        </li>
+                    </t>
+                </t>
+          </ul>
+        </div>
+    </t>
+    <t t-else="">
+         <div class="mb-3">
+            <label t-att-for="'attr-' + attribute.id" class="form-label" t-esc="attribute.name"/>
+            <input class="form-control form-input" t-att-type="attribute.display_type" t-att-id="'attr-' + attribute.id" t-att-name="attribute.original_name" t-on-change="(e) => this.onValueChange(e)"/>
+        </div>
+    </t>
+</t>
+</templates>

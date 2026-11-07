@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_attribute_master_custom_validation"
+            model="ir.ui.view">
+        <field name="name">
+            product.attribute.master.custom.validation.parameters
+        </field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id"
+               ref="pim_ext.view_product_attribute_master_custom_js_class"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='type_properties']/group[1]"
+                   position="after">
+
+                <group string="Validation Parameters">
+
+                    <!-- TEXT / TEXTAREA / IDENTIFIER -->
+                    <field name="max_characters"
+                           invisible="display_type not in ['text','textarea','identifier']"/>
+
+                    <field name="regex_pattern"
+                           invisible="display_type not in ['text','textarea','identifier']"/>
+
+                    <field name="unique_value"
+                           widget="boolean_radio"
+                           invisible="display_type not in ['text','textarea','identifier','number','float','price','measurement']"/>
+
+                    <!-- NUMBER / FLOAT / PRICE / MEASUREMENT -->
+                    <field name="min_value"
+                           invisible="display_type not in ['number','float','price','measurement']"/>
+
+                    <field name="max_value_field"
+                           invisible="display_type not in ['number','float','price','measurement']"/>
+
+                    <field name="allow_negative"
+                           widget="boolean_radio"
+                           invisible="display_type not in ['number','float','price','measurement']"/>
+
+                    <field name="allow_decimals"
+                           widget="boolean_radio"
+                           invisible="display_type not in ['number','float','price','measurement']"/>
+
+                    <field name="decimal_places"
+                           invisible="display_type not in ['float','price','measurement'] or allow_decimals == False"/>
+
+                    <!-- DATE -->
+                    <field name="min_date"
+                           invisible="display_type != 'date'"/>
+
+                    <field name="max_date"
+                           invisible="display_type != 'date'"/>
+
+                    <!-- FILE / IMAGE -->
+                    <field name="allowed_extensions"
+                           invisible="display_type not in ['file','image']"
+                        widget="many2many_tags"
+                    />
+
+                    <field name="max_file_size_mb"
+                           invisible="display_type not in ['file','image']"/>
+
+                    <!-- MEASUREMENT -->
+                    <field name="metric_family"
+                           invisible="display_type != 'measurement'"/>
+
+                    <field name="default_unit"
+                           domain="[('category_id.name','=',metric_family)]"
+                           invisible="display_type != 'measurement'"/>
+
+                    <!-- SELECT FIELDS -->
+                    <field name="default_value"
+                           force_save="1"
+                           invisible="display_type not in ['simple_select','multi_select','color']"/>
+
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

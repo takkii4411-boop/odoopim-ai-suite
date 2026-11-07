@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="product_management.ProductKanbanView" t-inherit="web.KanbanView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="attributes">
+            <attribute name="className">'prm-content'</attribute>
+        </xpath>
+    </t>
+
+</templates>

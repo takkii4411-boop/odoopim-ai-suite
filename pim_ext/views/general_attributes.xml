@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_general_attributes_tree_view" model="ir.ui.view">
+        <field name="name">general.attributes.tree</field>
+        <field name="model">general.attribute</field>
+        <field name="arch" type="xml">
+            <list string="General Attributes" create="0" editable="bottom" default_order="create_date desc">
+                <field name="name" readonly="1"/>
+                <field name="completeness" widget="boolean_toggle"/>
+<!--                <field name="is_ai_enrichable" widget="boolean_toggle" />-->
+<!--                <field name="is_ai_enrichable" widget="boolean_toggle"-->
+<!--       readonly="not related_field  not in ('text')"-->
+<!--       string="AI Enrichable"/>-->
+<!--                       readonly="display_type not in ('text', 'textarea')"/>-->
+<!--                -&#45;&#45;text text area readonly="display_type not in ('text', 'textarea')"&#45;&#45;&#45;&#45;realted field . base-->
+                   <field name="is_ai_enrichable" widget="boolean_toggle" readonly="original_name not in ('name','description')"/>
+
+
+
+<!--                <field name="is_ai_enrichable"-->
+<!--       widget="boolean_toggle"-->
+<!--       readonly="field_type not in ('char','text')"/>-->
+
+                <field name="related_field" column_invisible="1"/>
+                <field name="model" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_general_attribute_filter" model="ir.ui.view">
+        <field name="name">General Attribute Search</field>
+        <field name="model">general.attribute</field>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <search string="Attribute search">
+                <group expand="0" string="Filters">
+                    <filter string="Model" name="groupby_model"
+                            context="{'group_by': 'model'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="general_attributes_action" model="ir.actions.act_window">
+        <field name="name">System Attributes</field>
+        <field name="res_model">general.attribute</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_groupby_model': 1}</field>
+    </record>
+
+
+</odoo>

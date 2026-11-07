@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.product.management</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Product Management" string="Product Management" name="product_management">
+                    <block title="Product Management Options">
+                        <setting help="Search product templates by available attribute values. If the feature is turned on, you will be able, for example, to find templates that have both possible options color 'red' and material 'steel'">
+                            <field name="product_management_attributes_option"/>
+                        </setting>
+                        <setting help="Search product templates by available tags">
+                            <field name="product_management_tags_option"/>
+                        </setting>
+                        <setting help="Let users export selected products">
+                            <field name="product_management_export_option"/>
+                        </setting>
+                        <setting help="Turn on mass actions for E-commerce. If checked you will be able to select the actions: publish/unpublish products, update public categories, update accessories, and update alternatives.">
+                            <field name="module_product_management_website_sale"/>
+                            <div name="website_sale_prm_option_hint" class="text-muted mb16">
+                                The tool
+                                <a href="https://apps.odoo.com/apps/modules/17.0/product_management_website_sale/">
+                                    Product Management Interface: e-Commerce
+                                </a> (10 Euros extra) is required.
+                            </div>
+                        </setting>
+                        <setting help="Search product templates by E-commerce categories" invisible="not module_product_management_website_sale">
+                            <field name="product_management_eshop_categories_option"/>
+                        </setting>
+                        <setting help="Turn on mass actions for Accounting. If checked you will be able to select the actions: add/remove sale and purchase taxes, update income and expense accounts, and change invoice policy.">
+                            <field name="module_product_management_accounting"/>
+                            <div name="accounting_prm_option_hint" class="text-muted mb16">
+                                The tool
+                                <a href="https://apps.odoo.com/apps/modules/17.0/product_management_accounting/">
+                                    Product Management Interface: Accounting
+                                </a> (10 Euros extra) is required.
+                            </div>
+                        </setting>
+                        <setting help="Turn on mass actions for warehouse management. If checked you will be able to select the actions: add/remove logistic routes, update production and inventory locations, and change the tracking method.">
+                            <field name="module_product_management_stock"/>
+                            <div name="stock_prm_option_hint" class="text-muted mb16">
+                                The tool
+                                <a href="https://apps.odoo.com/apps/modules/17.0/product_management_stock/">
+                                    Product Management Interface: Warehouse
+                                </a> (10 Euros extra) is required.
+                            </div>
+                        </setting>
+                        <setting help="Turn on mass actions for purchase management. If checked you will be able to select the actions: add new product vendors, update the purchases policy, and make products purchasable/not purchasable.">
+                            <field name="module_product_management_purchase"/>
+                            <div name="purchase_prm_option_hint" class="text-muted mb16">
+                                The tool
+                                <a href="https://apps.odoo.com/apps/modules/17.0/product_management_purchase/">
+                                    Product Management Interface: Purchases
+                                </a> (10 Euros extra) is required.
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Mass actions">
+                        <field name="ir_actions_server_ids" class="w-100" context="{'default_model_id': ir_actions_server_prm_default_model_id}"/>
+                        <field name="ir_actions_server_ids_str" invisible="1"/>
+                        <field name="ir_actions_server_prm_default_model_id" invisible="1"/>
+                    </block>
+                    <block title="Kanban Fields">
+                        <field name="kanban_fields_ids"
+                               domain="[('model', '=', 'product.template'), ('ttype', 'not in', ['binary']), ('name', 'not in', ['image_128', 'categ_id', 'type', 'lst_price', 'product_variant_count', 'product_variant_ids', 'currency_id', 'sale_ok', 'purchase_ok', 'purchase_ok', 'qty_available', 'uom_id', 'website_published'])]"
+                               options="{'no_create_edit': 1, 'no_quick_create': 1}"
+                               class="w-100"
+                        />
+                        <field name="kanban_fields_ids_str" invisible="1"/>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    <record id="res_config_settings_product_management_action" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'product_management'}</field>
+    </record>
+
+</odoo>

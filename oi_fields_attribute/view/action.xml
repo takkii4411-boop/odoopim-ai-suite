@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="act_server_update_registry" model="ir.actions.server">
+		<field name="name">Update Registry</field>
+		<field name="state">code</field>
+		<field name="model_id" ref="model_ir_model_fields" />
+		<field name="code">action=model._update_registry()</field>
+	</record>
+
+	<record id="act_ir_model_fields_attribute" model="ir.actions.act_window">
+		<field name="name">Field Attributes</field>
+		<field name="res_model">ir.model.fields.attribute</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<record id="action_field_attributes" model="ir.actions.client">
+		<field name="name">Field Attributes</field>
+		<field name="tag">field_attributes</field>
+		<field name="binding_model_id" ref="model_ir_model_fields" />
+		<field name="binding_view_types">form</field>
+	</record>
+
+	<record id="action_field_attributes" model="ir.actions.client">
+		<field name="name">Field Attributes</field>
+		<field name="tag">field_attributes</field>
+		<field name="binding_model_id" ref="model_ir_model_fields" />
+		<field name="params" eval="{'type' : 'info'}" />
+	</record>
+	
+	<record id="action_field_databasee_attributes" model="ir.actions.client">
+		<field name="name">Database Column Details</field>
+		<field name="tag">field_attributes</field>
+		<field name="binding_model_id" ref="model_ir_model_fields" />
+		<field name="params" eval="{'type' : 'database_info'}" />
+	</record>	
+
+	<record id="action_field_update_db" model="ir.actions.server">
+		<field name="name">Update Database Column</field>
+		<field name="model_id" ref="model_ir_model_fields" />
+		<field name="binding_model_id" ref="model_ir_model_fields" />
+		<field name="state">code</field>
+		<field name="code">records._update_db()</field>
+	</record>
+	
+	<record id="action_field_recompute" model="ir.actions.server">
+		<field name="name">Recompute (All Records)</field>
+		<field name="model_id" ref="model_ir_model_fields" />
+		<field name="binding_model_id" ref="model_ir_model_fields" />
+		<field name="state">code</field>
+		<field name="code">action = records._recompute_all_records()</field>
+	</record>
+			
+</odoo>

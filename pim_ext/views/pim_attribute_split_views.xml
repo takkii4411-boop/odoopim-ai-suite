@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the custom layout view -->
+        <record id="view_product_attribute_custom" model="ir.ui.view">
+            <field name="name">product.attribute.custom.layout</field>
+            <field name="model">pim.attribute.type</field>
+            <field name="arch" type="xml">
+                <form string="Attribute" create="true" class="page_form">
+                    <div class="d-flex align-items-start">
+                        <div class="left-column">
+                             <field name="master_attribute_ids">
+                            <list editable="bottom" create="false" edit="false" delete="false"
+                                  default_order="create_date desc">
+                                <field name="name"/>
+                                <button name="attribute_edit_open_form_view" type="object" icon="fa-pencil-square-o"
+                                        title='view' class="btn-link"/>
+                                <button name="attribute_master_unlink" type="object" icon="fa-trash" title='fa-trash'
+                                        class="btn-link text-danger"/>
+                            </list>
+                        </field>
+                        </div>
+                        <div class="right-column">
+                            <form create="false" edit="false" delete="false" readonly="1" class="attribute_type">
+                                <header>
+                                    <button string="Back" type="object" icon="fa-arrow-left" name="action_back_to_menu_attribute"/>
+                                </header>
+                                <field name="is_invisible" invisible="1"/>
+                                <div class="pim_oe_title">
+                                    <h2 class="pim_create_attribute"><span class="attr_title">Create Attribute</span></h2>
+                                </div>
+                                <div class="pim_oe_title" invisible="is_invisible">
+                                    <h2 class="choose_pim_attribute_type" style="text-align:left;">Choose the attribute type</h2>
+                                </div>
+                                    <!-- Use a flex layout with columns -->
+
+                                <div class="d-flex justify-content-center" invisible="is_invisible">
+                                    <div class="o_grid attr_types">
+            <!--                            row 1-->
+                                        <div class="d-grid grid_column">
+                                            <!-- Button for Date -->
+                                            <div class="attribute-button">
+                                                <button name="action_select_date" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-date 1.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Date</span>
+                                                </button>
+                                            </div>
+                                            <div class="attribute-button">
+                                                <button name="action_select_measurement" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-metric 1.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Measurement</span>
+                                                </button>
+                                            </div>
+                                            <div class="attribute-button">
+                                                <button name="action_select_simple" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-select.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Simple select</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="attribute-button">
+                                                <button name="action_select_yes_no" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-switch.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Yes/No</span>
+                                                </button>
+                                            </div>
+                                        </div>
+            <!--                            row2-->
+                                        <div class="d-grid grid_column">
+                                            <div class="attribute-button">
+                                                <button name="action_select_file" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-file.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>File</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="attribute-button">
+                                                <button name="action_select_multiselect" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-multiselect.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Multi select</span>
+                                                </button>
+                                            </div>
+<!--                                            <div class="attribute-button">-->
+<!--                                                <button name="action_select_table" type="object" class="btn btn-light attribute-icon-button">-->
+<!--                                                    <img src="/pim_ext/static/src/img/icon-table.png" alt="File" class="attribute-icon-img"/>-->
+<!--                                                    <span>Table</span>-->
+<!--                                                </button>-->
+<!--                                            </div>-->
+                                            <div class="attribute-button">
+                                                <button name="action_select_float" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/fluent-emoji-high-contrast_input-numbers.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Float</span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+            <!--                            row3-->
+                                        <div class="d-grid grid_column">
+                                            <div class="attribute-button">
+                                                <button name="action_select_image" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-asset.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Image</span>
+                                                </button>
+                                            </div>
+                                            <div class="attribute-button">
+                                                <button name="action_select_number" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/fluent-emoji-high-contrast_input-numbers.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Number</span>
+                                                </button>
+                                            </div>
+
+                                             <div class="attribute-button">
+                                                <button name="action_select_text" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-text.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Text</span>
+                                                </button>
+                                            </div>
+
+
+
+                                        </div>
+            <!--                            row4-->
+                                        <div class="d-grid grid_column">
+                                            <div class="attribute-button">
+                                                <button name="action_select_multi_color" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-asset.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Color</span>
+                                                </button>
+                                            </div>
+                                            <div class="attribute-button">
+                                                <button name="action_select_price" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-price.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Price</span>
+                                                </button>
+                                            </div>
+                                            <div class="attribute-button">
+                                                <button name="action_select_text_area" type="object" class="btn btn-light attribute-icon-button">
+                                                    <img src="/pim_ext/static/src/img/icon-textarea.png" alt="File" class="attribute-icon-img"/>
+                                                    <span>Text Area</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="o_col_6 col-12 attr_form" invisible="not is_invisible">
+                                   <div class="attr_properties">
+                                       <sheet class="attr_sheet">
+                                           <div class="oe_title">
+                                               <h1 class="type_name"><field name="type_name" readonly="1" class="oe_inline choose_pim_attribute_type"/></h1>
+                                           </div>
+                                           <notebook class="type_properties">
+                                               <page name="type_properties" string="Properties">
+                                                   <div id="o_type_properties" class="d-lg-flex top_property">
+                                                       <div id="o_type_properties_main" class="flex-grow-1">
+                                                           <group string="General Parameters" class="general_param">
+                                                               <label for="name" string="Attribute Name" style="font-weight:bold;"/>
+                                                           </group>
+                                                       </div>
+                                                   </div>
+                                                   <div class="attr_form_values">
+                                                       <div>
+                                                           <field name="name"  required="True" nolabel="1" placeholder="Enter attribute name" class="attribute_type_class"/>
+                                                       </div>
+                                                       <div>
+                                                           <div>
+                                                               <group>
+                                                                   <label for="display_type" string="Type" style="font-weight:bold;" required="True"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div>
+                                                           <field name="display_type" nolabel="1" readonly="1" class="attribute_type_class attr_display_type"/>
+                                                       </div>
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="code" string="Code"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div>
+                                                           <field name="code" nolabel="1"
+                                                                  options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"
+                                                                  class="attribute_type_class"/>
+                                                       </div>
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="attribute_group" string="Attribute group"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div>
+                                                           <field name="company_id" invisible="1"/>
+                                                           <field name="attribute_group" nolabel="1" domain="[('company_id', '=', company_id)]"
+                                                                  options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"
+                                                                  class="attribute_type_class"/>
+                                                       </div>
+
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="unique_value" string="Unique value"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div class="d-flex">
+                                                           <field name="unique_value" widget="radio" options="{'horizontal': true}" class="o_radio_horizontal"/>
+                                                       </div><br/>
+
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="value_per_channel" string="Value per channel"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div class="d-flex">
+                                                           <field name="value_per_channel" widget="boolean_radio" options="{'layout': 'horizontal'}" class="o_radio_horizontal"/>
+                                                       </div><br/>
+
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="value_per_locale" string="Value per locale"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div class="d-flex">
+                                                           <field name="value_per_locale" widget="radio" options="{'horizontal': true}" class="o_radio_horizontal"/>
+                                                       </div><br/>
+
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="usable_in_grid" string="Usable in grid"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div class="d-flex">
+                                                           <field name="usable_in_grid" widget="radio" options="{'horizontal': true}" class="o_radio_horizontal"/>
+                                                       </div><br/>
+
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="locale_specific" string="Locale specific"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div class="d-flex">
+                                                           <field name="locale_specific" widget="radio" options="{'horizontal': true}" class="o_radio_horizontal"/>
+                                                       </div>
+                                                       <div id="o_type_properties" class="d-lg-flex top_property" invisible="display_type not in ['simple_select','radio','pills','color','multi_select']">
+                                                       <div id="o_type_properties_main" class="flex-grow-1">
+                                                           <group string="Attribute Values" class="general_param">
+                                                           </group>
+                                                       <div class="d-flex">
+                                                   <button name="sort_colors" string="Sort Colors" type="object" invisible="display_type != 'color'"></button>
+                                                           <br/>
+                                                       </div>
+                                                       <div class="d-flex">
+
+                                                   <field name="value_ids" invisible="display_type not in ['simple_select','radio','pills','color','multi_select', 'measurement']"
+                                                          required="display_type in ['simple_select','radio','pills','color','multi_select', 'measurement']">
+                                                       <list editable="bottom" limit="20">
+                                                           <field name="sequence" widget="handle"/>
+                                                           <field name="name"/>
+                                                           <field name="display_type" column_invisible="True"/>
+                                                           <field name="html_color"
+                                                                  column_invisible="parent.display_type != 'color'"
+                                                                  invisible="image" widget="color"/>
+                                                           <field name="image"
+                                                                  class="oe_avatar text-start float-none"
+                                                                  column_invisible="parent.display_type != 'color'"
+                                                                  options="{'size': [70, 70]}"
+                                                                  widget="image"/>
+                                                       </list>
+                                                   </field>
+                                                       </div>
+                                                   </div>
+                                                   </div>
+                                                   </div>
+                                               </page>
+                                               <page name="type_label_translation" string="Label Translations" invisible="1">
+                                               </page>
+                                               <page name="type_general_info" string="General">
+                                                   <div id="o_type_properties" class="d-lg-flex top_property">
+                                                       <div id="o_type_properties_main" class="flex-grow-1">
+                                                           <group string="Information" class="general_param"/>
+                                                       </div>
+                                                   </div>
+                                                   <div class="attr_form_values">
+                                                       <div>
+                                                           <div>
+                                                               <label for="is_mandatory" string="Mandatory" style="font-weight:bold;"/>
+                                                               <field name="is_mandatory" style="padding-left: 9%;"/>
+                                                           </div>
+                                                           <div style="margin-top: 15px;">
+                                                               <label for="is_required_in_clone" string="Required For Clone" style="font-weight:bold;"/>
+                                                               <field name="is_required_in_clone" style="padding-left: 2%;"/>
+                                                           </div>
+<!--                                                           <div style="margin-top: 15px;">-->
+<!--                                                               <label for="is_cloning" string="Cloning" style="font-weight:bold;"/>-->
+<!--                                                               <field name="is_cloning" style="padding-left: 2%;"/>-->
+<!--                                                           </div>-->
+                                                           <div style="margin-top: 15px;">
+                                                               <label for="is_completeness" string="Completeness" style="font-weight:bold;"/>
+                                                               <field name="is_completeness" style="padding-left: 6.5%;"/>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </page>
+                                               <page name="type_label_translation" string="Label Translations" invisible="1">
+                                               </page>
+                                               <page string="History">
+                                                   <group>
+                                                       <field name="history_log" nolabel="1" readonly="1"/>
+                                                   </group>
+                                               </page>
+                                           </notebook>
+                                       </sheet>
+                                       <div class="attr_creation" style="margin-top: 16px;">
+                                                           <button type="object" string="Save"
+                                                                   name="create_attributes" class="oe_highlight"/>
+<!--                                                           <button type="object" string="Cancal"-->
+<!--                                                                   name="cancel_attributes" class="oe_highlight"/>-->
+
+                                                       </div>
+                                   </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tree_pim_attribute_type" model="ir.ui.view">
+            <field name="name">pim.attribute.type.tree.view</field>
+            <field name="model">pim.attribute.type</field>
+            <field name="arch" type="xml">
+                <list create="false" edit="true" default_order="create_date desc">
+                    <header>
+                        <button name="create_pim_attribute_type" type="object" class="btn-primary"
+                            string="Create Attribute" display="always"
+                            invisible="context.get('active_model', 'pim.attribute.type') != 'pim.attribute.type'"/>
+                    </header>
+                    <field name="name"/>
+                    <field name="display_type" string="Type"/>
+                    <field name="attribute_group"/>
+                <field name="is_mandatory" widget="boolean_toggle"/>
+                <field name="is_required_in_clone" widget="boolean_toggle"/>
+                <field name="is_cloning" widget="boolean_toggle" column_invisible="True"/>
+                <field name="is_completeness" widget="boolean_toggle"/>
+<!--                <field name="state" widget="badge" decoration-success="state == 'publish'" decoration-danger="state == 'unpublish'"/>-->
+                <button name="attribute_edit_open_form_view" type="object" icon="fa-pencil-square-o" title='view' class="btn-link"/>
+                <button name="attribute_master_unlink" type="object" icon="fa-trash" title='delete' class="btn-link text-danger"/>
+                </list>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

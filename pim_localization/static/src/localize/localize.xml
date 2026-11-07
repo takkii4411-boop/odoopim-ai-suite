@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates xml:space="preserve">
+    <t t-name="pim_localization.LangLocalize">
+        <button class="p-2 border rounded d-flex" t-on-click="ClickOpenLanguages">
+            <span class="ms-2" ><t t-if="currentLang" t-esc="currentLang.code"/></span>
+            <span class="ms-2"><i class="langDropIcon fa fa-angle-down"/></span>
+        </button>
+        <div t-ref="LanguagesDrop" t-if="this.state.show_drop" class="LanguagesDrop position-absolute border rounded bg-white p-2" style="right:30px;top:116px;z-index:10;width:auto;">
+            <input t-if="this.state.languages.length > 7"
+                   type="text"
+                   t-ref="search"
+                   t-on-input="() => this.onSearchInput()"
+                   class="form-control rounded"
+                   placeholder="search..."/>
+            <div class="Languages mt-2" style="max-height:300px;overflow-y:scroll;scrollbar-width: none;">
+                <t t-foreach="this.state.filterLang" t-as="lang" t-key="lang_index">
+                    <t t-if="this.state.lang &amp;&amp; lang.id == this.state.lang">
+                        <a class="d-flex p-1 text-primary mb-1 rounded"
+                           style="cursor:pointer;border-bottom:1px solid #efefef;background:#efefef;"
+                           t-on-click="() => this.SelectLang(lang)">
+                            <span class="ms-2"><t t-esc="lang.code"/></span>
+                        </a>
+                    </t>
+                    <t t-else="">
+                        <a class="d-flex p-1 text-primary mb-1" t-if="lang.id"
+                           style="cursor:pointer;border-bottom:1px solid #efefef;"
+                           t-on-click="() => this.SelectLang(lang)">
+                            <span class="ms-2"><t t-esc="lang.code"/></span>
+                        </a>
+                    </t>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

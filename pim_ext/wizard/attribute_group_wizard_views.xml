@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attribute_group_wizard" model="ir.ui.view">
+        <field name="name">attribute.group.wizard.form</field>
+        <field name="model">attribute.group.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select Attribute Groups">
+                <group>
+                    <field name="company_id" invisible="1"/>
+                    <field name="attribute_family_id" string="Family" readonly="1" options="{'no_open': True}"/>
+                    <!-- Allow multiple attribute groups to be selected -->
+                    <field name="attribute_group_ids" widget="many2many_tags" domain="[('active', '=', True),('id', 'not in', exist_group_ids),('company_id', '=', company_id)]"
+                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="exist_group_ids" widget="many2many_tags" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="apply_group_attributes" string="Update" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

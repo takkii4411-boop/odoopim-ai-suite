@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+<!--    <t t-name="pim_locales_channels.CharField" t-inherit="web.CharField" t-inherit-mode="extension">-->
+<!--        <xpath expr="//div[hasclass('o_field_input_buttons')]" position="inside">-->
+<!--            <ChannelTranslationButton-->
+<!--                    fieldName="props.name"-->
+<!--                    record="props.record"-->
+<!--            />-->
+<!--        </xpath>-->
+<!--    </t>-->
+</templates>

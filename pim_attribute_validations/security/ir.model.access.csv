@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_image_attribute_type_user,image.attribute.type.user,model_image_attribute_type,base.group_user,1,0,0,0
+access_image_attribute_type_manager,image.attribute.type.manager,model_image_attribute_type,base.group_system,1,1,1,1

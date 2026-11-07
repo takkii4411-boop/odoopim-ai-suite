@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="pim_ext.EnhancedMediaGalleryDialog">
+        <div class="o_field_enhanced_media_gallery_dialog w-100">
+            
+            <div class="media-list-container">
+                <!-- Add Media Button -->
+                <div class="mb-3">
+                    <button class="btn btn-primary" t-on-click="openUploadOptionsDialog">
+                        <i class="fa fa-plus me-2"></i> Add Media
+                    </button>
+                </div>
+
+                <!-- Media Items List -->
+                <div class="media-list-container">
+                    <div class="table-responsive">
+                        <table class="table o_list_table table-striped table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="col-num">#</th>
+                                    <th class="col-image">Image</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th class="col-primary text-center">Primary</th>
+                                    <th class="col-actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="mediaItems" t-as="item" t-key="item.id || item_index">
+                                    <tr class="o_data_row align-middle">
+                                        <td><t t-esc="item_index + 1"/></td>
+                                        
+                                        <!-- Image Thumbnail -->
+                                        <td>
+                                            <div class="media-thumbnail">
+                                                <!-- VIDEO: Show thumbnail with play overlay -->
+                                                <t t-if="item.data.video_file || item.data.video_url">
+                                                    <!-- Check if thumbnail exists -->
+                                                    <t t-if="item.data.video_thumbnail">
+                                                        <div class="video-thumbnail-wrapper">
+                                                            <img t-att-src="item.resId ? '/web/image/product.image/' + item.resId + '/video_thumbnail?t=' + state.updateTrigger : ('data:image/png;base64,' + item.data.video_thumbnail)"
+                                                                alt="Video thumbnail"
+                                                                class="video-thumbnail-image"/>
+                                                            <div class="video-play-overlay">
+                                                                <i class="fa fa-play-circle fa-2x text-white"></i>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div class="video-thumbnail-wrapper video-no-thumb">
+                                                            <i class="fa fa-play-circle fa-3x text-muted"></i>
+                                                        </div>
+                                                    </t>
+                                                </t>
+                                                
+                                                <img t-else=""
+                                                    t-att-src="item.resId ? '/web/image/product.image/' + item.resId + '/image_1920?t=' + state.updateTrigger : ('data:image/png;base64,' + item.data.image_1920)"
+                                                    alt="Media thumbnail"/>
+                                            </div>
+                                        </td>
+                                        <!-- Name -->
+                                        <td class="fw-bold">
+                                            <t t-esc="item.data.name || 'Unnamed'"/>
+                                        </td>
+
+                                        <!-- Type -->
+                                        <td>
+                                            <span t-if="item.data.video_file || item.data.video_url" class="badge bg-danger">Video</span>
+                                            <span t-if="!item.data.video_file &amp;&amp; !item.data.video_url" class="badge bg-info">Image</span>
+                                        </td>
+
+                                        <!-- Primary Checkbox -->
+                                        <td class="text-center">
+                                            <i t-if="item.data.is_primary" class="fa fa-check-circle text-success fa-lg"></i>
+                                            <i t-else="" class="fa fa-circle-o text-muted text-opacity-25 fa-lg"></i>
+                                        </td>
+
+                                        <!-- Actions -->
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button class="btn btn-link text-primary p-0 me-2" 
+                                                        t-on-click="() => { this.state.currentIndex = item_index; this.openDialog(); }"
+                                                        title="Preview">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-link text-danger p-0" 
+                                                        t-on-click="() => this.deleteMediaItem(item_index)"
+                                                        title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </t>
+                                
+                                <!-- No Items Row -->
+                                <tr t-if="mediaItems.length === 0">
+                                    <td colspan="6" class="text-center text-muted py-3">
+                                        No media found.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div t-if="mediaItems.length === 0" class="alert alert-info">
+                    <i class="fa fa-info-circle me-2"></i> No media added yet. Click "Add Media" to get started.
+                </div>
+            </div>
+
+            <!-- UPLOAD OPTIONS DIALOG -->
+            <div t-if="state.showUploadOptionsDialog" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header media-upload-header">
+                            <h5 class="modal-title text-white">
+                                <i class="fa fa-upload me-2"></i> Choose Upload Method
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" t-on-click="closeUploadOptionsDialog"></button>
+                        </div>
+
+                        <div class="modal-body media-upload-body">
+
+                            <!-- UPLOAD METHOD SELECTION -->
+                            <t t-if="!state.uploadMethod">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="card h-100 upload-option-card" 
+                                             t-on-click="() => this.selectUploadMethod('url')">
+                                            <div class="card-body text-center">
+                                                <div class="mb-3">
+                                                    <i class="fa fa-link fa-4x text-primary"></i>
+                                                </div>
+                                                <h5 class="card-title">Media URLs</h5>
+                                                <p class="card-text text-muted small">
+                                                    Add multiple URLs with preview
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="card h-100 upload-option-card" 
+                                             t-on-click="() => this.selectUploadMethod('file')">
+                                            <div class="card-body text-center">
+                                                <div class="mb-3">
+                                                    <i class="fa fa-file-image-o fa-4x text-success"></i>
+                                                </div>
+                                                <h5 class="card-title">Upload Files</h5>
+                                                <p class="card-text text-muted small">
+                                                    Select files with preview slider
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="card h-100 upload-option-card" 
+                                             t-on-click="() => this.selectUploadMethod('drag')">
+                                            <div class="card-body text-center">
+                                                <div class="mb-3">
+                                                    <i class="fa fa-cloud-upload fa-4x text-warning"></i>
+                                                </div>
+                                                <h5 class="card-title">Drag &amp; Drop</h5>
+                                                <p class="card-text text-muted small">
+                                                    Drag files with auto-preview
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- URL UPLOAD WITH TABLE & SLIDER PREVIEW -->
+                            <t t-if="state.uploadMethod === 'url'">
+                                <button class="btn btn-sm btn-secondary mb-3" t-on-click="() => this.state.uploadMethod = null">
+                                    <i class="fa fa-arrow-left me-1"></i> Back
+                                </button>
+
+                                <div class="row">
+                                    <!-- LEFT: URL Input & Table -->
+                                    <div class="col-md-6 url-input-section">
+                                        <h6 class="fw-bold mb-3">
+                                            <i class="fa fa-link me-2"></i> Add URLs
+                                        </h6>
+
+                                        <!-- URL Input -->
+                                        <div class="input-group mb-3">
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   placeholder="Paste URL and press Enter or click +"
+                                                   t-model="state.currentUrl"
+                                                   t-on-keydown="onUrlInputKeydown"
+                                                   t-on-paste="onUrlInputPaste"/>
+                                            <button class="btn btn-primary" t-on-click="addUrlToList">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="form-text mb-3">
+                                            <i class="fa fa-info-circle me-1"></i>
+                                            Paste one or multiple URLs (separated by newline)
+                                        </div>
+
+                                        <!-- URL Table -->
+                                        <div class="url-table-container">
+                                            <table class="table table-sm table-hover">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="col-num">#</th>
+                                                        <th>URL</th>
+                                                        <th class="col-status">Status</th>
+                                                        <th class="col-action"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-foreach="state.urlList" t-as="urlItem" t-key="urlItem_index">
+                                                        <tr t-att-class="{ 'table-active': urlItem_index === state.selectedUrlIndex }"
+                                                            t-on-click="() => this.selectUrlPreview(urlItem_index)">
+                                                            <td><t t-esc="urlItem_index + 1"/></td>
+                                                            <td class="text-truncate">
+                                                                <t t-esc="urlItem.url"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-if="urlItem.loading" class="badge bg-warning">
+                                                                    <i class="fa fa-spinner fa-spin"></i> Loading
+                                                                </span>
+                                                                <span t-if="!urlItem.loading &amp;&amp; !urlItem.error &amp;&amp; urlItem.isImage" 
+                                                                      class="badge bg-info">IMAGE</span>
+                                                                <span t-if="!urlItem.loading &amp;&amp; !urlItem.error &amp;&amp; urlItem.isVideo" 
+                                                                      class="badge bg-danger">VIDEO</span>
+                                                                <span t-if="urlItem.error" 
+                                                                      class="badge bg-danger" 
+                                                                      t-att-title="urlItem.error">Error</span>
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-danger"
+                                                                        t-on-click.stop="() => this.removeUrlFromList(urlItem_index)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                    <tr t-if="state.urlList.length === 0">
+                                                        <td colspan="4" class="text-center text-muted">
+                                                            <i class="fa fa-info-circle me-1"></i> No URLs added yet
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- RIGHT: Preview Slider -->
+<div class="col-md-6">
+    <h6 class="fw-bold mb-3">
+        <i class="fa fa-eye me-2"></i> Preview
+        <span t-if="state.urlList.length > 0" class="badge bg-secondary ms-2">
+            <t t-esc="state.selectedUrlIndex + 1"/> / <t t-esc="state.urlList.length"/>
+        </span>
+    </h6>
+
+    <div t-if="state.urlList.length === 0" class="preview-empty-state alert alert-secondary">
+        <div class="text-center">
+            <i class="fa fa-image fa-3x text-muted mb-3"></i>
+            <p class="mb-0">Preview will appear here</p>
+        </div>
+    </div>
+
+    <div t-if="state.urlList.length > 0" class="position-relative">
+        <div class="border rounded p-2 preview-container">
+            <t t-set="selectedUrl" t-value="selectedUrlItem"/>
+            
+            <!-- Loading State -->
+            <div t-if="selectedUrl &amp;&amp; selectedUrl.loading" class="preview-loading-state">
+                <div class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-3x text-primary mb-3"></i>
+                    <p class="text-muted">Loading preview...</p>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div t-if="selectedUrl &amp;&amp; selectedUrl.error" class="alert alert-danger">
+                <h6><i class="fa fa-exclamation-triangle me-2"></i> Error</h6>
+                <p class="mb-0"><t t-esc="selectedUrl.error"/></p>
+            </div>
+
+            <!-- Image Preview -->
+            <div t-if="selectedUrl &amp;&amp; !selectedUrl.loading &amp;&amp; !selectedUrl.error &amp;&amp; selectedUrl.isImage">
+                <img t-att-src="selectedUrl.preview" class="preview-image img-fluid rounded" alt="Preview"/>
+                
+               
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div class="small">
+                        <span class="badge bg-info me-1">IMAGE</span>
+                        <span class="badge bg-secondary me-1"><t t-esc="selectedUrl.format"/></span>
+                        <span class="badge bg-secondary"><t t-esc="selectedUrl.size"/> MB</span>
+                        <span t-if="selectedUrl.bgRemoved" class="badge bg-success ms-1">
+                            <i class="fa fa-check me-1"></i>BG Removed
+                        </span>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                       
+                        <button
+                            t-if="!selectedUrl.bgRemoved"
+                            class="btn btn-outline-danger"
+                            t-on-click="() => this.removeBackgroundFromUrl(state.selectedUrlIndex)"
+                            t-att-disabled="state.isRemovingBackground">
+                            <i t-if="!state.isRemovingBackground" class="fa fa-scissors me-1"/>
+                            <i t-if="state.isRemovingBackground" class="fa fa-spinner fa-spin me-1"/>
+                            Remove BG
+                        </button>
+
+
+                        <button
+                            t-if="selectedUrl.bgRemoved"
+                            class="btn btn-outline-success"
+                            t-on-click="() => this.restoreBackgroundFromUrl(state.selectedUrlIndex)">
+                            <i class="fa fa-undo me-1"/>
+                            Restore BG
+                        </button>
+
+                        <!-- Primary Button -->
+                        <button 
+                            t-att-class="selectedUrl.setPrimary ? 'btn btn-warning' : 'btn btn-outline-warning'" 
+                            t-on-click="() => this.togglePrimaryForUrl(state.selectedUrlIndex)">
+                            <i t-att-class="selectedUrl.setPrimary ? 'fa fa-star' : 'fa fa-star-o'"></i>
+                            <t t-if="selectedUrl.setPrimary">Primary</t>
+                            <t t-else="">Set Primary</t>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Preview (unchanged) -->
+            <div t-if="selectedUrl &amp;&amp; !selectedUrl.loading &amp;&amp; !selectedUrl.error &amp;&amp; selectedUrl.isVideo">
+                <div t-if="selectedUrl.format === 'YOUTUBE' || selectedUrl.format === 'VIMEO'">
+                    <iframe t-att-src="selectedUrl.preview"
+                            width="100%"
+                            height="300"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen="allowfullscreen"
+                            class="rounded media-slider-iframe">
+                    </iframe>
+                </div>
+                
+                <div t-else="">
+                    <video controls="controls" autoplay="autoplay" muted="muted" 
+                           class="w-100 rounded preview-video">
+                        <source t-att-src="selectedUrl.preview" 
+                                t-att-type="'video/' + (selectedUrl.format ? selectedUrl.format.toLowerCase() : 'mp4')"/>
+                    </video>
+                </div>
+                
+                <div class="mt-2 small">
+                    <span class="badge bg-danger me-1">VIDEO</span>
+                    <span t-if="selectedUrl.format" class="badge bg-secondary me-1"><t t-esc="selectedUrl.format"/></span>
+                    <span t-if="selectedUrl.size &amp;&amp; selectedUrl.size !== 'N/A'" class="badge bg-secondary"><t t-esc="selectedUrl.size"/> MB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <t t-if="state.urlList.length > 1">
+            <button class="btn btn-dark position-absolute start-0 top-50 translate-middle-y ms-2 preview-navigation-btn"
+                    t-on-click="() => this.prevUrlPreview()">
+                <i class="fa fa-chevron-left"/>
+            </button>
+            <button class="btn btn-dark position-absolute end-0 top-50 translate-middle-y me-2 preview-navigation-btn"
+                    t-on-click="() => this.nextUrlPreview()">
+                <i class="fa fa-chevron-right"/>
+            </button>
+        </t>
+    </div>
+</div>
+                                </div>
+
+                                <!-- Upload Button -->
+                                <div class="d-flex gap-2 mt-3">
+                                    <button class="btn btn-primary" 
+                                            t-on-click="() => this.uploadFromUrls()"
+                                            t-att-disabled="state.urlList.length === 0 || state.isUploadingUrls">
+                                        <i t-if="!state.isUploadingUrls" class="fa fa-upload me-1"></i>
+                                        <i t-if="state.isUploadingUrls" class="fa fa-spinner fa-spin me-1"></i>
+                                        <t t-if="state.isUploadingUrls">Uploading...</t>
+                                        <t t-else="">Upload <t t-esc="state.urlList.length"/> URL(s)</t>
+                                    </button>
+                                    <button class="btn btn-secondary" t-on-click="closeUploadOptionsDialog">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </t>
+
+                            <!-- FILE UPLOAD WITH TABLE & SLIDER PREVIEW -->
+                            <t t-if="state.uploadMethod === 'file'">
+                                <button class="btn btn-sm btn-secondary mb-3" t-on-click="() => this.state.uploadMethod = null">
+                                    <i class="fa fa-arrow-left me-1"></i> Back
+                                </button>
+
+                                <div class="row">
+                                    <!-- LEFT: File Selection & Table -->
+                                    <div class="col-md-6">
+                                        <h6 class="fw-bold mb-3">
+                                            <i class="fa fa-file me-2"></i> Select Files
+                                        </h6>
+
+                                        <!-- File Input Button -->
+                                        <button class="btn btn-outline-primary w-100 mb-3" t-on-click="onFileUploadClick">
+                                            <i class="fa fa-upload me-2"></i> Choose Files
+                                        </button>
+                                        <input type="file" 
+                                               class="file-input-hidden"
+                                               multiple="true"
+                                               accept="image/*,video/*"
+                                               t-ref="file_upload_input"
+                                               t-on-change="onFileSelectForPreview"/>
+
+                                        <!-- File Table -->
+                                        <div class="file-table-container">
+                                            <table class="table table-sm table-hover">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="col-num">#</th>
+                                                        <th>Name</th>
+                                                        <th class="col-type">Type</th>
+                                                        <th class="col-size">Size</th>
+                                                        <th class="col-action"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-foreach="state.filesToUpload" t-as="fileItem" t-key="fileItem_index">
+                                                        <tr t-att-class="{ 'table-active': fileItem_index === state.selectedFileIndex }"
+                                                            t-on-click="() => this.selectFilePreview(fileItem_index)">
+                                                            <td><t t-esc="fileItem_index + 1"/></td>
+                                                            <td class="text-truncate">
+                                                                <t t-esc="fileItem.name"/>
+                                                                <i t-if="fileItem.setPrimary" class="fa fa-star text-warning ms-1"></i>
+                                                            </td>
+                                                            <td>
+                                                                <span t-if="fileItem.type === 'image'" class="badge bg-info">IMAGE</span>
+                                                                <span t-if="fileItem.type === 'video'" class="badge bg-danger">VIDEO</span>
+                                                            </td>
+                                                            <td><t t-esc="fileItem.size"/> MB</td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-outline-danger"
+                                                                        t-on-click.stop="() => this.removeFileFromPreview(fileItem_index)">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                    <tr t-if="state.filesToUpload.length === 0">
+                                                        <td colspan="5" class="text-center text-muted">
+                                                            <i class="fa fa-info-circle me-1"></i> No files selected yet
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                   <!-- RIGHT: Preview Slider -->
+
+<div class="col-md-6">
+    <h6 class="fw-bold mb-3">
+        <i class="fa fa-eye me-2"></i> Preview
+        <span t-if="state.filesToUpload.length > 0" class="badge bg-secondary ms-2">
+            <t t-esc="state.selectedFileIndex + 1"/> / <t t-esc="state.filesToUpload.length"/>
+        </span>
+    </h6>
+
+    <div t-if="state.filesToUpload.length === 0" class="preview-empty-state alert alert-secondary">
+        <div class="text-center">
+            <i class="fa fa-image fa-3x text-muted mb-3"></i>
+            <p class="mb-0">Preview will appear here</p>
+        </div>
+    </div>
+
+    <div t-if="state.filesToUpload.length > 0" class="position-relative">
+        <div class="border rounded p-2 preview-container">
+            <t t-set="selectedFile" t-value="state.filesToUpload[state.selectedFileIndex] || state.filesToUpload[0]"/>
+            
+            <!-- Image Preview -->
+            <div t-if="selectedFile &amp;&amp; selectedFile.type === 'image' &amp;&amp; selectedFile.preview">
+                <img t-att-src="selectedFile.preview" class="preview-image img-fluid rounded" alt="Preview"/>
+               
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <div class="small">
+                        <span class="badge bg-info me-1">IMAGE</span>
+                        <span class="badge bg-secondary me-1"><t t-esc="selectedFile.format"/></span>
+                        <span class="badge bg-secondary"><t t-esc="selectedFile.size"/> MB</span>
+                        <span t-if="selectedFile.bgRemoved" class="badge bg-success ms-1">
+                            <i class="fa fa-check me-1"></i>BG Removed
+                        </span>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                      
+                        <button
+                            t-if="!selectedFile.bgRemoved"
+                            class="btn btn-outline-danger"
+                            t-on-click="() => this.removeBackgroundFromFile(state.selectedFileIndex)"
+                            t-att-disabled="state.isRemovingBackground">
+                            <i t-if="!state.isRemovingBackground" class="fa fa-scissors me-1"/>
+                            <i t-if="state.isRemovingBackground" class="fa fa-spinner fa-spin me-1"/>
+                            Remove BG
+                        </button>
+
+                        <!-- ✅ Restore BG Button -->
+                        <button
+                            t-if="selectedFile.bgRemoved"
+                            class="btn btn-outline-success"
+                            t-on-click="() => this.restoreBackgroundFromFile(state.selectedFileIndex)">
+                            <i class="fa fa-undo me-1"/>
+                            Restore BG
+                        </button>
+
+                        <!-- Primary Button -->
+                        <button 
+                            t-att-class="selectedFile.setPrimary ? 'btn btn-warning' : 'btn btn-outline-warning'" 
+                            t-on-click="() => this.togglePrimaryForFile(state.selectedFileIndex)">
+                            <i class="fa fa-star me-1"></i>
+                            <t t-if="selectedFile.setPrimary">Primary</t>
+                            <t t-else="">Set Primary</t>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Preview -->
+            <div t-if="selectedFile &amp;&amp; selectedFile.type === 'video'">
+                <div t-if="selectedFile.preview">
+                    <video controls="controls" autoplay="autoplay" muted="muted" 
+                           class="w-100 rounded preview-video">
+                        <source t-att-src="selectedFile.preview" 
+                                t-att-type="'video/' + selectedFile.format.toLowerCase()"/>
+                    </video>
+                </div>
+                
+                <div t-else="" class="d-flex align-items-center justify-content-center bg-dark rounded preview-container">
+                    <div class="text-center">
+                        <i class="fa fa-play-circle fa-5x text-white mb-3"></i>
+                        <p class="text-white">Video Ready</p>
+                    </div>
+                </div>
+                
+                <div class="mt-2 small">
+                    <span class="badge bg-danger me-1">VIDEO</span>
+                    <span class="badge bg-secondary me-1"><t t-esc="selectedFile.format"/></span>
+                    <span class="badge bg-secondary"><t t-esc="selectedFile.size"/> MB</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <t t-if="state.filesToUpload.length > 1">
+            <button class="btn btn-dark position-absolute start-0 top-50 translate-middle-y ms-2 preview-navigation-btn"
+                    t-on-click="() => this.prevFilePreview()">
+                <i class="fa fa-chevron-left"/>
+            </button>
+            <button class="btn btn-dark position-absolute end-0 top-50 translate-middle-y me-2 preview-navigation-btn"
+                    t-on-click="() => this.nextFilePreview()">
+                <i class="fa fa-chevron-right"/>
+            </button>
+        </t>
+    </div>
+</div>
+                                </div>
+
+                                <div t-if="state.isUploadingFiles" class="mt-3">
+                                    <div class="progress upload-progress-bar">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                             role="progressbar"
+                                             t-att-style="'width: ' + state.uploadProgress + '%'"
+                                             t-att-aria-valuenow="state.uploadProgress">
+                                            <t t-esc="Math.round(state.uploadProgress)"/>%
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2 mt-3">
+                                    <button class="btn btn-primary" 
+                                            t-on-click="() => this.uploadSelectedFiles()"
+                                            t-att-disabled="state.filesToUpload.length === 0 || state.isUploadingFiles">
+                                        <i t-if="!state.isUploadingFiles" class="fa fa-upload me-1"></i>
+                                        <i t-if="state.isUploadingFiles" class="fa fa-spinner fa-spin me-1"></i>
+                                        Upload <t t-esc="state.filesToUpload.length"/> File(s)
+                                    </button>
+                                    <button class="btn btn-secondary" t-on-click="closeUploadOptionsDialog">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div t-if="state.showDialog" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content gallery-modal-content">
+                        
+                        <div class="modal-header gallery-modal-header">
+                            <h5 class="modal-title text-white">
+                                <i class="fa fa-images me-2"></i> Media Gallery
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" t-on-click="closeDialog"></button>
+                        </div>
+
+                        <div class="modal-body p-0">
+                            <div class="drag-drop-zone position-relative"
+                                 t-att-class="{ 'o_dnd_dragging': state.isDragging }"
+                                 t-on-dragenter="onDragEnter"
+                                 t-on-dragleave="onDragLeave"
+                                 t-on-dragover="onDragOver"
+                                 t-on-drop="onDrop">
+
+                                <input type="file" 
+                                       class="file-input-hidden" 
+                                       multiple="true" 
+                                       accept="image/*,video/*"
+                                       t-ref="file_input_gallery" 
+                                       t-on-change="onFileInputChange"/>
+
+                                <div t-if="shouldShowDragZone" class="drag-zone-empty">
+                                    <div class="text-center text-muted">
+                                        <i class="fa fa-cloud-upload fa-5x mb-4"></i>
+                                        <h5 class="mb-4 fw-normal">Drag &amp; Drop Media Here</h5>
+                                        <button class="btn btn-outline-secondary" t-on-click="onFileOpen">
+                                            <i class="fa fa-folder-open me-2"></i> Browse Files
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div t-if="shouldShowMediaSlider" class="media-slider-container">
+                                 <div class=" m-3 ">
+                                           <div class="badge media-count-badge">
+                                    <i class="fa fa-images me-2"></i>
+                                    <t t-esc="state.currentIndex + 1"/> / 
+                                    <t t-esc="state.filesToUpload.length > 0 ? state.filesToUpload.length : mediaItems.length"/>
+                                </div>
+                                        </div>
+                                    <div class="media-control-main">
+                                    <div class="media-slider-main">
+
+                                        <div t-if="!isVideo()" class="text-center">
+                                            <img t-att-src="getCurrentMediaUrl()"
+                                                 class="media-slider-image img-fluid"/>
+                                        </div>
+
+                                        <div t-if="isVideo()" class="text-center w-100">
+
+                                            <t t-if="isEmbedVideo()">
+                                                <iframe t-att-src="getEmbedUrl()"
+                                                        width="100%"
+                                                        height="400"
+                                                        frameborder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowfullscreen="allowfullscreen"
+                                                        class="media-slider-iframe">
+                                                </iframe>
+                                            </t>
+
+                                            <t t-else="">
+                                                <video controls="controls"
+                                                       autoplay="autoplay"
+                                                       muted="muted"
+                                                       class="media-slider-video w-100"
+                                                       t-on-timeupdate="onVideoTimeUpdate"
+                                                       t-on-ended="onVideoEnded">
+                                                    <source t-att-src="getCurrentMediaUrl()" t-att-type="getVideoMimeType()"/>
+                                                </video>
+                                            </t>
+                                        </div>
+
+                                        <!-- Navigation Arrows - Show when there are multiple items (preview OR saved) -->
+                        <button t-if="(state.filesToUpload.length > 1 &amp;&amp; !state.showDragZoneOnly) || mediaItems.length > 1"
+                                class="btn btn-light position-absolute start-0 top-50 translate-middle-y ms-3 media-nav-btn"
+                                t-on-click="prevMedia">
+                            <i class="fa fa-chevron-left fa-2x"></i>
+                        </button>
+
+                        <button t-if="(state.filesToUpload.length > 1 &amp;&amp; !state.showDragZoneOnly) || mediaItems.length > 1"
+                                class="btn btn-light position-absolute end-0 top-50 translate-middle-y me-3 media-nav-btn"
+                                t-on-click="nextMedia">
+                            <i class="fa fa-chevron-right fa-2x"></i>
+                        </button>
+
+                                       
+
+                                        <div t-if="isPrimary()" class="position-absolute top-0 end-0 m-3">
+                                            <span class="badge primary-badge">
+                                                <i class="fa fa-star me-1"></i> PRIMARY
+                                            </span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="media-controls-bar">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        
+        <div class="text-white">
+            <h6 class="mb-1">
+                <t t-if="state.filesToUpload.length > 0 &amp;&amp; !state.showDragZoneOnly">
+                    <t t-esc="state.filesToUpload[state.currentIndex]?.name || 'Unnamed Media'"/>
+                </t>
+                <t t-else="">
+                    <t t-esc="currentItem?.data.name || 'Unnamed Media'"/>
+                </t>
+            </h6>
+            <small class="text-white-50">
+                <t t-if="state.filesToUpload.length > 0 &amp;&amp; !state.showDragZoneOnly">
+                    <span t-if="state.filesToUpload[state.currentIndex]?.type === 'video'" 
+                          class="badge bg-danger me-1">VIDEO</span>
+                    <span t-else="" class="badge bg-info me-1">IMAGE</span>
+                    <span class="badge bg-warning preview-mode-badge">
+                        <i class="fa fa-eye me-1"></i>PREVIEW MODE
+                    </span>
+                </t>
+                <t t-else="">
+                    <span t-if="isVideo()" class="badge bg-danger me-1">VIDEO</span>
+                    <span t-else="" class="badge bg-info me-1">IMAGE</span>
+                </t>
+            </small>
+        </div>
+
+        <!-- RIGHT: Action Buttons -->
+        <div class="btn-group" role="group">
+            
+            <!-- ===== PREVIEW MODE BUTTONS ===== -->
+            <t t-if="state.filesToUpload.length > 0 &amp;&amp; !state.showDragZoneOnly">
+                <t t-set="currentFile" t-value="state.filesToUpload[state.currentIndex]"/>
+                
+                <!-- Only show BG buttons for images -->
+                <t t-if="currentFile &amp;&amp; currentFile.type === 'image'">
+                   
+                    <button
+                        t-if="!currentFile.bgRemoved"
+                        class="btn btn-sm btn-outline-danger"
+                        t-on-click="removeBackground"
+                        t-att-disabled="state.isRemovingBackground">
+                        <i t-if="!state.isRemovingBackground" class="fa fa-scissors me-1"/>
+                        <i t-if="state.isRemovingBackground" class="fa fa-spinner fa-spin me-1"/>
+                        <t t-if="state.isRemovingBackground">Removing...</t>
+                        <t t-else="">Remove BG</t>
+                    </button>
+
+                 
+                    <button
+                        t-if="currentFile.bgRemoved"
+                        class="btn btn-sm btn-outline-success"
+                        t-on-click="restoreBackground"
+                        t-att-disabled="state.isRestoringBackground">
+                        <i t-if="!state.isRestoringBackground" class="fa fa-undo me-1"/>
+                        <i t-if="state.isRestoringBackground" class="fa fa-spinner fa-spin me-1"/>
+                        <t t-if="state.isRestoringBackground">Restoring...</t>
+                        <t t-else="">Restore BG</t>
+                    </button>
+                </t>
+                
+                <!-- Primary Button (Images Only) -->
+                <button t-if="currentFile &amp;&amp; currentFile.type === 'image'" 
+                        class="btn btn-sm"
+                        t-att-class="currentFile.setPrimary ? 'btn-warning' : 'btn-outline-warning'"
+                        t-on-click="setPrimary">
+                    <i class="fa fa-star me-1"></i>
+                    <t t-if="currentFile.setPrimary">Primary</t>
+                    <t t-else="">Set Primary</t>
+                </button>
+
+                <button class="btn btn-sm btn-light" 
+                        t-on-click="onFileOpen"
+                        title="Add more files">
+                    <i class="fa fa-plus me-1"></i> Add More
+                </button>
+
+                <button class="btn btn-sm btn-success" 
+                        t-on-click="savePreviewedFiles"
+                        title="Save all files">
+                    <i class="fa fa-save me-1"></i> 
+                    Save All (<t t-esc="state.filesToUpload.length"/>)
+                </button>
+
+                <button class="btn btn-sm btn-danger" 
+                        t-on-click="() => this.removeFileFromPreview(state.currentIndex)"
+                        title="Remove this file from preview">
+                    <i class="fa fa-trash me-1"></i> Remove
+                </button>
+            </t>
+
+            <t t-else="">
+                <!-- Only show BG buttons for images -->
+                <t t-if="!isVideo()">
+                   
+                    <button
+                        t-if="!currentBgRemoved"
+                        class="btn btn-sm btn-outline-danger"
+                        t-on-click="removeBackground"
+                        t-att-disabled="state.isRemovingBackground">
+                        <i t-if="!state.isRemovingBackground" class="fa fa-scissors me-1"/>
+                        <i t-if="state.isRemovingBackground" class="fa fa-spinner fa-spin me-1"/>
+                        <t t-if="state.isRemovingBackground">Removing...</t>
+                        <t t-else="">Remove BG</t>
+                    </button>
+
+                   
+                    <button
+                        t-if="currentBgRemoved"
+                        class="btn btn-sm btn-outline-success"
+                        t-on-click="restoreBackground"
+                        t-att-disabled="state.isRestoringBackground">
+                        <i t-if="!state.isRestoringBackground" class="fa fa-undo me-1"/>
+                        <i t-if="state.isRestoringBackground" class="fa fa-spinner fa-spin me-1"/>
+                        <t t-if="state.isRestoringBackground">Restoring...</t>
+                        <t t-else="">Restore BG</t>
+                    </button>
+                </t>
+                
+                <button t-if="!isVideo()" 
+                        class="btn btn-sm"
+                        t-att-class="isPrimary() ? 'btn-warning' : 'btn-outline-warning'"
+                        t-on-click="setPrimary">
+                    <i class="fa fa-star me-1"></i>
+                    <t t-if="isPrimary()">Primary</t>
+                    <t t-else="">Set Primary</t>
+                </button>
+
+                <button class="btn btn-sm btn-light" 
+                        t-on-click="onFileOpen"
+                        title="Add more media">
+                    <i class="fa fa-plus me-1"></i> Add More
+                </button>
+
+                <button class="btn btn-sm btn-danger" 
+                        t-on-click="removeCurrentMedia"
+                        title="Delete this media permanently">
+                    <i class="fa fa-trash me-1"></i> Delete
+                </button>
+            </t>
+        </div>
+    </div>
+</div>
+                                </div>
+
+                                <div t-if="state.isDragging" class="drag-overlay">
+                                    <div class="text-center text-white">
+                                        <i class="fa fa-cloud-upload fa-5x mb-3"></i>
+                                        <h3>Drop files here to upload</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

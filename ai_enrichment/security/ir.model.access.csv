@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_enrichment_config_user,access.ai.enrichment.config.user,model_ai_enrichment_config,base.group_user,1,1,1,1
+access_ai_enrichment_wizard,ai.enrichment.wizard,model_ai_enrichment_wizard,base.group_user,1,1,1,1
+access_ai_prompt_type_user,access_ai_prompt_type_user,model_ai_prompt_type,base.group_user,1,1,1,1
+access_ai_enrichment_queue_log_user,access.ai.enrichment.queue.log.user,model_ai_enrichment_queue_log,,1,1,1,1
+access_trigger_sync_config_user,access.trigger.sync.config.user,model_trigger_sync_config,,1,1,1,1
+access_ai_enrichment_field_user,access.ai.enrichment.field.user,model_ai_enrichment_field,base.group_user,1,1,1,1
+

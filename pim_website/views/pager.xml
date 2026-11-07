@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Alternative Compact Version -->
+    <template id="enhanced_pager_compact" name="Enhanced Pager Compact">
+        <t t-if="pager and pager.get('page_count', 0) > 1">
+            <nav class="enhanced-pager-container compact" aria-label="Page navigation">
+                <ul class="enhanced-pager">
+                    <li t-att-class="'pager-item' + (' disabled' if not pager.get('page_previous', {}).get('url') else '')">
+                        <a t-if="pager.get('page_previous', {}).get('url')"
+                           t-att-href="pager.get('page_previous', {}).get('url')"
+                           class="pager-link">
+                            <i class="fa fa-chevron-left"/>
+                        </a>
+                        <span t-else="" class="pager-link disabled">
+                            <i class="fa fa-chevron-left"/>
+                        </span>
+                    </li>
+
+                    <li class="pager-item active">
+                        <span class="pager-link">
+                            Page <strong t-esc="pager.get('page', {}).get('num', 1)"/> of <strong t-esc="pager.get('page_count', 1)"/>
+                        </span>
+                    </li>
+
+                    <li t-att-class="'pager-item' + (' disabled' if not pager.get('page_next', {}).get('url') else '')">
+                        <a t-if="pager.get('page_next', {}).get('url')"
+                           t-att-href="pager.get('page_next', {}).get('url')"
+                           class="pager-link">
+                            <i class="fa fa-chevron-right"/>
+                        </a>
+                        <span t-else="" class="pager-link disabled">
+                            <i class="fa fa-chevron-right"/>
+                        </span>
+                    </li>
+                </ul>
+            </nav>
+        </t>
+    </template>
+</odoo>

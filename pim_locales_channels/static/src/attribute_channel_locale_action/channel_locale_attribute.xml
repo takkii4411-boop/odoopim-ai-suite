@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<t t-name="pim_locales_channels.AttributeChannelLocalePop">
+    <Dialog size="'lg'" title="props.title">
+        <div class="table-responsive">
+            <div class="row">
+                <div class="col-12">
+                    <button t-if="this.state.grouped &amp;&amp; isNoVals" class="btn btn-primary float-end" t-on-click="ungroupByType">
+                        <i class="fa fa-check"/> Ungroup Fields
+                    </button>
+                    <button t-if="!this.state.grouped &amp;&amp; isNoVals" class="btn btn-secondary float-end" t-on-click="groupByType">
+                        <i class="fa fa-check"/> Group Fields
+                    </button>
+                </div>
+            </div>
+            <t t-if="isNoVals">
+                <t t-if="!this.state.grouped">
+                <t t-foreach="this.state.datas" t-as="platform_data" t-key="platform_data_index">
+                <div class="collapsed p-1" style="cursor:pointer;color:#017e84;"
+                     data-bs-toggle="collapse"
+                     t-att-data-bs-target="'#platform_body_' + platform_data">
+                    <span class="fs-4 fw-bold"><t t-esc="platform_data"/></span>
+                </div>
+                <hr/>
+                <div t-attf-id="platform_body_{{ platform_data }}"
+                    class="collapse mt-2">
+                    <table class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th class="fw-bolder">Field Name</th>
+                            <!-- Language Headers -->
+                            <t t-set="first_row" t-value="this.state.datas[platform_data][0]"/>
+
+                            <t t-foreach="first_row.langs" t-as="lang_val" t-key="lang_val_index">
+                                <th>
+                                    <span class="fw-bolder" t-esc="first_row.langs[lang_val].lang_name"/>
+                                </th>
+                            </t>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Field Rows -->
+                        <t t-foreach="this.state.datas[platform_data]" t-as="row" t-key="row_index">
+                            <tr>
+                                <td><t t-esc="row.field_label"/></td>
+
+                                <!-- Values Per Lang -->
+                                <t t-foreach="row.langs" t-as="lang" t-key="lang_index">
+                                    <td>
+                                        <input type="text"
+                                               class="form-control rounded"
+                                               placeholder="Enter Value..."
+                                               t-att-data-field="row.x_field_name"
+                                               t-att-data-field-id="row.field_id"
+                                               t-att-data-lang-id="row.langs[lang].x_lang_id"
+                                               t-att-data-lang="lang"
+                                               t-att-data-platform="platform_data"
+                                               t-att-value="row.langs[lang].x_value"
+                                               t-on-input="onValueChange"
+                                        />
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                </div>
+            </t>
+            </t>
+                <t t-else="">
+                <t t-foreach="this.state.datas" t-as="platform_data" t-key="platform_data_index">
+                    <div class="collapsed p-1" style="cursor:pointer;color:#017e84;"
+                         data-bs-toggle="collapse"
+                         t-att-data-bs-target="'#platform_body_' + platform_data">
+                        <span class="fs-4 fw-bold"><t t-esc="platform_data"/></span>
+                    </div>
+                    <hr/>
+                    <div t-attf-id="platform_body_{{ platform_data }}"
+                        class="collapse mt-2">
+                        <t t-log="this.state.datas[platform_data]"/>
+                        <t t-foreach="this.state.datas[platform_data]" t-as="ttype" t-key="ttype_index">
+                            <div class="collapsed p-1" style="cursor:pointer;color:#017e84;"
+                                 data-bs-toggle="collapse"
+                                 t-att-data-bs-target="'#field_type_' + ttype">
+                                <span class="fs-6 fw-bold ms-3"><t t-esc="ttype"/></span>
+                            </div>
+                            <div t-attf-id="field_type_{{ ttype }}"
+                                class="collapse mt-2">
+                                <table class="table table-striped table-hover table-sm ms-2">
+                                    <thead>
+                                        <tr>
+                                            <th class="fw-bolder">Field Name</th>
+                                            <!-- Language Headers -->
+                                            <t t-set="first_row" t-value="this.state.datas[platform_data][ttype][0]"/>
+
+                                            <t t-foreach="first_row.langs" t-as="lang_val" t-key="lang_val_index">
+                                                <th>
+                                                    <span class="fw-bolder" t-esc="first_row.langs[lang_val].lang_name"/>
+                                                </th>
+                                            </t>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Field Rows -->
+                                        <t t-foreach="this.state.datas[platform_data][ttype]" t-as="row" t-key="row_index">
+                                            <tr>
+                                                <td><t t-esc="row.field_label"/></td>
+
+                                                <!-- Values Per Lang -->
+                                                <t t-foreach="row.langs" t-as="lang" t-key="lang_index">
+                                                    <td>
+                                                        <input type="text"
+                                                               class="form-control rounded"
+                                                               placeholder="Enter Value..."
+                                                               t-att-data-field="row.x_field_name"
+                                                               t-att-data-field-id="row.field_id"
+                                                               t-att-data-lang-id="row.langs[lang].x_lang_id"
+                                                               t-att-data-lang="lang"
+                                                               t-att-data-platform="platform_data"
+                                                               t-att-value="row.langs[lang].x_value"
+                                                               t-on-input="onValueChange"
+                                                        />
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+
+                    </div>
+                </t>
+            </t>
+            </t>
+            <t t-else="">
+                <div class="row">
+                   <div class="col-12 text-center">
+                       <p>Enable the fields that you want to translate</p>
+<!--                       <button class="btn btn-primary"-->
+<!--                               t-on-click="EnableTranslationFields">Enable Fields</button>-->
+                   </div>
+                </div>
+
+            </t>
+
+        </div>
+        <!-- FOOTER -->
+        <t t-set-slot="footer">
+           <div class="d-flex justify-content-between w-100">
+                <button class="btn btn-light border" disabled="disabled">
+                    <i class="fa fa-globe"></i>
+                    Multi-Lingual
+                </button>
+
+                <div>
+                    <button class="btn btn-primary me-2" t-on-click="onSave">
+                        <i class="fa fa-save me-1"></i>
+                        Save All
+                    </button>
+                    <button class="btn btn-secondary" t-on-click="props.close">
+                        <i class="fa fa-times me-1"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </t>
+    </Dialog>
+</t>
+
+</templates>

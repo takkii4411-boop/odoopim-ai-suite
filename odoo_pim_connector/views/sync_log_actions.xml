@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_server_process_sync_log_queue" model="ir.actions.server">
+            <field name="name">Process Selected Logs</field>
+            <field name="model_id" ref="model_pim_sync_log"/>
+            <field name="binding_model_id" ref="model_pim_sync_log"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    records.action_process_queue()
+            </field>
+        </record>
+    </data>
+</odoo>

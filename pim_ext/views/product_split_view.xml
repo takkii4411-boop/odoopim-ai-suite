@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!-- Action to open the custom view -->
+        <record id="action_products_split_view_custom" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_product_creation_split_view_custom"/>
+            <field name="target">current</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+<!--    <t t-name="pim_ext.inherit_animated_number" t-inherit="web.AnimatedNumber">-->
+<!--        <xpath expr="//div[hasclass('o_animated_number')]" position="replace">-->
+<!--&lt;!&ndash;            <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <span>Total Products</span>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--            <div class="o_animated_number ms-2 text-900 text-nowrap cursor-default" t-att-class="state.value !== props.value and props.animationClass" t-att-title="props.title">-->
+<!--                <t t-slot="prefix"/>-->
+<!--                <span t-if="props.currency and props.currency.position === 'before'" t-esc="props.currency.symbol" class="ms-1"/>-->
+<!--                <b t-esc="format(state.value)" />-->
+<!--                <span t-if="props.currency and props.currency.position === 'after'" t-esc="props.currency.symbol" class="ms-1"/>-->
+<!--            </div>-->
+<!--        </xpath>-->
+<!--    </t>-->
+ <t t-name="pim_ext.ProgressBarFieldInherit" t-inherit="web.ProgressBarField" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_progressbar_value')]" position="replace">
+                               <div class="o_progressbar_value d-flex">
+                <t t-if="isPercentage">
+                    <input
+                        t-if="isEditable and props.isCurrentValueEditable"
+                        t-ref="currentValue"
+                        class="o_input h-100 text-center"
+                        type="text"
+                        inputmode="decimal"
+                        autocomplete="off"
+                        t-att-value="formatCurrentValue() or ''"
+                        t-att-required="props.required"
+                        t-on-change="onCurrentValueChange"
+                        t-on-focus="onInputFocus"
+                        t-on-blur="onInputBlur"
+                    />
+
+                    <span t-else="">
+                        <t t-set="percent_value" t-value="formatCurrentValue(true)+'%'"/>
+                        <span class="mx-1" t-esc="percent_value"/>
+                    </span>
+
+                </t>
+                <t t-else="">
+                    <input
+                        t-if="isEditable and props.isCurrentValueEditable"
+                        t-ref="currentValue"
+                        class="o_input h-100 text-center"
+                        type="text"
+                        inputmode="decimal"
+                        autocomplete="off"
+                        t-att-value="formatCurrentValue()"
+                        t-on-change="onCurrentValueChange"
+                        t-on-focus="onInputFocus"
+                        t-on-blur="onInputBlur"
+                    />
+                    <span t-else="" class="mx-1" t-esc="formatCurrentValue(true)"/>
+                    /
+                    <input
+                        t-if="isEditable and props.isMaxValueEditable"
+                        t-ref="maxValue"
+                        class="o_input h-100 text-center"
+                        type="text"
+                        inputmode="decimal"
+                        autocomplete="off"
+                        t-att-value="formatMaxValue()"
+                        t-on-change="onMaxValueChange"
+                        t-on-focus="onInputFocus"
+                        t-on-blur="onInputBlur"
+                    />
+                    <span t-else="" class="mx-1" t-esc="formatMaxValue(true)"/>
+                </t>
+            </div>
+
+        </xpath>
+ </t>
+</odoo>

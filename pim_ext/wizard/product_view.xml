@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="add_product_form" model="ir.ui.view">
+        <field name="name">product.select.form</field>
+        <field name="model">product.select</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="product_ids" nolabel="1" colspan="2"/>
+                </group>
+                <footer>
+                    <button name="add_sku" string="Add Selected SKU" type="object" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_add_products" model="ir.actions.act_window">
+        <field name="name">Choose SKU</field>
+        <field name="res_model">product.select</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

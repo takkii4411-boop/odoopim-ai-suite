@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="pim_locales_channels.TranslationLocaleDialog">
+        <Dialog title="props.title">
+            <div class="o_translation_dialog p-3 translation-dialog-container">
+
+                <!-- Header -->
+                <div class="translation-header mb-3">
+                    <span class="fw-bold fs-5">Localized Values</span>
+                    <p class="text-muted small mb-0">
+                        Edit translations for each channel &amp; language combination.
+                    </p>
+                </div>
+
+                <div class="row g-4 translation-grid">
+                    <t t-foreach="this.state.datas" t-as="platform_data" t-key="platform_data_index">
+                        <h5 class="mt-3 mb-2">
+                            Platform: <t t-esc="platform_data"/>
+                        </h5>
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Field Name</th>
+                                    <!-- Language Headers -->
+                                    <t t-set="first_row" t-value="this.state.datas[platform_data][0]"/>
+
+                                    <t t-foreach="first_row.langs" t-as="lang_val" t-key="lang_val_index">
+                                        <th>
+                                            <t t-esc="first_row.langs[lang_val].lang_name"/>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Field Rows -->
+                                <t t-foreach="this.state.datas[platform_data]" t-as="row" t-key="row_index">
+                                    <tr>
+                                        <td><t t-esc="row.field_label"/></td>
+
+                                        <!-- Values Per Lang -->
+                                        <t t-foreach="row.langs" t-as="lang" t-key="lang_index">
+                                            <td>
+                                                <input type="text"
+                                                       class="form-control rounded-0"
+                                                       t-att-data-field="row.x_field_name"
+                                                       t-att-data-field-id="row.field_id"
+                                                       t-att-data-lang-id="row.langs[lang].x_lang_id"
+                                                       t-att-data-lang="lang"
+                                                       t-att-data-platform="platform_data"
+                                                       t-att-value="row.langs[lang].x_value"
+                                                       t-on-input="onValueChange"
+                                                />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </div>
+
+            <t t-set-slot="footer">
+                <div class="d-flex justify-content-between w-100">
+                    <button class="btn btn-light border" disabled="disabled" t-if="!is_multiLingual">
+                        <i class="fa fa-globe"></i>
+                        Multi-Locale
+                    </button>
+
+                    <div>
+                        <button class="btn btn-primary me-2" t-on-click="onSave">
+                            <i class="fa fa-save me-1"></i>
+                            Save All
+                        </button>
+                        <button class="btn btn-secondary" t-on-click="props.close">
+                            <i class="fa fa-times me-1"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </t>
+        </Dialog>
+    </t>
+</templates>

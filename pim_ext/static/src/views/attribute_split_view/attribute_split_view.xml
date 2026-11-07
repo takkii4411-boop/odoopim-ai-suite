@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Main View Template -->
+    <t t-name="pim_ext.AttributeSplitView"
+       t-inherit="web.ListView"
+       t-inherit-mode="primary">
+        <xpath expr="//t[@t-component='props.Renderer']" position="attributes">
+            <attribute name="onFormChange">onFormChange.bind(this)</attribute>
+            <attribute name="onClickSave">onClickSave.bind(this)</attribute>
+        </xpath>
+    </t>
+    <!-- Button Template -->
+    <t t-name="pim_ext.AttributeSplitView.Buttons">
+        <div class="o_cp_action_menus d-flex align-items-center gap-2 ms-auto">
+            <t t-if="isFormChanged">
+                <div class="d-flex gap-2">
+                    <button type="button"
+                            class="btn o_list_button_save"
+                            data-hotkey="s"
+                            t-on-click.stop="onClickSave"
+                            title="Save">
+                        <i class="fa fa-check"/>
+                    </button>
+                    <button type="button"
+                            class="btn o_list_button_discard"
+                            data-hotkey="j"
+                            t-on-click.stop="onClickDiscard"
+                            title="Discard">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </t>
+            <t t-if="props.resModel === 'product.attribute'">
+                <button type="button"
+                        class="btn o_list_button_create shadow-sm"
+                        t-on-click.stop="onCreateAttribute"
+                        title="Create Attribute"
+                        data-hotkey="c">
+                    <i class="fa fa-plus me-2"/>
+                    <span class="d-none d-md-inline">Create Attribute</span>
+                </button>
+            </t>
+        </div>
+    </t>
+    <!-- Main Renderer Template -->
+    <t t-name="pim_ext.AttributeSplitRenderer"
+       t-inherit="web.ListRenderer"
+       t-inherit-mode="primary">
+        <!-- Add custom class to list renderer -->
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="attributes">
+            <attribute name="class" add="attribute-split-list" separator=" "/>
+        </xpath>
+        <!-- Split view panels -->
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="after">
+            <!-- Resize handle -->
+            <div class="attribute-split-resize"
+                 t-if="attributeState.isSelectingType || attributeState.current_record"
+                 t-on-pointerdown.stop.prevent="onStartSplitResize"/>
+            <!-- Form panel -->
+            <div class="attribute-split-form"
+                 t-if="attributeState.isSelectingType || attributeState.current_record">
+                <div class="split-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <t t-if="attributeState.isSelectingType">
+                                <i class="fa fa-plus-circle me-2 text-primary"/>
+                                Create Attribute
+                            </t>
+                            <t t-else="">
+                                <i class="fa fa-edit me-2"/>Edit <t t-esc="realModelName"/>
+                            </t>
+                        </h5>
+                        <button class="btn btn-sm btn-light"
+                                t-on-click="closeSplitView">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+                    <t t-if="attributeState.isSelectingType">
+                        <p class="mb-0 mt-2 text-muted small">Choose the attribute type</p>
+                    </t>
+                </div>
+                <div class="split-form-content">
+                    <!-- Attribute Type Selection -->
+                    <t t-if="attributeState.isSelectingType">
+                        <div class="pim_bg d-flex justify-content-center">
+                            <div class="pim_container">
+                                <h1 class="pim_title">Create Attribute</h1>
+                                <h3 class="pim_subtitle">Choose the attribute type</h3>
+                                <div class="pim_grid">
+                                    <!-- Date -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('date')">
+                                        <img src="/pim_ext/static/src/img/icon-date 1.png" alt="Date" class="pim_icon"/>
+                                        <span class="pim_label">Date</span>
+                                    </button>
+                                    <!-- File -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('file')">
+                                        <img src="/pim_ext/static/src/img/icon-file.png" alt="File" class="pim_icon"/>
+                                        <span class="pim_label">File</span>
+                                    </button>
+                                    <!-- Identifier -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('identifier')">
+                                        <img src="/pim_ext/static/src/img/icon-id.png" alt="Identifier" class="pim_icon"/>
+                                        <span class="pim_label">Identifier</span>
+                                    </button>
+                                    <!-- Image -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('image')">
+                                        <img src="/pim_ext/static/src/img/icon-asset.png" alt="Image" class="pim_icon"/>
+                                        <span class="pim_label">Image</span>
+                                    </button>
+                                    <!-- Measurement -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('measurement')">
+                                        <img src="/pim_ext/static/src/img/icon-metric 1.png" alt="Measurement" class="pim_icon"/>
+                                        <span class="pim_label">Measurement</span>
+                                    </button>
+                                    <!-- Multi Select -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('multi_select')">
+                                        <img src="/pim_ext/static/src/img/icon-multiselect.png" alt="Multi Select" class="pim_icon"/>
+                                        <span class="pim_label">Multi Select</span>
+                                    </button>
+                                    <!-- Number -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('number')">
+                                        <img src="/pim_ext/static/src/img/fluent-emoji-high-contrast_input-numbers.png" alt="Number" class="pim_icon"/>
+                                        <span class="pim_label">Number</span>
+                                    </button>
+                                    <!-- Price -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('price')">
+                                        <img src="/pim_ext/static/src/img/icon-price.png" alt="Price" class="pim_icon"/>
+                                        <span class="pim_label">Price</span>
+                                    </button>
+                                    <!-- Reference Multi Select -->
+<!--                                    <button class="pim_card"-->
+<!--                                            t-on-click="() => props.controllerRef.onTypeSelected('reference_multi_select')">-->
+<!--                                        <img src="/pim_ext/static/src/img/icon-multiselect.png" alt="Reference Multi" class="pim_icon"/>-->
+<!--                                        <span class="pim_label">Reference Data<br/>Multi Select</span>-->
+<!--                                    </button>-->
+<!--                                    &lt;!&ndash; Reference Simple Select &ndash;&gt;-->
+<!--                                    <button class="pim_card"-->
+<!--                                            t-on-click="() => props.controllerRef.onTypeSelected('reference_simple_select')">-->
+<!--                                        <img src="/pim_ext/static/src/img/icon-select.png" alt="Reference Simple" class="pim_icon"/>-->
+<!--                                        <span class="pim_label">Reference Data<br/>Simple Select</span>-->
+<!--                                    </button>-->
+                                    <!-- Simple Select -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('simple_select')">
+                                        <img src="/pim_ext/static/src/img/icon-select.png" alt="Simple Select" class="pim_icon"/>
+                                        <span class="pim_label">Simple Select</span>
+                                    </button>
+                                    <!-- Table -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('table')">
+                                        <img src="/pim_ext/static/src/img/icon-table.png" alt="Table" class="pim_icon"/>
+                                        <span class="pim_label">Table</span>
+                                    </button>
+                                    <!-- Text -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('text')">
+                                        <img src="/pim_ext/static/src/img/icon-text.png" alt="Text" class="pim_icon"/>
+                                        <span class="pim_label">Text</span>
+                                    </button>
+                                    <!-- Text Area -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('textarea')">
+                                        <img src="/pim_ext/static/src/img/icon-textarea.png" alt="Text Area" class="pim_icon"/>
+                                        <span class="pim_label">Text Area</span>
+                                    </button>
+                                    <!-- Yes/No -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('yes_no')">
+                                        <img src="/pim_ext/static/src/img/icon-switch.png" alt="Yes/No" class="pim_icon"/>
+                                        <span class="pim_label">Yes/No</span>
+                                    </button>
+                                    <!-- Float -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('float')">
+                                        <img src="/pim_ext/static/src/img/fluent-emoji-high-contrast_input-numbers.png" alt="Float" class="pim_icon"/>
+                                        <span class="pim_label">Float</span>
+                                    </button>
+                                    <!-- Color -->
+                                    <button class="pim_card"
+                                            t-on-click="() => props.controllerRef.onTypeSelected('color')">
+                                        <img src="/pim_ext/static/src/img/icon-asset.png" alt="Color" class="pim_icon"/>
+                                        <span class="pim_label">Color</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                    <!-- Edit Form View -->
+                    <t t-else="">
+                        <div class="o_form_view o_form_editable">
+                            <div class="o_form_sheet_bg">
+                                <div class="o_form_sheet">
+                                    <FormRenderer archInfo="attributeState.archInfo"
+                                                  record="attributeState.current_record"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </xpath>
+    </t>
+    <!-- RecordRow: Add pencil icon for full-screen form view -->
+    <t t-name="pim_ext.ListRenderer.RecordRow"
+       t-inherit="web.ListRenderer.RecordRow"
+       t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='hasOpenFormViewColumn']" position="after">
+            <td class="o_list_record_edit_action text-center"
+                t-on-click.stop="(ev) => this.onPencilClickFullScreen(record, ev)">
+                <button class="btn btn-link o_list_record_pencil_icon p-0"
+                        title="Open in Form View"
+                        tabindex="-1">
+                    <i class="fa fa-pencil"/>
+                </button>
+            </td>
+        </xpath>
+        <xpath expr="//t[@t-if='displayOptionalFields or hasX2ManyAction']" position="before">
+            <td t-if="!hasOpenFormViewColumn"
+                class="o_list_record_edit_action text-center"
+                t-on-click.stop="(ev) => this.onPencilClickFullScreen(record, ev)">
+                <button class="btn btn-link o_list_record_pencil_icon p-0"
+                        title="Open in Form View"
+                        tabindex="-1">
+                    <i class="fa fa-pencil"/>
+                </button>
+            </td>
+        </xpath>
+    </t>
+    <!-- Header: Add column for pencil icon -->
+    <t t-name="pim_ext.ListRenderer.Header"
+       t-inherit="web.ListRenderer"
+       t-inherit-mode="extension">
+        <xpath expr="//th[@t-if='hasOpenFormViewColumn']" position="after">
+            <th class="o_list_record_edit_action_header"/>
+        </xpath>
+        <xpath expr="//th[@t-if='hasActionsColumn']" position="before">
+            <th t-if="!hasOpenFormViewColumn"
+                class="o_list_record_edit_action_header"
+                />
+        </xpath>
+    </t>
+    <!-- Control Panel: Save/Discard buttons when form is dirty -->
+    <t t-name="pim_ext.ControlPanel"
+       t-inherit="web.ControlPanel"
+       t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_control_panel_navigation')]//div[hasclass('o_cp_pager')]"
+               position="before">
+            <t t-if="env.config.viewType === 'list' and env.config.actionId">
+                <div class="o_cp_action_menus d-flex align-items-center gap-2">
+                    <t t-if="state?.isFormChanged">
+                        <div class="d-flex gap-2">
+                            <button type="button"
+                                    class="btn o_list_button_save d-flex align-items-center"
+                                    data-hotkey="s"
+                                    t-on-click.stop="() => this.trigger('save-record')"
+                                    title="Save">
+                                <i class="fa fa-check me-1"/>
+                                <span class="d-none d-lg-inline">Save</span>
+                            </button>
+                            <button type="button"
+                                    class="btn o_list_button_discard d-flex align-items-center"
+                                    data-hotkey="j"
+                                    t-on-click.stop="() => this.trigger('discard-changes')"
+                                    title="Discard">
+                                <i class="fa fa-times me-1"/>
+                                <span class="d-none d-lg-inline">Discard</span>
+                            </button>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+    </t>
+    <!-- Breadcrumbs Enhancement -->
+    <t t-name="pim_ext.Breadcrumbs"
+       t-inherit="web.Breadcrumbs"
+       t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_breadcrumb')]" position="attributes">
+            <attribute name="class" add="pim-breadcrumb-enhanced" separator=" "/>
+        </xpath>
+    </t>
+</templates>

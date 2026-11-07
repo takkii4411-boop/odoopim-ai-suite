@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+  <t t-name="odoopim_split_widget.ImagePreviewDialog" owl="1">
+    <Dialog size="'md'" title="props.title" modalRef="modalRef">
+      <div class="o_image_carousel d-flex flex-column align-items-center position-relative">
+
+        <!-- Main image area -->
+        <div class="carousel-image-container position-relative w-100 text-center">
+
+          <img
+            t-att-src="state.currentImage"
+            class="carousel-image img-fluid rounded shadow-sm"
+            style="max-height: 400px; width: 100%; object-fit: contain;"
+          />
+
+          <!-- Previous button -->
+          <button type="button"
+                  class="btn btn-light nav-btn position-absolute top-50 start-0 translate-middle-y"
+                  t-on-click="prevImage"
+                  t-att-disabled="isFirst"
+                  t-att-title="isFirst ? 'No previous image' : 'Previous'">
+              <i class="fa fa-chevron-left"
+                 t-attf-class="{{ isFirst ? 'text-muted' : '' }}"></i>
+          </button>
+
+          <!-- Next button -->
+          <button type="button"
+                  class="btn btn-light nav-btn position-absolute top-50 end-0 translate-middle-y"
+                  t-on-click="nextImage"
+                  t-att-disabled="isLast"
+                  t-att-title="isLast ? 'No next image' : 'Next'">
+              <i class="fa fa-chevron-right"
+                 t-attf-class="{{ isLast ? 'text-muted' : '' }}"></i>
+          </button>
+
+          <!-- Thumbnails overlay -->
+          <div class="thumbnail-overlay position-absolute bottom-0 start-50 translate-middle-x mb-2 d-flex justify-content-center gap-2 p-2 rounded bg-dark bg-opacity-50">
+            <t t-foreach="imageUrls" t-as="url" t-key="url_index">
+              <img t-att-src="url"
+                   class="thumbnail border rounded"
+                   t-attf-class="{{ state.currentIndex === url_index ? 'selected' : '' }}"
+                   t-on-click="() => this.selectImage(url_index)"
+                   style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;" />
+            </t>
+          </div>
+
+          <!-- Image counter overlay -->
+          <div class="position-absolute top-0 end-0 bg-dark bg-opacity-50 text-white px-2 py-1 rounded m-2 small">
+            <t t-esc="`Image ${state.currentIndex + 1} of ${imageUrls.length}`"/>
+          </div>
+        </div>
+
+      </div>
+
+      <t t-set-slot="footer">
+        <button type="button" class="btn btn-secondary"
+                t-on-click="props.close">
+          Close
+        </button>
+      </t>
+
+    </Dialog>
+  </t>
+</templates>

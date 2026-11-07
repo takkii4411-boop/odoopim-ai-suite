@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="pim_ai_transulate.AiTranslateButton">
+        <t t-if="state.isVisible">
+            <style>
+                .ai-translate-btn {
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity 0.2s ease-in-out;
+                    position: absolute;
+                    right: 6px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: none;
+                    cursor: pointer;
+                    z-index: 100;
+                    border: 0;
+                    padding: 0;
+                }
+
+                /*
+                   UPDATED CSS:
+                   Target the Table Cell (TD) instead of 'div.position-relative'.
+                   Also force the TD to be relative so the button positions correctly.
+                */
+                td {
+                    position: relative;
+                }
+                td:hover .ai-translate-btn {
+                    opacity: 1;
+                    visibility: visible;
+                }
+
+                .ai-translate-btn img {
+                    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    width: 18px;
+                    height: 18px;
+                }
+                .ai-translate-btn:hover img {
+                    transform: scale(1.4) rotate(10deg);
+                    filter: drop-shadow(0 0 6px rgba(0, 180, 255, 0.8));
+                }
+            </style>
+
+            <button type="button"
+                    class="ai-translate-btn"
+                    t-on-click="onTranslate"
+                    title="AI Translate">
+                <img src="/pim_ai_transulate/static/src/img/artificial-intelligence.png" alt="AI"/>
+            </button>
+        </t>
+    </t>
+
+</templates>

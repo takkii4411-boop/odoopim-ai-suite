@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="pim_ext.PimColor">
+        <div class="PimColor">
+            <t t-if="!this.state.show_colors">
+                <div class="col-auto">
+                    <span class="d-flex color_badge shadow-sm"
+                          t-on-click="() => this.ClickOpenColors()"
+                          t-att-style="'background-color:'+this.state.color+';'">
+                    </span>
+                </div>
+            </t>
+            <div class="row g-2" t-if="this.state.show_colors">
+                <t t-foreach="this.state.selections" t-as="color" t-key="color_index">
+                    <div class="col-auto">
+                        <span class="d-flex color_badge shadow-sm"
+                              t-on-click="() => this.switchColor(color.value)"
+                              t-att-style="'background-color:'+color.value+';'"
+                              t-att-title="color.name">
+                        </span>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

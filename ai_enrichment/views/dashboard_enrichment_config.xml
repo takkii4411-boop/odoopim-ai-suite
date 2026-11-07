@@ -1,0 +1,44 @@
+<odoo>
+
+    <odoo>
+        <!-- Action -->
+        <record id="action_prompt_type" model="ir.actions.act_window">
+            <field name="name">Prompt Types</field>
+            <field name="res_model">ai.prompt.type</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- List View -->
+        <record id="view_prompt_type_tree" model="ir.ui.view">
+            <field name="name">ai.prompt.type.tree</field>
+            <field name="model">ai.prompt.type</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_prompt_type_form" model="ir.ui.view">
+            <field name="name">ai.prompt.type.form</field>
+            <field name="model">ai.prompt.type</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </odoo>
+
+    <!-- Action for custom menu -->
+    <record id="action_my_custom_model" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">ai.enrichment.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

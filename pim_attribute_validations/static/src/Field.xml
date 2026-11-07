@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="web.Field" t-inherit="web.Field" t-inherit-mode="extension">
+
+        <xpath expr="." position="attributes">
+            <attribute name="t-attf-class">
+                {{ props.className or '' }}
+                {{ validation?.error ? ' o_pim_field_invalid' : '' }}
+            </attribute>
+        </xpath>
+
+        <xpath expr="." position="inside">
+
+            <t t-if="validation?.error">
+                <div class="o_pim_validation_error"
+                     role="alert"
+                     t-att-aria-label="'Validation error: ' + validation.error">
+                    <i class="fa fa-exclamation-circle o_pim_validation_error_icon"
+                       aria-hidden="true"/>
+                    <span class="o_pim_validation_error_text"
+                          t-esc="validation.error"/>
+                </div>
+            </t>
+
+        </xpath>
+
+    </t>
+
+</templates>

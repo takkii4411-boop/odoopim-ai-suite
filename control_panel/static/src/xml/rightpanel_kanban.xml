@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="RightPanelKanbanController" t-inherit="web.KanbanView" t-inherit-mode="primary">
+        <xpath expr="//Layout" position="attributes">
+            <attribute name="className">'prm-content'</attribute>
+        </xpath>
+        <xpath expr="//t[@t-foreach='headerButtons']" position="after" t-if="!evalViewModifier(button.invisible)">
+
+                <div class="o-checkbox list-check o_field_discontinued o_boolean_toggle form-switch">
+                    <label class="list-check-label" for="toggle-discontinued"
+                           style="display:flex; align-items:center; padding: 5px;">
+                        <input
+                                type="checkbox"
+                                class="form-check-input"
+                                id="toggle-discontinued"
+                                t-on-click="() => this.show_discontinued? this.hidearchived() : this.showarchived()"
+                                t-att-checked="this.show_discontinued"
+                        />
+                        <span class="list-check-label" style="margin-left: 5px; font-weight: 700;">Discontinued</span>
+                    </label>
+                </div>
+        </xpath>
+    </t>
+    <t t-name="FamilyKanbanRecord">
+        <div role="article"
+             t-att-class="getRecordClasses()"
+             t-att-data-id="props.record.id"
+             t-att-tabindex="props.record.model.useSampleModel ? -1 : 0"
+             t-on-click="onGlobalClickNew"
+             t-ref="root">
+        </div>
+    </t>
+
+    <t t-name="FamilyKanbanRenderer" t-inherit="web.KanbanRenderer" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_kanban_renderer')]" position="before">
+            <ProductNavigation t-props="getProductNavigationProps()"/>
+        </xpath>
+        <xpath expr="//div[hasclass('o_kanban_renderer')]" position="after">
+            <RightPanel t-props="getFamilyManagerProps()"/>
+        </xpath>
+
+    </t>
+
+</templates>

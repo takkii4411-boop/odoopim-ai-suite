@@ -1,0 +1,22 @@
+.o_boolean_status {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid #D8DADD;
+    border-radius: 6px;
+    min-width: 80px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+
+    &.o_enabled {
+        color: #10790E;
+        border-color: #D8DADD;
+    }
+
+    &.o_disabled {
+        color: #F38402;
+        border-color: #D8DADD;
+        background-color: white;
+    }
+}

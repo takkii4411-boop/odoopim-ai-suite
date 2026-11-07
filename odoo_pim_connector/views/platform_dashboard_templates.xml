@@ -1,0 +1,26 @@
+<!-- odoo_pim_connector/views/platform_dashboard_templates.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="platform_dashboard_view" inherit_id="web.layout">
+        <t t-call="web.basic_layout">
+            <t t-call="web.web_client_inherit">
+                <div class="o_pim_dashboard">
+                    <!-- Header -->
+                    <div class="o_pim_dashboard_header">
+                        <h2>Channel Film Connector</h2>
+                        <h3>Dashboard Configuration</h3>
+                        <h4>PIM Connectors</h4>
+                    </div>
+                    
+                    <!-- Search Bar -->
+                    <div class="o_pim_search_container">
+                        <input type="text" class="o_pim_search" placeholder="Search..." />
+                    </div>
+                    
+                    <!-- Categories will be rendered here by JavaScript -->
+                    <div class="o_pim_categories_container"></div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

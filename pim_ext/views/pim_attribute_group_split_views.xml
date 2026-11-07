@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the custom layout view -->
+        <record id="view_product_attribute_groups_custom" model="ir.ui.view">
+            <field name="name">product.attribute.groups.custom.layout</field>
+            <field name="model">attribute.group</field>
+            <field name="arch" type="xml">
+                <form string="Attribute Group" create="true" edit="true" delete="false" class="page_form">
+                    <div class="d-flex align-items-start">
+                        <div class="left-column" invisible="not child_ids">
+                            <field name="child_ids">
+                                <list editable="bottom" create="false" edit="false" delete="false" default_order="create_date desc" limit="20">
+                                    <field name="name"/>
+                                    <field name="active" widget="boolean_toggle"/>
+                                    <button name="attribute_group_open_form_view" type="object" icon="fa-pencil-square-o" title='view' class="btn-link"/>
+                                    <button name="attribute_group_unlink" type="object" icon="fa-trash" title='delete' class="btn-link text-danger"/>
+                                </list>
+                            </field>
+                        </div>
+                        <div class="right-column">
+                            <form create="false" edit="false" delete="false" readonly="1" class="attribute_type">
+                                <header>
+                                    <button string="Back" type="object" icon="fa-arrow-left" name="action_back_to_menu"/>
+                                </header>
+<!--                                <div class="pim_oe_title">-->
+<!--                                    <h2 class="pim_create_attribute"><span class="attr_title">Edit Attribute Group</span></h2>-->
+<!--                                </div>-->
+                                <div class="pim_oe_title" invisible="not is_create_mode">
+                                    <h2 class="pim_create_attribute"><span class="attr_title">Create Attribute Group</span></h2>
+                                </div>
+                                <div class="pim_oe_title" invisible="is_create_mode">
+                                    <h2 class="pim_create_attribute"><span class="attr_title">Edit Attribute Group</span></h2>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="o_col_6 col-12 attr_form">
+                                   <div class="attr_properties">
+                                       <sheet class="attr_sheet">
+                                           <div class="oe_title">
+                                               <h1 class="name"><field name="name" readonly="1" class="oe_inline"/></h1>
+                                           </div>
+                                           <notebook>
+                                               <page name="Properties">
+                                                   <group>
+                                                       <group string="General Properties">
+                                                           <field name="name"/>
+                                                           <field name="attribute_code" invisible="1"/>
+                                                           <field name="company_id" invisible="1"/>
+                                                           <field name="attribute_code_rec"/>
+                                                       </group>
+                                                   </group>
+                                                   <group>
+                                                       <group string="Label Translation">
+                                                           <field name="attribute_label"/>
+                                                       </group>
+                                                   </group>
+                                               </page>
+                                               <page name="Attributes">
+                                                   <field name="attribute_group_line_ids" widget="one2many">
+                                                       <list string="Attributes" editable="bottom" default_order="create_date desc" limit="20">
+                                                           <field name="used_attribute_ids" column_invisible="True"/>
+                                                           <field name="product_attribute_id" string="Attribute" required="1"
+                                                                 options="{'no_create': True, 'no_create_edit': True}" domain="[('company_id', '=', parent.company_id)]"/>
+                                                           <field name="attribute_company_id"/>
+                                                           <field name="display_type" string="Type" column_invisible="True"/>
+                                                           <field name="related_display_type" string="Type"/>
+                                                           <field name="value_per_channel" string="Value per channel"/>
+                                                           <field name="value_per_locale" string="Value per locale"/>
+<!--                                                           <field name="enable" force_save="1"/>-->
+                                                       </list>
+                                                   </field>
+                                               </page>
+                                               <page name="History">
+                                                   <group>
+                                                   <field name="history_log" nolabel="1" readonly="1"/>
+                                                   </group>
+                                               </page>
+                                           </notebook>
+                                       </sheet>
+                                   </div>
+                                </div>
+                            </form>
+                            <div class="attr_creation" style="margin-top: 16px;">
+                                                       <button type="object" string="Save" invisible="id"
+                                                               name="save_attributes" class="oe_highlight"/>
+                                                   </div>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to open the custom view -->
+        <record id="action_products_attributes_group_custom" model="ir.actions.act_window">
+            <field name="name">Edit Attribute Group</field>
+            <field name="res_model">attribute.group</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_product_attribute_groups_custom"/>
+            <field name="context">{'default_child_ids': child_ids}</field>
+            <field name="target">current</field>
+        </record>
+
+        <record id="view_attribute_group_tree" model="ir.ui.view">
+            <field name="name">Attribute Group</field>
+            <field name="model">attribute.group</field>
+            <field name="arch" type="xml">
+                <list string="Attribute Group" default_order="create_date desc" create="false">
+                    <header>
+                        <button name="create_pim_attribute_groups" type="object" class="btn-primary"
+                            string="Create Attribute group" display="always"
+                            invisible="context.get('active_model', 'attribute.group') != 'attribute.group'"/>
+                    </header>
+                    <field name="name"/>
+                    <field name="active" widget="boolean_toggle"/>
+                    <field name="company_id"/>
+                    <button name="attribute_group_open_form_view" type="object" icon="fa-pencil-square-o" title='view' class="btn-link"/>
+                    <button name="attribute_group_unlink" type="object" icon="fa-trash" title='delete' class="btn-link text-danger"/>
+                </list>
+            </field>
+        </record>
+
+
+    <record id="view_attribute_group_filter" model="ir.ui.view">
+        <field name="name">Attribute Group</field>
+        <field name="model">attribute.group</field>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <search string="Attribute Group">
+                <field name="name"/>
+                <field name="company_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Attribute Group Name" name="attribute_group" domain="[]" context="{'group_by': 'name'}"/>
+                </group>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_attribute_group_view" model="ir.actions.act_window">
+        <field name="name">Attributes Groups</field>
+        <field name="res_model">attribute.group</field>
+        <field name="domain">[('company_id', 'in', allowed_company_ids)]</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'list', 'view_id': ref('view_attribute_group_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_product_attribute_groups_custom')}),
+                ]"/>
+        <field name="search_view_id" ref="view_attribute_group_filter"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            No Record Found
+          </p>
+        </field>
+    </record>
+
+<!--    <record id="action_update_attribute_group_view" model="ir.actions.server">-->
+<!--        <field name="name">Update Attribute Group View</field>-->
+<!--        <field name="model_id" ref="pim_ext.model_attribute_group"/>-->
+<!--        <field name="binding_model_id" ref="pim_ext.model_attribute_group"/>-->
+<!--        <field name="binding_view_types">list,form</field>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">model.update_attribute_group_view()</field>-->
+<!--    </record>-->
+    <record id="action_update_attribute_group_according_to_mapped" model="ir.actions.server">
+        <field name="name">Update Attribute Group Mapping</field>
+        <field name="model_id" ref="pim_ext.model_attribute_group"/>
+        <field name="binding_model_id" ref="pim_ext.model_attribute_group"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">model.update_attributes_according_to_mapped_groups()</field>
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_suppliers_form_view" model="ir.ui.view">
+        <field name="name">suppliers.list.form</field>
+        <field name="model">supplier.info</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="completeness" widget="progressbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Supplier Informations">
+                            <field name="name"/>
+                            <field name="street"/>
+                            <field name="city"/>
+                            <field name="website"/>
+                            <field name="company_id"/>
+                            <field name="notes" placeholder="Enter notes..."/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" groups="base.group_user" options="{'post_refresh': 'recipients'}"/>-->
+<!--                    <field name="activity_ids"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <record id="view_suppliers_tree_view" model="ir.ui.view">
+        <field name="name">suppliers.list.view</field>
+        <field name="model">supplier.info</field>
+        <field name="arch" type="xml">
+            <list default_order="create_date desc">
+                <field name="name"/>
+                <field name="street"/>
+                <field name="city"/>
+                <field name="website"/>
+                <field name="notes" optional="hide"/>
+                <field name="completeness" widget="progressbar" nolabel="1" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="search_suppplier_information" model="ir.ui.view">
+        <field name="name">search.supplier.information</field>
+        <field name="model">supplier.info</field>
+        <field name="arch" type="xml">
+            <search string="Supplier Info">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('street', 'ilike', self),
+                 ('city', 'ilike', self),('website', 'ilike', self)]"/>
+                <field name="street"/>
+                <field name="city"/>
+                <field name="website"/>
+                <group expand="0" string="Group By">
+                    <filter string="Name" name="supplier_name" domain="[]" context="{'group_by': 'name'}"/>
+                    <filter string="Street" name="supplier_street" domain="[]" context="{'group_by': 'street'}"/>
+                    <filter string="City" name="supplier_city" domain="[]" context="{'group_by': 'city'}"/>
+                    <filter string="Website" name="supplier_website" domain="[]" context="{'group_by': 'website'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_supplier_info" model="ir.actions.act_window">
+        <field name="name">Manage Suppliers</field>
+        <field name="res_model">supplier.info</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+
+</odoo>

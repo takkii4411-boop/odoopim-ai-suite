@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <menuitem
+        id="root_menu_pim"
+        name="PIM"
+        sequence="6"
+        groups="stock.group_stock_manager"
+        web_icon="product_info_management,static/description/icon.png"
+    />
+
+    <menuitem
+        id="menu_product_template_management"
+        name="Products"
+        parent="root_menu_pim"
+        action="product_info_management.inherit_action_product_template"
+        sequence="1"
+        groups="stock.group_stock_manager"
+    />
+
+    <menuitem
+        id="pim_configuration"
+        name="Configuration"
+        parent="root_menu_pim"
+        sequence="100"
+        groups="stock.group_stock_manager"/>
+
+    <menuitem
+        id="menu_pim_product_settings"
+        name="Product Settings"
+        parent="pim_configuration"/>
+</odoo>

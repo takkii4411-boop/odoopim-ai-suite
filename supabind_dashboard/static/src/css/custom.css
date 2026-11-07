@@ -1,0 +1,27 @@
+/*
+ * Styles for the Supabind Dashboard iframe
+ */
+
+/*
+ * When our client action is displayed, Odoo wraps it in a div.
+ * This rule targets that specific wrapper and removes the default
+ * Odoo content padding, which is what was pushing your iframe down.
+ */
+.o_action_manager > .o_action_client {
+    padding: 0 !important;
+}
+
+/*
+ * These rules ensure our container and the iframe within it
+ * fill the now padding-less parent container completely.
+ */
+.o_supabind_iframe_container {
+    width: 100%;
+    height: 100%;
+}
+
+.o_supabind_iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}

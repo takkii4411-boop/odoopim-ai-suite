@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="pim_product_creation.ProductCreation">
+        <!--NAVIGATION BREADCRUMBS-->
+        <div t-if="this.state.loading" class="loading-overlay">
+            <span class="MouseLoader"></span>
+        </div>
+
+        <div class="ProductCreation p-2" t-ref="ProductCreation">
+            <nav aria-label="breadcrumb" class="mb-3">
+                <button class="btn mt-2 text-primary" t-on-click="() => this.triggerClose()">
+                    <i class="fa fa-angle-left"/>
+                    Back
+                </button>
+                <button class="btn mt-2 float-end" t-on-click="() => this.resize()">
+                    <img src="/pim_product_creation/static/src/img/arrow.png" style="width:16px;"/>
+                </button>
+                <div class="d-flex align-items-center justify-content-start">
+                    <small>Products Creation</small>
+                    <div class="px-2" style="flex-grow: 1;">
+                        <hr/>
+                    </div>
+                </div>
+            </nav>
+
+            <!--MAIN TITLE-->
+            <h2 class="mb-4 fw-bold">
+                <t t-if="this.state.menu_type &amp;&amp; this.state.step != 0">
+                    <t t-esc="this.state.menu_type.name"/>
+                    <div t-if="this.variant_count > 0 &amp;&amp; this.state.menu_type.type == 'MODEL'">
+                        <small>(<t t-esc="this.variant_count"/>
+                            Variants Created)</small>
+                    </div>
+                </t>
+                <t t-else="">
+                    Select Your Action
+                </t>
+            </h2>
+
+            <!--ACTION CARDS GRID || LEVEL 0 VIEW-->
+            <t t-set="count" t-value="987654324"/><!--for looping-->
+            <div class="row g-3 mb-5" t-if="this.state.step == 0">
+                <t t-foreach="this.state.menu" t-as="action" t-key="action.action">
+                    <div class="col-md-6 col-lg-3">
+                        <a href="#" class="text-decoration-none" t-on-click="() => this.changeAction(action.type)">
+                            <div class="action-card h-100"
+                                 t-att-class="this.state.menu_type.type === action.type? 'highlighted':''">
+                                <div class="card-body text-center p-4">
+                                    <div class="action-icon mb-3">
+                                        <img t-att-src="action.image" height="48"/>
+                                    </div>
+                                    <h6 class="card-title" t-esc="action.name"/>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </t>
+            </div>
+
+            <!--LEVEL 1 VIEW-->
+            <div class="row mb-5 " t-if="this.state.step == 1">
+                <!--PRODUCT-->
+                <form class="needs-validation"
+                      t-att-id="'form_'+this.state.menu_type.type"
+                      t-if="this.state.menu_type.type == 'PRODUCT'">
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label for="name" class="fw-bold">Product Name</label>
+                            <input type="text" class="form-control bg-white" name="name"
+                                   placeholder="Enter Product Name" required="True"
+                                   id="name" aria-describedby="Product Name"/>
+                            <div class="invalid-feedback">
+                                Please Enter a product name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label for="sku" class="fw-bold">SKU</label>
+                            <input type="text" class="form-control bg-white" name="sku"
+                                   placeholder="Enter Product SKU" required="True"
+                                   id="sku" aria-describedby="Product SKU"/>
+                            <div class="invalid-feedback">
+                                Please Enter a SKU for product.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                          <div class="form-group">
+                              <label for="family" class="fw-bold">Family</label>
+                              <select class="form-control bg-white" id="family" name="family_id" required="True">
+                                  <t t-if="this.state.families.length >= 1">
+                                      <t t-foreach="this.state.families" t-as="fam" t-key="count">
+                                          <option t-att-value="fam.id"><t t-esc="fam.name"/></option>
+                                          <t t-set="count" t-value="count + 1"/>
+                                      </t>
+                                  </t>
+                              </select>
+                              <div class="invalid-feedback">
+                                 Please select a family for product.
+                              </div>
+                              <small id="familyHelp" class="form-text text-muted">Select a family as per your requirement.</small>
+                          </div>
+                    </div>
+                </form>
+                <!--MODEL-->
+                <form class="needs-validation"
+                      t-att-id="'form_'+this.state.menu_type.type"
+                      t-if="this.state.menu_type.type == 'MODEL'">
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label for="name" class="fw-bold">Product Name</label>
+                            <input type="text" class="form-control bg-white" name="name"
+                                   placeholder="Enter Product Name" required="True"
+                                   id="name" aria-describedby="Product Name"/>
+                            <div class="invalid-feedback">
+                                Please Enter a product name.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label for="sku" class="fw-bold">SKU</label>
+                            <input type="text" class="form-control bg-white" name="sku"
+                                   placeholder="Enter Product SKU" required="True"
+                                   id="sku" aria-describedby="Product SKU"/>
+                            <div class="invalid-feedback">
+                                Please Enter a SKU for product.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label for="family" class="fw-bold">Family</label>
+                            <select class="form-control bg-white"
+                                    t-on-change="(ev) => this.onchangeFamily(ev.target.value)" id="family"
+                                    name="family_id">
+                                <t t-if="this.state.families.length >= 1">
+                                    <t t-foreach="this.state.families" t-as="fams" t-key="count">
+                                        <option t-att-value="fams.id"><t t-esc="fams.name"/></option>
+                                        <t t-set="count" t-value="count + 1"/>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <option>No Family Found</option>
+                                </t>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a family for product.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="variant_id" class="fw-bold">Family Variant</label>
+                            <select required="True" class="form-control bg-white" id="variant_id" name="variant_id">
+                                <t t-if="this.state.family_variants.length >= 1">
+                                    <t t-foreach="this.state.family_variants" t-as="var" t-key="count">
+                                        <option t-att-value="var.id"><t t-esc="var.name"/></option>
+                                        <t t-set="count" t-value="count + 1"/>
+                                    </t>
+                                </t>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a family Variant for product. <br/>(create one under the family if not
+                                found any)
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--BUNDLE-->
+
+            </div>
+
+            <!--LEVEL 2 VIEW-->
+            <div class="row mb-5 " t-if="this.state.step == 2">
+                <!--PRODUCT-->
+                <!--MODEL-->
+                <div t-if="this.state.menu_type.type == 'MODEL'">
+                    <ProductVariantCreation name="'jhgf'" resModel="'product.template'" resId="this.state.resId"/>
+<!--                    <t t-foreach="this.variant.products" t-as="product" t-key="count">-->
+<!--                        <div class="col-lg-12 col-md-12 col-sm-12">-->
+<!--                            <div class="card border-0 shadow-sm mb-2 rounded-3">-->
+<!--                                <div class="d-flex align-items-center justify-content-between p-3 bg-white rounded-3">-->
+<!--                                    &lt;!&ndash; Left: Product Image and Info &ndash;&gt;-->
+<!--                                    <div class="d-flex align-items-center">-->
+<!--                                        <img src="/pim_product_creation/static/src/img/box.png"-->
+<!--                                             alt="Product Image"-->
+<!--                                             class="rounded me-3"-->
+<!--                                             style="width:55px; height:55px; object-fit:cover;"/>-->
+
+<!--                                        <div>-->
+<!--                                            <h5 class="mb-1 fw-normal text-dark">-->
+<!--                                                <t t-esc="product.display_name"/>-->
+<!--                                            </h5>-->
+
+<!--                                            &lt;!&ndash; SKU Row &ndash;&gt;-->
+<!--                                            <div class="d-flex align-items-center mt-1">-->
+<!--                                                <span class="text-info me-2 fw-semibold">SKU:</span>-->
+<!--                                                <input type="text"-->
+<!--                                                       class="form-control-sm rounded-0 border-0 border-bottom border-info"-->
+<!--                                                       t-att-value="product.sku"-->
+<!--                                                       t-model="product.sku"-->
+<!--                                                       placeholder="Enter SKU"/>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
+<!--                                    &lt;!&ndash; Right: Vertical Action Buttons &ndash;&gt;-->
+<!--                                    <div class="d-flex flex-column align-items-end ms-3">-->
+<!--                                        <button type="button"-->
+<!--                                                t-on-click="editProduct"-->
+<!--                                                t-att-data-id="product.id"-->
+<!--                                                class="btn btn-sm text-success border-0 mb-2 w-100"-->
+<!--                                                title="Edit Product">-->
+<!--                                            <i class="fa fa-edit me-1"/>-->
+<!--                                        </button>-->
+<!--                                        <button type="button"-->
+<!--                                                t-on-click="deleteProduct"-->
+<!--                                                t-att-data-id="product.id"-->
+<!--                                                class="btn btn-sm text-danger border-0 w-100" title="Delete Product">-->
+<!--                                            <i class="fa fa-trash me-1"/>-->
+<!--                                        </button>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <t t-set="count" t-value="count + 1"/>-->
+<!--                    </t>-->
+                </div>
+            </div>
+
+            <!--NAVIGATION BUTTONS-->
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-secondary px-5"
+                        t-att-disabled="this.state.step === 0"
+                        t-on-click="() => this.nextStep(-1)">
+                    Previous
+                </button>
+                <button class="btn btn-primary px-5" style="transition:0.5s;"
+                        t-if="this.state.step != 2"
+                        t-on-click="() => this.nextStep(1)">
+                    <t t-esc="this.state.button_name"/>
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

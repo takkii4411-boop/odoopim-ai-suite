@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_pim_channel_tree" model="ir.ui.view">
+        <field name="name">pim.channel.tree</field>
+        <field name="model">pim.channel</field>
+        <field name="arch" type="xml">
+            <list string="Channels" create="false" default_order="create_date desc">
+                <header>
+                    <button name="create_pim_channels" type="object" class="btn-primary"
+                        string="Create Channel" display="always"
+                        invisible="context.get('active_model', 'pim.channel') != 'pim.channel'"/>
+                </header>
+                <field name="name"/>
+                <field name="currency_id"/>
+                <field name="locale_id"/>
+                <field name="category_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pim_channel_form" model="ir.ui.view">
+        <field name="name">pim.channel.form</field>
+        <field name="model">pim.channel</field>
+        <field name="arch" type="xml">
+            <form string="Channels" create="false">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="currency_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                        <field name="locale_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                        <field name="category_id" options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    </group>
+                </sheet>
+                <chatter/>
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" groups="base.group_user" options="{'post_refresh': 'recipients'}"/>-->
+<!--                    <field name="activity_ids"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pim_channels_filter" model="ir.ui.view">
+        <field name="name">Channels</field>
+        <field name="model">pim.channel</field>
+        <field name="priority" eval="15"/>
+        <field name="arch" type="xml">
+            <search string="Channels">
+                <field name="name"/>
+                <group expand="0" string="Group By">
+                    <filter string="Currency" name="currency_group" domain="[]"
+                            context="{'group_by': 'currency_id'}"/>
+                    <filter string="Locale" name="locale_group" domain="[]"
+                            context="{'group_by': 'locale_id'}"/>
+                    <filter string="Category Tree" name="category_tree_group" domain="[]"
+                            context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action to Open PIM Channels -->
+    <record id="action_pim_channel" model="ir.actions.act_window">
+        <field name="name">Channels</field>
+        <field name="res_model">pim.channel</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu Item -->
+<!--    <menuitem id="menu_pim_channel_root"-->
+<!--              name="Channels"-->
+<!--              parent="pim_ext.pim_configuraion"-->
+<!--              sequence="50"-->
+<!--              action="action_pim_channel"/>-->
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+pim_approval_workflow.access_pim_workflow,access_pim_workflow,pim_approval_workflow.model_pim_workflow,group_pim_administrator,1,1,1,1
+pim_approval_workflow.access_pim_workflow_stage,access_pim_workflow_stage,pim_approval_workflow.model_pim_workflow_stage,group_pim_administrator,1,1,1,1

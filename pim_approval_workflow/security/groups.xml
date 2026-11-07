@@ -1,0 +1,28 @@
+<odoo>
+    <record id="module_category_pim" model="ir.module.category">
+        <field name="name">PIM Work Flow Group</field>
+        <field name="description">Product Information Management</field>
+        <field name="sequence">50</field>
+        <field name="visible" eval="True"/>
+        <field name="exclusive" eval="True"/>
+    </record>
+    <record id="group_pim_moderator" model="res.groups">
+        <field name="name">PIM Moderator</field>
+            <field name="category_id" ref="pim_approval_workflow.module_category_pim"/>
+        </record>
+    <record id="group_pim_editor" model="res.groups">
+        <field name="name">PIM Editor</field>
+        <field name="category_id" ref="pim_approval_workflow.module_category_pim"/>
+        <field name="implied_ids" eval="[(4, ref('pim_approval_workflow.group_pim_editor'))]"/>
+    </record>
+    <record id="group_pim_publisher" model="res.groups">
+        <field name="name">PIM Publisher</field>
+        <field name="category_id" ref="pim_approval_workflow.module_category_pim"/>
+        <field name="implied_ids" eval="[(4, ref('pim_approval_workflow.group_pim_moderator'))]"/>
+    </record>
+    <record id="group_pim_administrator" model="res.groups">
+        <field name="name">PIM Administrator</field>
+        <field name="category_id" ref="pim_approval_workflow.module_category_pim"/>
+        <field name="implied_ids" eval="[(4, ref('pim_approval_workflow.group_pim_publisher'))]"/>
+    </record>
+</odoo>

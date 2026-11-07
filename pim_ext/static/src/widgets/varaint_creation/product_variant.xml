@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="pim_navabrindit.ProductVariantCreation" owl="1">
+        <div class="container">
+            <div class="d-flex justify-content-between">
+                <h3>Variant Creation</h3>
+                <button class="btn btn-primary px-5 float-end" style="transition:0.5s;"
+                        t-on-click="() => this.onClickAdd()">
+                    <i class="fa fa-plus"/>
+                </button>
+            </div>
+            <hr/>
+            <ol>
+                <t t-foreach="state.products" t-as="product" t-key="product_index">
+                    <li>
+                        <div class="card rounded shadow-sm mb-1 p-2">
+                            <div class="mb-3 row">
+                                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-8">
+                                  <input type="text" placeholder="Name..." t-on-change="(ev) => this.onChangeName(ev, product_index)"
+                                         class="form-control" id="name" t-att-value="product.product.name"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button class="btn btn-outline-danger rounded-pill"
+                                        t-on-click="() => this.onClickRemove(product_index)">
+                                        <i class="fa fa-times"/>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3 row">
+                                        <label for="default_code" class="col-sm-2 col-form-label">SKU</label>
+                                        <div class="col-sm-10">
+                                          <input type="text" placeholder="SKU" t-on-change="(ev) => this.onChangeSku(ev, product_index)"
+                                                 class="form-control" id="sku" value=""/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <t t-if="state.variant_ids" t-foreach="state.variant_ids" t-as="variant" t-key="variant_index">
+                                    <div class="col-md-6 mb-2">
+                                        <select id="variant.attribute_line_id" class="form-select" t-on-change="(ev) => this.onChangeSelect(ev, variant.attribute_line_id, product_index)">
+                                            <option value=""
+                                            t-att-disabled="product.val_ids.some(v => v.attribute_line_id === variant.attribute_line_id)">Select <t t-esc="variant.attribute_line_name"/></option>
+                                            <t t-foreach="variant.values" t-as="val" t-key="val_index">
+                                                <option t-att-value="val.id"><t t-esc="val.name"/></option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </li>
+                </t>
+            </ol>
+            <hr/>
+             <div class="d-flex justify-content-between">
+                <span/>
+                <button class="btn btn-primary px-5 float-end" style="transition:0.5s;"
+                        t-on-click="() => this.onClickCreate()">
+                    Save New Variants
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

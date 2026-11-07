@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+     <record id="attribute_form_view_concurrent_inherit" model="ir.ui.view">
+        <field name="name">Attribute Form View</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id" ref="product.product_attribute_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+<!--                <header>-->
+<!--                    <div role="alert" invisible="not editing_warning">-->
+<!--                        <field name="editing_warning"/>-->
+<!--                        <button name="reload_onclick" type="object" icon="fa-refresh"/>-->
+<!--                    </div>-->
+<!--                    <field name="editing" invisible="1"/>-->
+<!--                    <field name="edit_session_name" invisible="1"/>-->
+<!--                </header>-->
+
+            </xpath>
+        </field>
+     </record>
+</odoo>

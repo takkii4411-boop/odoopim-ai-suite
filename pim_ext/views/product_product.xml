@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_product_creation_split_view_custom" model="ir.ui.view">
+        <field name="name">product.product.creation.custom.split.view.layout</field>
+        <field name="model">product.product</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form string="Products Custom" class="page_form" create="false">
+                <header>
+                    <button string="Back" type="object" icon="fa-arrow-left" name="action_back_to_product_menu"/>
+                </header>
+
+                <div class="pim_oe_title">
+                    <h2 class="pim_create_attribute">
+                        <span class="attr_title">Products</span>
+                    </h2>
+                </div>
+
+                <sheet class="attr_sheet">
+                    <field name="name" readonly="1" widget="product_header"/>
+                    <field name="percentage_complete" invisible="1"/>
+                    <field name="active_label" invisible="1"/>
+
+                    <notebook>
+                        <!-- Product Info -->
+                        <page string="Product Info" name="type_properties">
+                            <group string="General Info">
+                                <field name="name" readonly="0"/>
+                                <field name="id" readonly="1"/>
+                                <field name="sku"  readonly="0"/>
+                                <field name="family_id" domain="[('company_id', '=', company_id)]" readonly="0"
+                                       options="{'no_open': True, 'no_create': True}"/>
+                                <field name="categ_id" options="{'no_open': True, 'no_create': True}"
+                                       invisible="1"/>
+                                <field name="pim_category_ids" domain="[('company_id', '=', company_id)]"
+                                       widget="many2many_tags" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="company_id" options="{'no_open': True, 'no_create': True}"/>
+                                <!--                                    <field name="brand_id" domain="[('company_id', '=', company_id)]" options="{'no_open': True, 'no_create': True}"/>-->
+                                <field name="supplier_id" domain="[('company_id', '=', company_id)]"
+                                       options="{'no_open': True, 'no_create': True}"/>
+                                <!--                                            <field name="create_date" readonly="1"/>-->
+                                <!--                                            <field name="write_date" readonly="1"/>-->
+                                <field name="image_ids"
+                                       class="o_website_sale_image_list"
+                                       context="{'default_name': name}"
+                                       add-label="Add Media"
+                                       options="{'convert_to_webp': True}"/>
+                                <field name="image_1" invisible="True"/>
+                                <field name="description"/>
+                            </group>
+                        </page>
+                        <!-- Attribute Tab -->
+                        <page string="Attributes" name="attributes_page" id="attributes_page">
+                        </page>
+                        <!-- History Tab -->
+                        <page string="History" name="history_products">
+                            <group>
+                                <field name="history_log" readonly="1" nolabel="1"/>
+                            </group>
+                        </page>
+
+                        <!-- Hidden Translations Tab -->
+                        <page name="type_label_translation" string="Label Translations" invisible="1"/>
+                    </notebook>
+                </sheet>
+
+                <!-- Save Button -->
+                <div class="attr_creation" style="margin-top: 16px;">
+                    <button type="object" string="Save" invisible="id" name="save_product_rec"
+                            class="oe_highlight"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- product.template kanban custom layout view -->
+    <record id="view_product_product_management_kanban" model="ir.ui.view">
+        <field name="name">product.product.management.kanban</field>
+        <field name="model">product.product</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile o_kanban_5_per_row fam_grid_box" default_order="create_date desc"
+                    create="0" limit="80">
+                <div class="progress-container w-100 mt-2">
+                    <progressbar style="width: 100%; height: 8px;" field="progress_state" colors='{"fully_completed": "info",
+                          "almost_completed": "light_green",
+                           "partially_completed": "yellow_color",
+                           "not_completed": "orange_color",
+                           "incomplete": "danger"}'/>
+                </div>
+<!--                <header>-->
+<!--                    <button name="create_pim_products" type="object" class="btn-primary"-->
+<!--                            string="Create Product" display="always"-->
+<!--                            invisible="context.get('active_model', 'product.template') != 'product.template'"/>-->
+<!--                </header>-->
+                <field name="name" string="Family Name"/>
+                <!--                <field name="family_id" string="Family ID"/>-->
+                <!--                <field name="brand_id" string="Brand Name"/>-->
+                <!--                <field name="buyer_id"/>-->
+                <!--                <field name="sku_count"/>-->
+                <templates>
+                    <t t-name="kanban-box">
+                        <t t-if="record.percentage_complete.value &gt;= 70">
+                            <t t-set="bg_class" t-value="'green_bg'"/>
+                        </t>
+                        <t t-elif="record.percentage_complete.value &gt;= 55 and record.percentage_complete.value &lt; 70">
+                            <t t-set="bg_class" t-value="'light_green_bg'"/>
+                        </t>
+                        <t t-elif="record.percentage_complete.value &gt;= 40 and record.percentage_complete.value &lt; 55">
+                            <t t-set="bg_class" t-value="'yellow_bg'"/>
+                        </t>
+                        <t t-elif="record.percentage_complete.value &gt;= 25 and record.percentage_complete.value &lt; 40">
+                            <t t-set="bg_class" t-value="'orange_bg'"/>
+                        </t>
+                        <t t-elif="record.percentage_complete.value &gt;= 0 and record.percentage_complete.value &lt; 25">
+                            <t t-set="bg_class" t-value="'red_bg'"/>
+                        </t>
+                        <div class="o_kanban_card" t-att-class="'fam_grid ' + bg_class">
+                            <div class="o_kanban_image fam_grid_image">
+                                <img alt="Avatar"
+                                     t-att-src="kanban_image('product.template', 'image_1920', record.id.raw_value)"/>
+                            </div>
+
+                            <div class="oe_kanban_details fam_grid_content">
+                                <!--                                <div class="o_kanban_record_title">-->
+                                <!--                                    <i class="fa fa-lg fa-square-o jstr-pull-right jstr-hide-mobile jstr-hide-tablet"></i>-->
+                                <!--                                    <i class="fa fa-lg fa-check-square-o jstr-pull-right jstr-hide-mobile jstr-hide-tablet"></i>-->
+                                <!--                &lt;!&ndash;                    <i class="fa fa-trash jstr-pull-right jstr-hide-mobile jstr-hide-tablet"></i>&ndash;&gt;-->
+                                <!--                                    <span class="jstr-overalyed">-->
+                                <!--                                        <field name="name"/>-->
+                                <!--                                    </span>-->
+                                <!--                                </div>-->
+                                <div t-attf-class="oe_kanban_global_click family_record_grid">
+                                    <ul class="fam_list">
+                                        <li class="mb4 fam_list_title">
+                                            <span>SKU: &#160;<field name="sku"/>
+                                            </span>
+                                        </li>
+                                        <li class="mb4 fam_list_title kanban-product-name">
+                                            <span>Name: &#160;<field name="name"/>
+                                            </span>
+                                        </li>
+                                        <div class="d-flex fam_list_value">
+                                            <!--                                            <div>-->
+                                            <!--                                                <li><span class="value_weight">Family: </span><field name="family_id"/></li>-->
+                                            <!--                                                <li><span class="value_weight">Brand: </span><field name="brand_id"/></li>-->
+                                            <!--                                            </div>-->
+                                            <!--                                            <div>-->
+                                            <!--                                                <li><span class="value_weight">Buyer: </span><field name="buyer_id"/></li>-->
+                                            <!--                                                <li><span class="value_weight">SKU(s): </span><field name="sku_count"/></li>-->
+                                            <!--                                            </div>-->
+                                        </div>
+                                    </ul>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="fam_grid_sts d-flex flex-column justify-content-between">
+                                            <div>
+                                                <p class="mb-1 value_title">Status</p>
+                                                <div t-if="record.active_label.raw_value == 'ENABLED'"
+                                                     class="status-box status-enabled">
+                                                    <field name="active_label"/>
+                                                </div>
+                                                <div t-if="record.active_label.raw_value == 'DISABLED'"
+                                                     class="status-box status-disabled">
+                                                    <field name="active_label"/>
+                                                </div>
+                                            </div>
+                                            <div class="fam_grid_c_date">
+                                                <p class="mb-1 value_title">Created at</p>
+                                                <field name="create_date"/>
+                                            </div>
+                                        </div>
+                                        <div class="fam_ce_date d-flex flex-column justify-content-between">
+                                            <div>
+                                                <p class="mb-1 value_title">Complete</p>
+                                                <field name="percentage_complete" widget="progressbar_extended"/>
+                                            </div>
+                                            <div class="fam_grid_c_date">
+                                                <p class="mb-1 value_title">Updated at</p>
+                                                <field name="write_date"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- product.template tree custom layout view -->
+    <record id="view_product_product_management_tree" model="ir.ui.view">
+        <field name="name">product.product.management.tree</field>
+        <field name="model">product.product</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <list js_class="tree_form_view" create="false" edit="false" default_order="create_date desc" expand="1">
+                <field name="product_sequence" string="Id"/>
+                <field name="image_1920" widget="image" options="{'size': [50, 50]}"/>
+                <!--                    <field name="image_1" column_invisible="1" widget="image" options="{'size': [50, 50]}"/>-->
+                <field name="sku"/>
+                <field name="family_id"/>
+                <field name="product_tmpl_id" column_invisible="True"/>
+                <!--                    <field name="brand_id"/>-->
+                <field name="company_id"/>
+                <field name="pim_category_ids" widget="many2many_tags"/>
+                <field name="name"/>
+                <field name="is_na" column_invisible="1"/>
+<!--                <field name="product_attr_values_id" widget="many2many_tags" string="Variant Values" column_invisible="1"/>-->
+                <field name="active_label" widget="field_border"/>
+                <field name="percentage_complete" widget="field_progress" column_invisible="True"/>
+                <!--                    <field name="create_date" string="Created"/>-->
+                <!--                    <field name="write_date" string="Updated"/>-->
+<!--                <field name="readable_variant_names" string="Variant products" column_invisible="1"/>-->
+                <!--                    <field name="completeness" widget="progressbar_extended" optional="hide"/>-->
+                <button name="custom_product_open_form_view" string=" " icon="fa-edit" title='edit' type="object"/>
+                <button name="custom_product_open_default_form_view" string=" " icon="fa-info" title='info'
+                        type="object"/>
+                <button name="custom_product_unlink" string=" " icon="fa-trash-o" title='delete' type="object"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_product_product_management_view" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('company_id', 'in', allowed_company_ids),("sale_ok", "=", True)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_product_product_management_tree')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_product_product_management_kanban')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_product_product_creation_split_view_custom')}),
+                ]"/>
+<!--        <field name="context">{'search_default_group_by_product_tmpl_id':1}</field>-->
+
+    </record>
+
+    <menuitem id="product_product_creation_menu"
+              name="Products Variants"
+              parent="pim_ext.menu_root_product_root_management"
+              action="action_product_product_management_view"
+              sequence="10"/>
+</odoo>

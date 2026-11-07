@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ==================== SEARCH VIEW ==================== -->
+        <record id="search_product_brand_information" model="ir.ui.view">
+            <field name="name">search.product.brand.info</field>
+            <field name="model">product.brand</field>
+            <field name="arch" type="xml">
+                <search string="Product Brands">
+                    <field name="name" string="Brand"
+                           filter_domain="['|', '|', ('name', 'ilike', self), ('tagline', 'ilike', self), ('description', 'ilike', self)]"/>
+                    <field name="code"/>
+                    <field name="website"/>
+                    <field name="tagline"/>
+                    <field name="country_of_origin"/>
+                    <field name="seo_title"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+
+                    <separator/>
+                    <filter string="Has Products" name="has_products" domain="[('product_count', '>', 0)]"/>
+                    <filter string="No Products" name="no_products" domain="[('product_count', '=', 0)]"/>
+                    <separator/>
+                    <filter string="Complete Profile" name="complete" domain="[('completeness', '=', 100)]"/>
+                    <filter string="Incomplete Profile" name="incomplete" domain="[('completeness', '&lt;', 100)]"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Country" name="group_country" context="{'group_by': 'country_of_origin'}"/>
+                        <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"
+                                groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ==================== TREE VIEW ==================== -->
+        <record id="view_product_brand_tree" model="ir.ui.view">
+            <field name="name">product.brand.tree.view</field>
+            <field name="model">product.brand</field>
+            <field name="arch" type="xml">
+                <list string="Product Brands" create="false" delete="true" default_order="create_date desc">
+                    <header>
+                        <button name="create_product_brand" type="object" class="btn-primary"
+                                string="Create Brand" display="always"/>
+                    </header>
+
+                    <field name="brand_logo" widget="image" optional="show"/>
+                    <field name="name"/>
+                    <field name="product_count" optional="hide"/>
+                    <field name="completeness" widget="progressbar" optional="hide"/>
+
+                    <button name="brand_open_form_view" string=" " icon="fa-edit" type="object"/>
+                    <button name="brand_master_unlink" string=" " icon="fa-trash-o" type="object"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- ==================== UNIFIED SPLIT VIEW FORM ==================== -->
+        <record id="view_product_brand_split_view_custom" model="ir.ui.view">
+            <field name="name">product.brand.split.view.custom.layout</field>
+            <field name="model">product.brand</field>
+            <field name="arch" type="xml">
+                <form string="Brand" create="true" edit="true" delete="false" class="page_form">
+                    <div class="d-flex align-items-start">
+                        <!-- LEFT COLUMN - Brand List -->
+                        <div class="left-column">
+                            <field name="master_brand_ids">
+                                <list editable="bottom" create="false" edit="false" delete="false"
+                                      default_order="create_date desc">
+                                    <header>
+                                        <button name="create_product_brand" type="object" class="btn-primary"
+                                                string="Create Brand" display="always"/>
+                                    </header>
+                                    <field name="brand_logo" widget="image" class="oe_avatar"/>
+                                    <field name="name"/>
+                                    <button name="brand_open_form_view" type="object"
+                                            icon="fa-pencil-square-o" class="btn-link"/>
+                                    <button name="brand_master_unlink" type="object" icon="fa-trash"
+                                            class="btn-link text-danger"/>
+                                </list>
+                            </field>
+                        </div>
+
+                        <!-- RIGHT COLUMN - Brand Details -->
+                        <div class="right-column">
+                            <div class="attribute_type">
+                                <header>
+                                    <button string="Back" type="object" icon="fa-arrow-left"
+                                            name="action_back_to_brand_menu"/>
+                                </header>
+
+                                <div class="pim_oe_title" invisible="not is_create_mode">
+                                    <h2 class="pim_create_attribute">
+                                        <span class="attr_title">Create Brand</span>
+                                    </h2>
+                                </div>
+
+                                <div class="pim_oe_title" invisible="is_create_mode">
+                                    <h2 class="pim_create_attribute">
+                                        <span class="attr_title">Edit Brand</span>
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <!-- MAIN FORM CONTAINER -->
+                            <div class="brand_form_container">
+                                <div class="o_col_6 col-12 attr_form">
+                                    <div class="attr_properties">
+                                        <sheet class="attr_sheet">
+                                            <field name="brand_logo" widget="image" class="oe_avatar"
+                                                   options="{'size': [90, 90]}"/>
+
+                                            <div class="oe_title">
+                                                <h1 class="name">
+                                                    <field name="name" readonly="1"/>
+                                                </h1>
+                                            </div>
+
+                                            <notebook>
+                                                <!-- PROPERTIES TAB -->
+                                                <page name="Properties" string="Properties">
+                                                    <group string="Basic Information" name="group_basic_info">
+                                                        <group>
+                                                            <field name="name"/>
+                                                            <field name="code" readonly="1"/>
+                                                            <field name="tagline"/>
+                                                            <field name="website" widget="url"/>
+                                                        </group>
+                                                        <group>
+                                                            <field name="country_of_origin"
+                                                                   options="{'no_quick_create': True, 'no_create_edit': True}"/>
+                                                            <field name="company_id" groups="base.group_multi_company"/>
+                                                        </group>
+                                                    </group>
+
+                                                    <group string="Description" name="group_description">
+                                                        <field name="description" nolabel="1"/>
+                                                    </group>
+
+                                                    <group string="SEO Metadata" name="group_seo">
+                                                        <group>
+                                                            <field name="seo_title"/>
+                                                            <field name="seo_keywords"/>
+                                                        </group>
+                                                        <group>
+                                                            <field name="seo_description"/>
+                                                        </group>
+                                                    </group>
+                                                </page>
+
+                                                <!-- ATTRIBUTES TAB -->
+                                                <page name="brand_attributes" string="Attributes">
+                                                    <div class="alert alert-info mb-3" role="alert">
+                                                        <i class="fa fa-info-circle"/>
+                                                        <strong>Configuration Tab:</strong>
+                                                        Add attributes here to automatically generate fields in the
+                                                        Properties tab.
+                                                    </div>
+
+                                                    <br/>
+                                                    <div style="display:flex; gap:10px; width:max-content;">
+                                                        <button name="action_open_add_attribute_wizard" type="object"
+                                                                string="Add Attribute" class="oe_button btn-primary"/>
+                                                    </div>
+
+                                                    <group>
+                                                        <field name="brand_sequence_id" invisible="1"/>
+                                                        <field name="exist_attribute_ids" widget="many2many_tags"
+                                                               invisible="1"/>
+                                                        <field name="exist_group_ids" widget="many2many_tags"
+                                                               invisible="1"/>
+                                                        <field name="dynamic_properties" invisible="1"/>
+                                                    </group>
+
+                                                    <br/>
+                                                    <field name="brand_attribute_ids"
+                                                           invisible="not brand_attribute_ids">
+                                                        <list editable="bottom" edit="false" create="false"
+                                                              default_order="create_date desc" limit="20">
+                                                            <field name="attribute_group_id" widget="many2one"
+                                                                   options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                                            <field name="attribute_id"
+                                                                   domain="[('company_id', '=', parent.company_id)]"/>
+                                                            <field name="attribute_company_id"/>
+                                                            <field name="is_visible" widget="boolean_toggle"
+                                                                   string="Show in Properties"/>
+                                                        </list>
+                                                    </field>
+                                                </page>
+
+                                                <!-- GENERAL TAB -->
+                                                <page name="general_info" string="General">
+                                                    <group>
+                                                        <group string="Information">
+                                                            <field name="completeness" widget="percentpie"/>
+                                                            <field name="company_id" groups="base.group_multi_company"/>
+                                                            <field name="user_id" readonly="1"/>
+                                                        </group>
+                                                        <group></group>
+                                                    </group>
+                                                </page>
+
+                                                <!-- HISTORY TAB -->
+                                                <page name="History" string="History">
+                                                    <group>
+                                                        <field name="history_log" nolabel="1" readonly="1"/>
+                                                    </group>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="attr_creation" style="margin-top: 16px;">
+                                <button type="object" string="Save" name="save_brand" class="oe_highlight"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================== WIZARDS ==================== -->
+
+        <!-- Add Attribute Wizard -->
+        <record id="view_brand_add_attribute_wizard_form" model="ir.ui.view">
+            <field name="name">brand.add.attribute.wizard.form</field>
+            <field name="model">brand.add.attribute.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Add Attribute">
+                    <group>
+                        <field name="brand_id" readonly="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="existing_attribute_ids" invisible="1"/>
+                        <field name="attribute_group_id" required="1"
+                               placeholder="Select attribute group..."
+                               options="{'create': True, 'create_edit': True}"/>
+                        <field name="attribute_id" required="1"
+                               placeholder="Select attribute..."
+                               options="{'create': True, 'create_edit': True}"/>
+                    </group>
+
+                    <footer>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <button string="Add Attribute" class="btn-primary"
+                                type="object" name="confirm_add_attribute"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Delete Wizard -->
+        <record id="view_brand_delete_confirmation_wizard_form" model="ir.ui.view">
+            <field name="name">brand.delete.confirmation.wizard.form</field>
+            <field name="model">brand.delete.confirmation.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Confirm Brand Deletion">
+                    <sheet>
+                        <field name="brand_id" invisible="1"/>
+                        <field name="brand_name" invisible="1"/>
+                        <field name="product_count" invisible="1"/>
+                        <group>
+                            <field name="confirmation_message" nolabel="1" readonly="1"/>
+                        </group>
+                        <group invisible="product_count == 0">
+                            <field name="product_names" nolabel="1" readonly="1"/>
+                        </group>
+                    </sheet>
+
+                    <footer>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                        <button string="Delete Brand" name="confirm_delete" type="object"
+                                class="btn btn-primary" data-hotkey="d"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Attribute Form -->
+        <record id="view_product_brand_attribute_form" model="ir.ui.view">
+            <field name="name">product.brand.attribute.form</field>
+            <field name="model">product.brand.attribute</field>
+            <field name="arch" type="xml">
+                <form string="Brand Attribute">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="original_name" readonly="1"
+                                       help="Auto-generated from name. Must start with x_"/>
+                                <field name="display_type" required="1"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="group_id" required="1"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="is_mandatory"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Values" invisible="display_type not in ['simple_select', 'multi_select']">
+                                <field name="value_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="name"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================== ACTION ==================== -->
+        <record id="actions_product_brand" model="ir.actions.act_window">
+            <field name="name">Brands</field>
+            <field name="res_model">product.brand</field>
+            <field name="domain">[('company_id', 'in', allowed_company_ids)]</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('view_product_brand_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_product_brand_split_view_custom')}),
+            ]"/>
+            <field name="search_view_id" ref="search_product_brand_information"/>
+            <field name="context">{'default_master_brand_ids': []}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first brand
+                </p>
+                <p>
+                    Brands help you organize your products and provide consistent branding across your catalog.
+                    Add brand logos, custom attributes, descriptions, and SEO metadata.
+                </p>
+            </field>
+        </record>
+
+        <!-- ==================== PRODUCT TEMPLATE VIEWS ==================== -->
+
+        <!-- Form View Inherit -->
+        <record id="product_template_form_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="brand_id"
+                           widget="many2one_avatar"
+                           options="{'no_create': False, 'no_open': False}"
+                           placeholder="Select a brand..."/>
+                </xpath>
+
+                <xpath expr="//field[@name='brand_id']" position="after">
+                    <group string="Brand Details"
+                           invisible="brand_id == False"
+                           class="mt-3">
+                        <group>
+                            <field name="brand_logo"
+                                   widget="image"
+                                   class="oe_avatar"
+                                   readonly="1"
+                                   nolabel="1"
+                                   options="{'size': [90, 90]}"/>
+                        </group>
+                        <group>
+                            <label for="brand_id" string="Brand Information" class="fw-bold"/>
+                            <div>
+                                <field name="brand_id" readonly="1" class="oe_inline"/>
+                                <span invisible="brand_tagline == False" class="text-muted">-</span>
+                                <field name="brand_tagline" readonly="1" class="oe_inline text-muted"/>
+                            </div>
+                            <field name="brand_country" readonly="1" string="Origin"/>
+                            <field name="brand_website" widget="url" readonly="1" string="Website"/>
+                        </group>
+                    </group>
+
+                    <group string="Brand Description"
+                           invisible="brand_id == False or brand_description == False">
+                        <field name="brand_description" readonly="1" nolabel="1"/>
+                    </group>
+
+                    <group string="Brand SEO Metadata"
+                           class="mt-2"
+                           invisible="brand_id == False or brand_seo_title == False">
+                        <group>
+                            <field name="brand_seo_title" readonly="1" string="SEO Title"/>
+                            <field name="brand_seo_keywords" readonly="1" string="SEO Keywords"/>
+                        </group>
+                        <group>
+                            <field name="brand_seo_description" readonly="1" string="SEO Description"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Tree View Inherit -->
+        <record id="product_template_tree_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.tree.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="brand_id"
+                           widget="many2one_avatar"
+                           optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Kanban View Inherit -->
+        <record id="product_template_kanban_view_inherit_brand" model="ir.ui.view">
+            <field name="name">product.template.kanban.inherit.brand</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="brand_id"/>
+                    <field name="brand_logo"/>
+                </xpath>
+                <xpath expr="//field[@name='list_price']" position="after">
+                    <div t-if="record.brand_id.raw_value" class="mt-1 d-flex align-items-center">
+                        <img t-if="record.brand_logo.raw_value"
+                             t-att-src="kanban_image('product.brand', 'image_128', record.brand_id.raw_value)"
+                             class="rounded me-1"
+                             style="width: 24px; height: 24px; object-fit: cover;"/>
+                        <span class="badge badge-secondary">
+                            <t t-esc="record.brand_id.value"/>
+                        </span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

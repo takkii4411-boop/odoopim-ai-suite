@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_attribute_master_custom_extra" model="ir.ui.view">
+        <field name="name">product.attribute.master</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id"
+               ref="pim_ext.view_product_attribute_master_custom"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_attr_channel_locale_update"
+                        string="Update Locales"
+                        type="object"/>
+            </header>
+            <xpath expr="//div[@id='is_value_per_channel']" position="after">
+                <field name="platform_credential_ids"
+                       domain="[('is_active','=', True)]"
+                       invisible="not is_value_per_channel"
+                       placeholder="Select Channels"
+                       widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_product_attribute_master_custom_js_class_extra"
+            model="ir.ui.view">
+        <field name="name">product.attribute.master.js</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id"
+               ref="pim_ext.view_product_attribute_master_custom_js_class"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_attr_channel_locale_update"
+                            string="Update Locales"
+                            type="object"
+                            class="oe_highlight"/>
+                </header>
+            </xpath>
+
+            <field name="is_value_per_channel" position="after">
+                <field name="platform_credential_ids"
+                       domain="[('is_active','=', True)]"
+                       string="Channels"
+                       invisible="not is_value_per_channel"
+                       placeholder="Select Channels"
+                       widget="many2many_tags"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pim_workflow_list" model="ir.ui.view">
+        <field name="name">pim.workflow.list</field>
+        <field name="model">pim.workflow</field>
+        <field name="arch" type="xml">
+            <list string="PIM Workflows" decoration-info="status == 'draft'" decoration-success="status == 'active'"
+                  decoration-danger="status == 'archived'">
+                <field name="name" string="Name"/>
+                <field name="description" optional="show"/>
+                <field name="status" widget="badge" decoration-info="status == 'draft'"
+                       decoration-success="status == 'active'" decoration-danger="status == 'archived'"/>
+                <field name="stage_ids" widget="many2many_tags" options="{'no_open': True, 'no_create': True}"/>
+                <field name="create_date" widget="date" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_pim_workflow_form" model="ir.ui.view">
+        <field name="name">pim.workflow.form</field>
+        <field name="model">pim.workflow</field>
+        <field name="arch" type="xml">
+            <form string="PIM Workflow">
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,active,archived"
+                           statusbar_colors="{'draft':'info','active':'success','archived':'danger'}"
+                           options="{'clickable':1}"/>
+                </header>
+                <sheet>
+                    <!-- Title Area -->
+                    <div class="oe_title">
+                        <label for="name" string="Workflow Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Standard Product Approval Workflow" required="1"/>
+                        </h1>
+                    </div>
+
+                    <group name="general_info">
+                        <group>
+                            <field name="status"/>
+                        </group>
+                    </group>
+
+                    <!-- Notebook Tabs -->
+                    <notebook>
+                        <!-- Stages Tab -->
+                        <page string="Stages" name="stages">
+                            <field name="stage_ids" nolabel="1">
+                                <list editable="bottom" delete="True">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" required="1" placeholder="Stage Name"/>
+                                    <field name="group_id" required="1" options="{'no_create': True}"/>
+                                    <field name="user_ids" widget="many2many_tags" options="{'no_create': True}"
+                                           placeholder="Assigned Users"/>
+                                </list>
+                            </field>
+                            <p class="text-muted oe_edit_only mt16">
+                                Drag rows to reorder stages. Each stage is assigned to a role (group) and specific
+                                users.
+                            </p>
+                        </page>
+
+                        <!-- Mappings Tab -->
+                        <page string="Mappings" name="mappings">
+                            <group string="Workflow Scope">
+                                <field name="category_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="family_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="attribute_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="attribute_group_ids" widget="many2many_tags"
+                                       options="{'no_create': True}"/>
+                            </group>
+                        </page>
+
+                        <!-- Matching Products Tab -->
+                        <page string="Matching Products" name="products">
+                            <field name="product_ids" nolabel="1" readonly="1">
+                                <list>
+                                    <field name="name" string="Product"/>
+                                    <field name="default_code" string="Internal Ref"/>
+                                    <field name="categ_id" string="Category"/>
+                                    <field name="list_price" string="Sales Price" widget="monetary"/>
+                                    <field name="type" string="Type"/>
+                                </list>
+                            </field>
+                            <div class="alert alert-info mt16 oe_edit_only">
+                                This is a read-only computed list. It updates automatically when you change categories
+                                or families.
+                            </div>
+                        </page>
+
+                        <!-- Notes Tab -->
+                        <page string="Notes" name="notes">
+                            <field name="description" nolabel="1" widget="text"
+                                   placeholder="Add detailed notes, guidelines, or rules for this workflow..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action Window -->
+    <record id="action_pim_workflow" model="ir.actions.act_window">
+        <field name="name">PIM Workflows</field>
+        <field name="res_model">pim.workflow</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_pim_workflow_list"/>
+        <field name="context">{'search_default_group_status_admin':1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first PIM Workflow!
+            </p>
+            <p>
+                Define approval processes for product data with role-based stages, mappings, and user assignments.
+            </p>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_pim_workflow_search" model="ir.ui.view">
+        <field name="name">pim.workflow.search</field>
+        <field name="model">pim.workflow</field>
+        <field name="arch" type="xml">
+            <search string="Workflows">
+                <field name="name" string="Workflow Name"/>
+                <field name="description"/>
+                <field name="category_ids"/>
+                <field name="family_ids"/>
+                <field name="stage_ids"/>
+
+                <filter string="Active" name="active" domain="[('status', '=', 'active')]"/>
+                <filter string="Draft" name="draft" domain="[('status', '=', 'draft')]"/>
+                <filter string="Archived" name="archived" domain="[('status', '=', 'archived')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status_admin" context="{'group_by': 'status'}"
+                            groups="pim_approval_workflow.group_pim_administrator"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_ids'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

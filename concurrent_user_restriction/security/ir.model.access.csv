@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_session_info,session.info.general.user,model_session_info,pim_ext.group_general_user,1,1,1,1

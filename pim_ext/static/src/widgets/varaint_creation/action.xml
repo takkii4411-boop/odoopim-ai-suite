@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<t t-name="pim_ext.VariantCreation">
+    <Dialog size="'lg'" title="props.title">
+        <div class="table-responsive">
+            <ProductVariantCreation name="props.name"
+                                    resModel="props.resModel"
+                                    popup="this.props"
+                                    resId="props.resId"/>
+        </div>
+        <!-- FOOTER -->
+        <t t-set-slot="footer">
+           <div class="d-flex justify-content-between w-100">
+                <div>
+                    <button class="btn btn-secondary" t-on-click="props.close">
+                        <i class="fa fa-times me-1"></i>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </t>
+    </Dialog>
+</t>
+
+</templates>

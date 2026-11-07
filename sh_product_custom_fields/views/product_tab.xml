@@ -1,0 +1,88 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 	 Button Click -->
+    <record id="sh_product_order_custom_tab_wizrd_view" model="ir.ui.view">
+        <field name="name">sh.dynamic.tab.product.order.form</field>
+        <field name="model">sh.custom.tab.product</field>
+        <field name="arch" type="xml">
+            <form string="Custom Tab">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1" />
+                            <field name="label" required="1" />
+                        </group>
+                        <group>
+                            <field name="groups" widget="many2many_tags" /> <field name="invisible_tab" invisible="1" />
+                            <field name="tab_list" invisible="invisible_tab" />
+                            <field name="sh_position" invisible="invisible_tab" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="create_tab" string="Create Tab" type="object" class="oe_highlight" />
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="sh_action_product_order_custom_tab">
+        <field name="name">Product Template Custom Tab</field>
+        <field name="res_model">sh.custom.tab.product</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="sh_product_order_custom_tab_wizrd_view" />
+        <field name="type">ir.actions.act_window</field>
+        <field name="target">new</field>
+    </record>
+
+    <!--   	Menu Action   -->
+    <record id="sh_product_order_form_custom_tab_form_view" model="ir.ui.view">
+        <field name="name">sh.custom.tab.product.order.form.view</field>
+        <field name="model">sh.custom.tab.product</field>
+        <field name="arch" type="xml">
+            <form string="Custom Tabs" create="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1" />
+                            <field name="label" required="1" />
+                        </group>
+                        <group>
+                            <field name="groups" widget="many2many_tags" /><field name="invisible_tab" invisible="1" /> <field name="tab_list" invisible="invisible_tab" />
+                            <field name="sh_position" invisible="invisible_tab" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sh_product_order_custom_tab_tree_view" model="ir.ui.view">
+        <field name="name">sh.custom.tab.product.tree.view</field>
+        <field name="model">sh.custom.tab.product</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="name" />
+                <field name="label" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="sh_action_product_order_custom_tab_form">
+        <field name="name">Product Variant Custom Tab</field>
+        <field name="res_model">sh.custom.tab.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="sh_product_order_custom_tab_tree_view" />
+        <field name="type">ir.actions.act_window</field>
+    </record>
+
+    <menuitem
+        id="sh_product_custom_tab_action_menu"
+        name="Product Variant Custom Tabs"
+        parent="sale.menu_sale_config"
+        groups="sh_product_custom_fields.group_product_variant_custom_field"
+        sequence="15"
+        action="sh_action_product_order_custom_tab_form"
+    />
+</odoo>

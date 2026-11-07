@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_creation_split_view_custom" model="ir.ui.view">
+        <field name="name">product.creation.custom.split.view.layout.channel.localize</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="pim_ext.view_product_creation_split_view_custom"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_attr_channel_locale_update" type="object"
+                         class="btn btn-primary" string="Update Locales"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

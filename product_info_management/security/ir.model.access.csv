@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_pim_attribute,pim.attribute.user,model_pim_attribute,,1,1,1,1
+access_pim_attribute_group,pim.attribute.group.user,model_pim_attribute_group,,1,1,1,1
+access_pim_families,pim.attribute.family.user,model_pim_family,,1,1,1,1
+
+
+
+
+

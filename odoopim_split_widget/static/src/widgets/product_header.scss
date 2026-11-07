@@ -1,0 +1,142 @@
+// Variables
+$quality-gradient: linear-gradient(to right, #22c55e, #eab308, #f97316, #ef4444);
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+
+// Card styling
+.card {
+    border: 1px solid #e5e7eb;
+    box-shadow: $shadow-sm;
+
+    .card-body {
+        padding: 2rem;
+    }
+}
+
+// Button customizations
+.btn-success {
+    background-color: #22c55e;
+    border-color: #22c55e;
+
+    &:hover {
+        background-color: #16a34a;
+        border-color: #16a34a;
+    }
+}
+
+.btn-outline-danger {
+    color: #ef4444;
+    border-color: #fecaca;
+    background-color: transparent;
+
+    &:hover {
+        background-color: #fef2f2;
+        border-color: #fecaca;
+        color: #ef4444;
+    }
+}
+
+.btn-outline-secondary {
+    color: #6b7280;
+    border-color: #d1d5db;
+    background-color: transparent;
+
+    &:hover {
+        background-color: #f9fafb;
+        border-color: #d1d5db;
+        color: #6b7280;
+    }
+}
+
+.btn-link {
+    color: #6b7280;
+
+    &:hover {
+        color: #111827;
+    }
+}
+
+// Quality section
+.quality-section {
+    .quality-bar {
+        height: 12px;
+        background: $quality-gradient;
+        border-radius: 6px;
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 30%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 8px solid #1f2937;
+        }
+    }
+}
+
+// Completeness section
+.completeness-section {
+    .progress {
+        background-color: #e5e7eb;
+        border-radius: 6px;
+
+        .progress-bar-custom {
+            border-radius: 6px;
+        }
+    }
+}
+
+// Image container
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .card-body {
+        padding: 18px !important;
+    }
+
+    .container-fluid {
+        padding: 12px !important;
+    }
+}
+
+
+.green_bg {
+  background-color: #2EA20B; // solid green
+  color: #fff;
+}
+
+.light_green_bg {
+  background-color: #76C712; // light green
+  color: #000;
+}
+
+.yellow_bg {
+  background-color: #ffc107; // yellow
+  color: #000;
+}
+
+.orange_bg {
+  background-color: #E0900E; // orange
+  color: #fff;
+}
+
+.red_bg {
+  background-color: #EB4614; // red
+  color: #fff;
+}
+
+.o_field_product_header{
+    width: 100% !important;
+}
+
+.quality-badge{
+    max-width: 35%;
+}

@@ -1,0 +1,99 @@
+.o_tree_form_view_view {
+  .o_content {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .tree-form-tree {
+    width: 100%;
+    border-right: 1px solid #dee2e6;
+    transition: width 0.4s ease-in-out;
+
+    .o_list_table {
+      tbody {
+        tr {
+          &.active {
+            td {
+              background-color: #e2e4e5;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  .tree-form-resize {
+    height: 100%;
+    width: 10px;
+    cursor: e-resize;
+    margin: 0 5px 0 5px;
+    background-color: #d8d8d8;
+    transition: width 0.4s ease-in-out;
+  }
+
+  .tree-form-form {
+    overflow: auto;
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease-in-out;
+
+    .o_form_renderer {
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .form-action-buttons {
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      .btn {
+        font-weight: 500;
+
+        i {
+          font-size: 12px;
+        }
+
+        &.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 4px 8px;
+        font-weight: 600;
+      }
+    }
+
+  }
+
+  .action-window {
+    background-color: #222124;
+
+    .bulk-actions-buttons {
+      .btn {
+        background-color: #2D2C2F;
+        border-color: #3B3B3C;
+        color: white;
+
+        img {
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+      .active {
+        background-color: #F6F6F6;
+        border-color: #3B3B3C;
+        color: #222124;
+      }
+    }
+  }
+
+  .dropdown-toggle::after {
+    content: none !important;
+  }
+}

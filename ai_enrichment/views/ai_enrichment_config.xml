@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- UPDATED FORM VIEW -->
+    <record id="view_ai_enrichment_config_form" model="ir.ui.view">
+        <field name="name">ai.enrichment.config.form</field>
+        <field name="model">ai.enrichment.config</field>
+        <field name="arch" type="xml">
+            <form string="AI Enrichment Configuration">
+                <sheet>
+                    <group>
+                        <group>
+                            <!-- New fields from the old model -->
+                            <field name="name"/>
+                            <field name="provider"/>
+                        </group>
+                        <group>
+                            <!-- New fields from the old model -->
+                            <field name="code"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group string="Credentials (Optional)">
+                        <field name="api_key"/>
+                        <field name="api_url"/>
+                        <field name="api_token" invisible="1"/>
+                        <field name="manual_credentials" widget="boolean_toggle"/>
+                    </group>
+                    <group string="Auth Credential" invisible="not manual_credentials">
+                        <field name="user_name" required="manual_credentials"/>
+                        <field name="password" password="True"
+                               required="manual_credentials"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- UPDATED LIST VIEW -->
+    <record id="view_ai_enrichment_config_list" model="ir.ui.view">
+        <field name="name">ai.enrichment.config.list</field>
+        <field name="model">ai.enrichment.config</field>
+        <field name="arch" type="xml">
+            <list string="AI Enrichment Configuration">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="provider"/>
+                <field name="code"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action and Menu items remain mostly the same -->
+    <record id="action_ai_enrichment_config" model="ir.actions.act_window">
+        <field name="name">AI Enrichment Configuration</field>
+        <field name="res_model">ai.enrichment.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- For Sync Configuration -->
+    <record id="view_trigger_sync_config_form" model="ir.ui.view">
+        <field name="name">trigger.sync.config.form</field>
+        <field name="model">trigger.sync.config</field>
+        <field name="arch" type="xml">
+            <form string="Sync Configuration">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="trigger_task_identifier"/>
+                            <field name="trigger_api_url"/>
+                            <field name="trigger_api_key"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- UPDATED LIST VIEW -->
+    <record id="view_trigger_sync_config_list" model="ir.ui.view">
+        <field name="name">trigger.sync.config.list</field>
+        <field name="model">trigger.sync.config</field>
+        <field name="arch" type="xml">
+            <list string="Sync Configuration">
+                <field name="trigger_task_identifier"/>
+                <field name="trigger_api_url"/>
+                <field name="trigger_api_key"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action and Menu items remain mostly the same -->
+    <record id="action_trigger_sync_config" model="ir.actions.act_window">
+        <field name="name">Sync Configuration</field>
+        <field name="res_model">trigger.sync.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

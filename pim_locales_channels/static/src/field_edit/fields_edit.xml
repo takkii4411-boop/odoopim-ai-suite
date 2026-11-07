@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="pim_locales_channels.FieldsEditPopup">
+        <Dialog title="props.title">
+            <div>
+                anand
+            </div>
+            <t t-set-slot="footer">
+                <div class="d-flex justify-content-between w-100">
+                    <button class="btn btn-light border" disabled="disabled" t-if="!is_multiLingual">
+                        <i class="fa fa-globe"></i>
+                        Multi-Locale
+                    </button>
+
+                    <div>
+                        <button class="btn btn-primary me-2" t-on-click="onSave">
+                            <i class="fa fa-save me-1"></i>
+                            Save All
+                        </button>
+                        <button class="btn btn-secondary" t-on-click="props.close">
+                            <i class="fa fa-times me-1"></i>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </t>
+        </Dialog>
+    </t>
+</templates>

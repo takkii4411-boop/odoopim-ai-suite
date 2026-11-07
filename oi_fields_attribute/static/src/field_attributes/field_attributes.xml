@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-name="oi_fields_attribute.FieldAttributes" owl="1">
+    <Dialog size="'lg'" title="props.title">
+        <main role="alert">
+            <table class="table table-condensed table-striped">
+                <tr>
+                    <th>Model</th>
+                    <td><t t-out="data.model"/></td>
+                </tr>        
+                <tr>
+                    <th>Field</th>
+                    <td><t t-out="data.name"/></td>
+                </tr>        
+                <tr>
+                    <th>Type</th>
+                    <td><t t-out="data.type"/></td>
+                </tr>        
+            </table>
+            <div>
+                <table class="table table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="data.attrs" t-as="attr" t-key="attr_index">
+                            <td><t t-out="attr[0]"/></td>
+                            
+                            <td>
+                                <t t-if="isFunction(attr[1])">
+                                    <span t-out="attr[1][1]" /><br />
+                                    <span t-out="attr[1][2]" />
+                                </t>
+                                <t t-else="" t-out="formatValue(attr[1])"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        <t t-set-slot="footer" owl="1">
+            <button class="btn btn-primary" t-ref="autofocus"  t-on-click="props.close">
+            Ok
+            </button>
+        </t>		    
+    </Dialog>
+</t>
+
+
+</templates>

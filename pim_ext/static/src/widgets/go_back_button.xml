@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <div class="p-1" t-name="pim_ext.GoHistoryBackComponent">
+        <button class="btn btn-secondary" t-on-click="onClick">
+            <i class="fa fa-arrow-left"/>
+            <span class="ms-2">Back</span>
+        </button>
+    </div>
+</templates>

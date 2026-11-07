@@ -1,0 +1,637 @@
+.custom-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    z-index: 9999;
+}
+
+/* new style */
+.chat-input::placeholder {
+    font-style: italic;
+}
+
+#botImage {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.custom-footer img.footer-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(100px);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.custom-footer img.footer-image.show-icon {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.bot-chat {
+    position: fixed;
+    bottom: 5px;
+    right: -600px;
+    width: 475px;
+    height: 80%;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transition: right 0.4s ease-in-out;
+    font-family: 'Roboto', sans-serif;
+}
+
+.bot-chat.show {
+    right: 20px;
+}
+
+/* MAXIMIZED STATE - EXPAND TO CENTER */
+.bot-chat.maximized {
+    /* 1. Define the Big Size */
+    width: 90vw !important;   /* 90% of screen width */
+    height: 90vh !important;  /* 90% of screen height */
+
+    /* 2. Position using Right/Bottom (Same as minimized state)
+          This prevents the "flying" effect.
+          5vw right + 90vw width = 95%, leaving 5vw on left. perfectly centered. */
+    right: 5vw !important;
+    bottom: 5vh !important;
+
+    /* 3. Ensure Top/Left/Transform are disabled so they don't conflict */
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+
+    /* 4. Smooth Transition */
+    transition: all 0.4s ease-in-out;
+
+    border-radius: 10px;
+    z-index: 20000;
+}
+
+.bot-chat.maximized .chat-body {
+    height: 100%;
+}
+
+.bot-chat .chat-header {
+    background-color: #714B67; /* Purple Header */
+    color: #ffffff;
+    padding: 12px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+}
+
+.bot-chat .chat-header .icons-left {
+    display: flex;
+    gap: 10px;
+}
+
+.bot-chat .chat-header button {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 22px;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+#maximizeChat {
+    font-size: 18px;
+    margin-right: 5px;
+    margin-left: 5px;
+    padding-bottom: 2px;
+}
+
+.bot-chat .chat-header button:hover {
+    color: #FF0000;
+    transform: scale(1.1);
+}
+
+.bot-chat .chat-header span {
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.bot-chat .chat-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 10px;
+    min-height: 200px;
+    scroll-behavior: smooth;
+}
+
+.bot-info .bot-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.bot-info .bot-description {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.bot-chat .bot-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+
+    /* ADD THIS LINE TO CENTER CONTENT: */
+    justify-content: center;
+
+    /* Optional: Adds space between the robot and the text */
+    gap: 20px;
+}
+
+.bot-chat .bot-info .bot-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.bot-chat .bot-info .bot-description {
+    font-size: 13px;
+    color: lightslategrey;
+    text-align: center;
+    font-family: serif;
+}
+
+/* ========================================= */
+/*  UPDATED FOOTER STYLES (Flexbox Alignment)*/
+/* ========================================= */
+
+.bot-chat .chat-footer {
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border-top: 1px solid #dddddd;
+    display: flex;              /* Enables Flexbox */
+    align-items: center;        /* Centers items vertically */
+    justify-content: space-between;
+    gap: 15px;                  /* Adds space between Toggle, Input, and Button */
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 16px;
+    flex-shrink: 0;             /* Prevents shrinking */
+    margin-right: 5px;          /* Extra space specifically after toggle */
+}
+
+/* Input Container */
+.input-container {
+    position: relative;
+    flex-grow: 1;               /* Takes up all remaining space */
+    width: auto;                /* Resets fixed width */
+}
+
+.bot-chat .chat-footer input.chat-input {
+    width: 100%;                /* Fills the container */
+    padding: 10px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+    color: #333333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Send Button */
+.star-button {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;             /* Prevents shrinking */
+    transition: transform 0.1s ease-in-out;
+}
+
+.star-button .icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    transition: transform 0.2s, filter 0.2s;
+
+    /* DEFAULT COLOR: Matches the Purple Header (#714B67) */
+    filter: invert(33%) sepia(10%) saturate(1630%) hue-rotate(263deg) brightness(93%) contrast(88%);
+}
+
+.star-button:hover .icon {
+    transform: scale(1.1);
+    /* Darker purple on hover */
+    filter: invert(21%) sepia(16%) saturate(1396%) hue-rotate(264deg) brightness(95%) contrast(91%);
+}
+
+.star-button:active .icon {
+    transform: scale(0.9);
+}
+
+/* ========================================= */
+
+/* Style for the stop button */
+.stop-button {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.stop-button:hover {
+    color: #f00;
+}
+
+.chat-message {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333333;
+}
+
+/* Card Style for Bot Info */
+.card-style {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.user-title {
+    font-weight: bold;
+    font-size: 13px;
+    color: #888888;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    margin-right: 15px;
+}
+
+.user-title .chat-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.bot-title {
+    font-weight: bold;
+    font-size: 13px;
+    color: #888888;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.bot-title .chat-icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.chat-bubble {
+    padding: 14px 18px;
+    border-radius: 18px;
+    background-color: #e8eaf6;
+    word-wrap: break-word;
+    position: relative;
+    display: inline-block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.chat-message.bot-message .chat-bubble {
+    background-color: #ffffff;
+    color: #333333;
+    align-self: flex-start;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.chat-message.bot-message .chat-bubble p {
+    margin-bottom: 0;
+    font-family: serif;
+}
+
+.chat-message.user-message .chat-bubble {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+}
+
+.chat-message.user-message .chat-bubble p {
+    margin-bottom: 0;
+    font-family: serif;
+}
+
+.message-time-bot {
+    font-size: 11px;
+    color: #808080;
+    position: absolute;
+    bottom: -20px;
+    padding: 0 5px;
+}
+
+.message-time-user {
+    font-size: 10px;
+    color: #aaa;
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    padding: 0 5px;
+}
+
+.chat-bubble.typing::after {
+    content: '...';
+    display: inline-block;
+    animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+.copy-icon {
+    margin-left: 5px;
+    width: 12px;
+    height: 18px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+/* Toggle Switch Styles */
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 15px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #007bff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(14px);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.mic-button {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border-radius: 30px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.mic-button:active {
+    border-radius: 30px solid green;
+}
+
+/* Quick Replies */
+#quickReplies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 12px 10px;
+}
+
+#quickReplies .quick-reply {
+    padding: 10px 5px;
+    background-color: #ffffff;
+    color: #4a4a4a;
+    border-radius: 25px;
+    max-width: 300px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    font-size: 12px;
+    line-height: 1.5;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    word-wrap: break-word;
+    border: 1px solid #dcdcdc;
+}
+
+#quickReplies .quick-reply:hover {
+    background-color: aliceblue;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Glassmorphism Effect for Confirmation Popup */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.confirmation-popup {
+    position: absolute;
+    bottom: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 450px;
+    z-index: 9999;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.confirmation-popup p {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.confirm-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #5bc0de;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #c9302c;
+}
+
+.cancel-btn:hover {
+    background-color: #31b0d5;
+}
+
+.confirmation-overlay {
+    display: none;
+}
+
+.wave-background {
+    position: relative;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(230, 245, 255, 0.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23007bff" fill-opacity="1" d="M0,320L30,298.7C60,277,120,235,180,192C240,149,300,107,360,90.7C420,75,480,85,540,85.3C600,85,660,75,720,112C780,149,840,235,900,266.7C960,299,1020,277,1080,229.3C1140,181,1200,107,1260,80C1320,53,1380,75,1410,85.3L1440,96L1440,0L1410,0C1380,0,1320,0,1260,0C1200,0,1140,0,1080,0C1020,0,960,0,900,0C840,0,780,0,720,0C660,0,600,0,540,0C480,0,420,0,360,0C300,0,240,0,180,0C120,0,60,0,30,0L0,0Z"></path></svg>') no-repeat;
+    opacity: 0.9;
+    background-size: cover;
+}
+
+/* Loader animation */
+.loader {
+    width: 30px;
+    aspect-ratio: 4;
+    --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+    background:
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100%/3) 100%;
+    animation: l7 1s infinite linear;
+}
+
+@keyframes l7 {
+    33% { background-size: calc(100%/3) 0%, calc(100%/3) 100%, calc(100%/3) 100%; }
+    50% { background-size: calc(100%/3) 100%, calc(100%/3) 0%, calc(100%/3) 100%; }
+    66% { background-size: calc(100%/3) 100%, calc(100%/3) 100%, calc(100%/3) 0%; }
+}
+
+.loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+}
+
+.gif-loader-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+}
+
+.gif-loader-wrapper img {
+    width: 30px;
+    height: 30px;
+}
+
+.star-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Custom scrollbar styling */
+.custom-background::-webkit-scrollbar {
+    width: 12px;
+}
+
+.custom-background::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.custom-background::-webkit-scrollbar-thumb {
+    background-color: #714B67;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+.custom-background::-webkit-scrollbar-thumb:hover {
+    background-color: #714B67
+}
+
+.custom-background::-webkit-scrollbar-thumb:active {
+    background-color: #714B67
+}
+
+/* Firefox scrollbar styling */
+.custom-background {
+    scrollbar-width: thin;
+    scrollbar-color: #714B67 #f1f1f1;
+}
+
+.custom-background:hover {
+    scrollbar-color: #714B67 #f1f1f1;
+}

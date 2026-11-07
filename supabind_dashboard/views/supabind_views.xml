@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client Action to launch the Supabind dashboard component -->
+    <record id="action_supabind_dashboard" model="ir.actions.client">
+        <field name="name">Onboarder Dashboard</field>
+        <!-- This tag must match the component registered in our JavaScript file -->
+        <field name="tag">supabind_dashboard.SupabindDashboard</field>
+    </record>
+
+    <!-- Top-level Menu Item -->
+    <menuitem
+        id="menu_supabind_root"
+        name="Onboarder"
+        web_icon="supabind_dashboard,static/description/icon.png"
+        sequence="1"/>
+
+    <!-- Sub-menu Item that triggers our action -->
+    <menuitem
+        id="menu_supabind_dashboard"
+        name="Dashboard"
+        parent="menu_supabind_root"
+        action="action_supabind_dashboard"
+        sequence="1"/>
+</odoo>

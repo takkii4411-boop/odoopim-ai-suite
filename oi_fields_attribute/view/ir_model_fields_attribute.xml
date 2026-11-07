@@ -1,0 +1,57 @@
+<odoo>
+
+	<record id="view_ir_model_fields_attribute_tree" model="ir.ui.view">
+		<field name="name">ir.model.fields.attribute.tree</field>
+		<field name="model">ir.model.fields.attribute</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="field_id" column_invisible="context.get('default_field_id')"/>
+				<field name="attribute"/>
+				<field name="value"/>
+				<field name="code"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="view_ir_model_fields_attribute_form" model="ir.ui.view">
+		<field name="name">ir.model.fields.attribute.form</field>
+		<field name="model">ir.model.fields.attribute</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<widget name="web_ribbon" text="Archived" bg_color="bg-danger" invisible="active"/>
+					<group>
+						<field name="active" invisible="1"/>
+						<field name="field_id" invisible="context.get('default_field_id')"/>
+						<field name="attribute"/>
+						<field name="value"/>
+					</group>
+					<group string="Python Code">
+						<field name="code" nolabel="1" widget="ace" options="{'mode': 'python'}" colspan="2"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<record id="view_ir_model_fields_attribute_search" model="ir.ui.view">
+		<field name="name">ir.model.fields.attribute.search</field>
+		<field name="model">ir.model.fields.attribute</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="model"/>
+				<field name="field_id"/>
+				<field name="attribute"/>
+				<filter name="inactive" string="Archived" domain="[('active','=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_model" string="Model" domain="[]" context="{'group_by': 'model'}"/>
+                    <filter name="group_field" string="Field" domain="[]" context="{'group_by': 'field_id'}"/>
+                    <filter name="group_attribute" string="Attribute" domain="[]" context="{'group_by': 'attribute'}"/>
+                </group>
+				
+			</search>
+		</field>
+	</record>
+
+</odoo>

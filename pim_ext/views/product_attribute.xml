@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--    Inherit Attribute Form-->
+
+    <record id="pim_product_attribute_search" model="ir.ui.view">
+        <field name="name">pim.product.attribute.search</field>
+        <field name="model">product.attribute</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="display_type"/>
+                <field name="attribute_group"/>
+                <filter string="Mandatory" name="filter_mandatory"
+                        domain="[('is_mandatory', '=', True)]"/>
+                <filter string="Required in clone"
+                        name="filter_required_in_clone"
+                        domain="[('is_required_in_clone', '=', True)]"/>
+                <!--                <filter string="Cloning" name="filter_cloning" domain="[('is_cloning', '=', True)]"/>-->
+                <filter string="Completeness" name="filter_completeness"
+                        domain="[('is_completeness', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_name" string="Name" domain="[]"
+                            context="{'group_by': 'name'}"/>
+                    <filter name="group_attribute_rec" string="Attribute Group"
+                            domain="[]"
+                            context="{'group_by': 'attribute_group'}"/>
+                    <filter name="group_attribute_type" string="Type"
+                            domain="[]"
+                            context="{'group_by': 'display_type'}"/>
+                    <filter name="group_mandatory" string="Mandatory"
+                            domain="[]"
+                            context="{'group_by': 'is_mandatory'}"/>
+                    <filter name="group_required_in_clone"
+                            string="Required in clone" domain="[]"
+                            context="{'group_by': 'is_required_in_clone'}"/>
+                    <!--                    <filter name="group_cloning" string="Cloning" domain="[]" context="{'group_by': 'is_cloning'}"/>-->
+                    <filter name="group_completeness" string="Completeness"
+                            domain="[]"
+                            context="{'group_by': 'is_completeness'}"/>
+                </group>
+                <separator/>
+                <!--                <filter name="basic_attribute_type" string="Basic Attribute Type" domain="[('attribute_types', '=', 'basic')]"/>-->
+                <!--                <filter name="optional_attribute_type" string="Optional Attribute Type" domain="[('attribute_types', '=', 'optional')]"/>-->
+            </search>
+        </field>
+    </record>
+
+
+    <record id="view_attribute_master_unlink_wizard_form" model="ir.ui.view">
+        <field name="name">attribute.master.unlink.wizard.form</field>
+        <field name="model">attribute.master.unlink.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Deletion">
+                <group>
+                    <div style="justify-content: center; align-items: center; white-space: nowrap; margin: 10px 0;">
+                        <p style="margin: 0; font-size: 14px;">
+                            Are you sure you want to delete this attribute?
+                        </p>
+                    </div>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-secondary"
+                            special="cancel"/>
+                    <button string="Delete" class="btn-primary" type="object"
+                            name="confirm_unlink"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_product_attribute_master_custom" model="ir.ui.view">
+        <field name="name">product.attribute.master.custom.layout</field>
+        <field name="model">product.attribute</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <form string="Attribute Master" create="false" edit="true"
+                  delete="false" class="page_form">
+                <div class="d-flex align-items-start attribute-main">
+                    <div class="left-column">
+                        <field name="master_attribute_ids">
+                            <list editable="bottom" create="false" edit="false"
+                                  delete="false"
+                                  default_order="create_date desc">
+                                <field name="name"/>
+                                <button name="attribute_edit_open_form_view"
+                                        type="object" icon="fa-pencil-square-o"
+                                        title='view' class="btn-link"/>
+                                <button name="attribute_master_unlink"
+                                        type="object" icon="fa-trash"
+                                        title='fa-trash'
+                                        class="btn-link text-danger"/>
+                            </list>
+                        </field>
+                    </div>
+
+                    <div class="right-column">
+                        <div class="attribute_type">
+                            <header>
+                                <button string="Back" type="object"
+                                        icon="fa-arrow-left"
+                                        name="action_back_to_attribute_menu"/>
+                            </header>
+                            <div class="pim_oe_title">
+                                <h2 class="pim_create_attribute">
+                                    <span class="attr_title">Edit Attribute
+                                    </span>
+                                </h2>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="o_col_6 col-12 attr_form">
+                                <div class="attr_properties">
+                                    <sheet class="attr_sheet">
+                                        <div class="oe_title">
+                                            <h1 class="name">
+                                                <field name="name" readonly="1"
+                                                       class="oe_inline"/>
+                                            </h1>
+                                        </div>
+                                        <notebook class="type_properties">
+                                            <page name="type_properties"
+                                                  string="Properties">
+                                                <group>
+                                                    <field name="product_product_field_id"
+                                                           invisible="1"/>
+                                                    <field name="product_template_field_id"
+                                                           invisible="1"/>
+                                                </group>
+                                                <div id="o_type_properties"
+                                                     class="d-lg-flex top_property">
+                                                    <div id="o_type_properties_main"
+                                                         class="flex-grow-1">
+                                                        <group string="General Parameters"
+                                                               class="general_param">
+                                                            <label for="name"
+                                                                   string="Attribute Name"
+                                                                   style="font-weight:bold;"/>
+                                                        </group>
+                                                    </div>
+                                                </div>
+                                                <div class="attr_form_values">
+                                                    <div>
+                                                        <field name="name"
+                                                               required="True"
+                                                               nolabel="1"
+                                                               placeholder="Enter attribute name"
+                                                               class="attribute_type_class"/>
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            <group>
+                                                                <label for="display_type"
+                                                                       string="Type"
+                                                                       style="font-weight:bold;"
+                                                                       required="True"/>
+                                                            </group>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <field name="display_type"
+                                                               nolabel="1"
+                                                               readonly="1"
+                                                               class="attribute_type_class attr_display_type"/>
+                                                    </div>
+                                                    <div id="o_type_properties">
+                                                        <div id="o_type_properties_main"
+                                                             class="flex-grow-1">
+                                                            <group>
+                                                                <label for="code"
+                                                                       string="Code"/>
+                                                            </group>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <field name="code"
+                                                               nolabel="1"
+                                                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"
+                                                               class="attribute_type_class"/>
+                                                    </div>
+                                                    <div id="o_type_properties">
+                                                        <div id="o_type_properties_main"
+                                                             class="flex-grow-1">
+                                                            <group>
+                                                                <label for="attribute_group"
+                                                                       string="Attribute group"/>
+                                                            </group>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <field name="attribute_group"
+                                                               nolabel="1"
+                                                               widget="many2many_tags"
+                                                               domain="[('company_id', '=', company_id)]"
+                                                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"
+                                                               class="attribute_type_class"/>
+                                                    </div>
+                                                    <div invisible="display_type not in ['text','text_area']">
+                                                        <div id="o_type_properties">
+                                                            <div id="o_type_properties_main"
+                                                                 class="flex-grow-1">
+                                                                <group>
+                                                                    <label for="max_value"
+                                                                           string="Maximum"/>
+                                                                </group>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <field name="max_value"
+                                                                   nolabel="1"
+                                                                   class="attribute_type_class"/>
+                                                        </div>
+                                                    </div>
+                                                    <!--<div invisible="display_type not in ['text']">
+                                                        <div id="o_type_properties">
+                                                            <div id="o_type_properties_main" class="flex-grow-1">
+                                                                <group>
+                                                                    <label for="alpha_numeric_value"
+                                                                           string="Alpha Numeric Validation"/>
+                                                                </group>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <field name="alpha_numeric_value" widget="radio"
+                                                                   options="{'horizontal': true}"
+                                                                   class="o_radio_horizontal"/>
+                                                        </div>
+                                                        <br/>
+                                                    </div>-->
+                                                    <div invisible="display_type not in ['text']">
+                                                        <div id="o_type_properties">
+                                                            <div id="o_type_properties_main"
+                                                                 class="flex-grow-1">
+                                                                <group>
+                                                                    <label for="unique_value"
+                                                                           string="Unique value"/>
+                                                                </group>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <field name="unique_value"
+                                                                   widget="radio"
+                                                                   options="{'horizontal': true}"
+                                                                   class="o_radio_horizontal"/>
+                                                        </div>
+                                                        <br/>
+                                                    </div>
+                                                    <div id="o_type_properties">
+                                                        <div id="o_type_properties_main"
+                                                             class="flex-grow-1">
+                                                            <group>
+                                                                <label for="is_value_per_channel"
+                                                                       string="Value per channel"/>
+                                                            </group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex"
+                                                         id="is_value_per_channel">
+                                                        <field name="is_value_per_channel"
+                                                               widget="boolean_radio"
+                                                               options="{'layout': 'horizontal','false_text':'Enable To make Attribute Channel Specific','false_text_class':'text-success'}"
+                                                               class="o_radio_horizontal"/>
+                                                    </div>
+                                                    <br/>
+                                                    <div invisible="display_type not in ['text', 'textarea', 'simple_select', 'multi_select', 'table']">
+                                                        <div id="o_type_properties">
+                                                            <div id="o_type_properties_main"
+                                                                 class="flex-grow-1">
+                                                                <group>
+                                                                    <label for="is_value_per_locale"
+                                                                           string="Value per locale"/>
+                                                                </group>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <field name="is_value_per_locale"
+                                                                   widget="boolean_radio"
+                                                                   options="{'layout': 'horizontal','false_text':'Enable To make Attribute Locale Specific','false_text_class':'text-success'}"
+                                                                   class="o_radio_horizontal"/>
+                                                        </div>
+                                                    </div>
+                                                    <br/>
+                                                    <div id="o_type_properties"
+                                                         invisible="display_type != 'measurement'">
+                                                        <div id="o_type_properties_main"
+                                                             class="flex-grow-1">
+                                                            <group>
+                                                                <label for="multi_field_per_value"
+                                                                       string="Field Per Value"/>
+                                                            </group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex"
+                                                         invisible="display_type != 'measurement'">
+                                                        <field name="multi_field_per_value"
+                                                               widget="radio"
+                                                               help="Create Fields in product template per values"
+                                                               options="{'horizontal': true}"
+                                                               class="o_radio_horizontal"/>
+                                                    </div>
+                                                    <br/>
+                                                    <div invisible="display_type in ['measurement', 'table']">
+                                                        <div id="o_type_properties">
+                                                            <div id="o_type_properties_main"
+                                                                 class="flex-grow-1">
+                                                                <group>
+                                                                    <label for="usable_in_grid"
+                                                                           string="Usable in grid"/>
+                                                                </group>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <field name="usable_in_grid"
+                                                                   widget="radio"
+                                                                   options="{'horizontal': true}"
+                                                                   class="o_radio_horizontal"/>
+                                                        </div>
+                                                        <br/>
+                                                    </div>
+                                                    <div id="o_type_properties">
+                                                        <div id="o_type_properties_main"
+                                                             class="flex-grow-1">
+                                                            <group>
+                                                                <label for="locale_specific"
+                                                                       string="Locale specific"/>
+                                                            </group>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex">
+                                                        <field name="locale_specific"
+                                                               widget="radio"
+                                                               options="{'horizontal': true}"
+                                                               class="o_radio_horizontal"/>
+                                                    </div>
+                                                    <br/>
+                                                    <div invisible="display_type != 'measurement'"
+                                                         class="measurement-options">
+                                                        <field name="value_ids"
+                                                               invisible="display_type not in ['simple_select','color','multi_select', 'measurement']"
+                                                               required="display_type in ['simple_select','color','multi_select', 'measurement']">
+                                                            <list editable="bottom">
+                                                                <field name="sequence"
+                                                                       widget="handle"/>
+                                                                <field name="name"/>
+                                                                <field name="display_type"
+                                                                       column_invisible="True"/>
+                                                                <field name="html_color"
+                                                                       column_invisible="parent.display_type != 'color'"
+                                                                       widget="color"/>
+                                                                <field name="image"
+                                                                       class="oe_avatar text-start float-none"
+                                                                       column_invisible="1"
+                                                                       options="{'size': [70, 70]}"
+                                                                       widget="image"/>
+                                                            </list>
+                                                        </field>
+                                                    </div>
+
+                                                </div>
+                                            </page>
+
+
+                                            <page name="options"
+                                                  string="Options"
+                                                  invisible="display_type in ['measurement'] or display_type not in ['simple_select','color','multi_select']">
+
+                                                <div class="pim-options-wrapper">
+                                                    <div class="text-center mb-3"
+                                                         invisible="value_ids">
+                                                        <button name="action_add_attribute_value"
+                                                                string="Add Option"
+                                                                type="object"
+                                                                class="btn btn-primary"
+                                                                style="background:#71639e;"
+                                                                context="{'form_view_ref': 'product.product_attribute_value_view_form'}"/>
+
+
+                                                    </div>
+
+                                                    <div invisible="not value_ids"
+                                                         class="option-table">
+                                                        <div class="d-flex justify-content-end mb-2 add-option-btn">
+
+
+                                                            <button name="action_add_attribute_value"
+                                                                    string="Add Option"
+                                                                    type="object"
+                                                                    class="btn btn-primary"
+                                                                    style="background:#71639e;"
+                                                                    context="{'form_view_ref': 'product.product_attribute_value_view_form'}"/>
+
+                                                        </div>
+
+                                                        <field name="value_ids">
+                                                            <list editable="bottom"
+                                                                  create="false"
+                                                                  create_edit="false">
+                                                                <field name="sequence"
+                                                                       widget="handle"/>
+                                                                <field name="name"/>
+                                                                <field name="display_type"
+                                                                       column_invisible="True"/>
+
+                                                                <field name="image"
+                                                                       class="oe_avatar text-start float-none"
+                                                                       column_invisible="1"
+                                                                       options="{'size': [70, 70]}"
+                                                                       widget="image"/>
+                                                            </list>
+                                                        </field>
+                                                    </div>
+
+                                                </div>
+                                            </page>
+
+                                            <page name="type_general_info"
+                                                  string="General">
+                                                <!--                                                <group string="INFORMATION">-->
+                                                <!--                                                    <group>-->
+                                                <!--                                                        <em><label for="is_mandatory" class="fw-bold"/></em>-->
+                                                <!--                                                        <field name="is_mandatory" nolabel="1"/>-->
+                                                <!--                                                        <em><label for="is_required_in_clone" class="fw-bold"/></em>-->
+                                                <!--                                                        <field name="is_required_in_clone" nolabel="1"/>-->
+                                                <!--                                                        <em><label for="is_completeness" class="fw-bold"/></em>-->
+                                                <!--                                                        <field name="is_completeness" nolabel="1"/>-->
+                                                <!--                                                        <em><label for="is_ai_enrichable" class="fw-bold"/></em>-->
+                                                <!--                                                        <field name="is_ai_enrichable" nolabel="1"/>-->
+                                                <!--                                                    </group>-->
+                                                <!--                                                </group>-->
+                                                <!--                                                <div id="o_type_properties" class="d-lg-flex top_property">-->
+                                                <!--                                                    <div id="o_type_properties_main" class="flex-grow-1">-->
+                                                <!--                                                        <group string="Information" class="general_param"/>-->
+                                                <!--                                                    </div>-->
+                                                <!--                                                </div>-->
+                                                <group>
+                                                    <group string="Information">
+                                                        <field name="is_mandatory"/>
+                                                        <field name="is_required_in_clone"/>
+                                                        <field name="is_completeness"/>
+                                                        <field name="company_id"/>
+                                                    </group>
+                                                    <group></group>
+                                                </group>
+                                            </page>
+
+                                            <page name="History">
+                                                <group>
+                                                    <field name="history_log"
+                                                           nolabel="1"
+                                                           readonly="1"/>
+                                                </group>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="attr_creation" style="margin-top: 16px;">
+                            <button type="object" string="Save"
+                                    invisible="original_name"
+                                    name="create_update_attribute_fields"
+                                    class="oe_highlight"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_attribute_master_custom_js_class"
+            model="ir.ui.view">
+        <field name="name">product.attribute.master.custom.layout</field>
+        <field name="model">product.attribute</field>
+        <field name="arch" type="xml">
+            <form string="Attribute Master" create="false" edit="true">
+                <sheet>
+                    <group invisible="1">
+                        <field name="product_product_field_id"/>
+                        <field name="product_template_field_id"/>
+                    </group>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <notebook>
+                        <page name="type_properties" string="Properties">
+                            <group string="General Parameters">
+                                <group>
+                                    <field name="name" required="1"
+                                           placeholder="Enter attribute name"/>
+                                    <field name="display_type" readonly="1"
+                                           required="1"/>
+                                    <field name="code"
+                                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="attribute_group"
+                                           widget="many2many_tags"
+                                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                </group>
+<!--                                <group>-->
+<!--                                    <field name="max_value"-->
+<!--                                           invisible="display_type not in ['text','text_area']"-->
+<!--                                           placeholder="Maximum length"/>-->
+<!--                                    <field name="unique_value" widget="radio"-->
+<!--                                           options="{'horizontal': true}"-->
+<!--                                           invisible="display_type not in ['text']"/>-->
+<!--                                </group>-->
+                            </group>
+
+                            <group string="Advanced Options">
+                                <group>
+                                    <field name="is_value_per_channel"
+                                           widget="boolean_radio"
+                                           string="Value per channel"
+                                           options="{'horizontal': true}"/>
+
+                                    <field name="is_value_per_locale"
+                                           widget="boolean_radio"
+                                           options="{'horizontal': true}"
+                                           invisible="display_type not in ['text', 'textarea', 'simple_select', 'multi_select', 'table']"/>
+
+                                    <field name="multi_field_per_value"
+                                           widget="radio"
+                                           help="Create Fields in product template per values"
+                                           options="{'horizontal': true}"
+                                           invisible="display_type != 'measurement'"/>
+                                </group>
+                                <group>
+
+                                    <field name="product_template_field_id"
+                                           invisible="1"/>
+                                    <field name="product_product_field_id"
+                                           invisible="1"/>
+
+                                    <field name="is_usable_in_grid"
+                                           widget="boolean_radio"
+                                           class="o_radio_horizontal"
+                                           invisible="display_type in ['measurement', 'table']"/>
+
+                                    <field name="locale_specific" widget="radio"
+                                           options="{'horizontal': true}"/>
+                                </group>
+                            </group>
+
+                            <group string="Attribute Values"
+                                   class="attribute-values-card"
+                                   invisible="display_type in ['text', 'float','text_area','price','date','file','image','yes_no','table','number']"
+                            >
+                                <div class="table-card-wrapper">
+                                    <field name="value_ids" nolabel="1"
+                                           invisible="display_type not in ['simple_select','color','multi_select', 'measurement']"
+                                           required="display_type in ['simple_select','color','multi_select', 'measurement']">
+                                        <list editable="bottom">
+                                            <field name="sequence"
+                                                   widget="handle"/>
+                                            <field name="name"/>
+                                            <field name="display_type"
+                                                   column_invisible="1"/>
+                                            <field name="html_color"
+                                                   column_invisible="parent.display_type != 'color'"
+                                                   invisible="image"
+                                                   widget="color"/>
+                                            <field name="image"
+                                                   column_invisible="1"
+                                                   options="{'size': [70, 70]}"
+                                                   widget="image"/>
+                                        </list>
+                                    </field>
+                                </div>
+                            </group>
+
+                            <group string="Table Attribute Values"
+                                   invisible="display_type not in ['table']">
+                                <field name="sub_attribute_ids" nolabel="1"
+                                       invisible="display_type not in ['table']"
+                                       required="display_type in ['table']">
+                                    <list editable="bottom">
+                                        <field name="name"/>
+                                        <field name="display_type"/>
+                                        <field name="original_name"/>
+                                        <button name="action_set_values"
+                                                string="Set Values"
+                                                type="object" icon="fa-pencil"
+                                                invisible="display_type not in ['table','measurement','multi_select','simple_select','color']"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page name="options"
+                              string="Options"
+                              invisible="display_type in ['measurement'] or display_type not in ['simple_select','color','multi_select']">
+
+                            <div class="pim-options-wrapper">
+
+                                <!-- Show button when no values exist -->
+                                <div class="text-center mb-3"
+                                     invisible="value_ids">
+                                    <!-- Use js_add_value_line for no-reload behavior -->
+                                    <button name="js_add_value_line"
+                                            string="Add Option"
+                                            type="object"
+                                            class="btn btn-primary"
+                                            style="background:#71639e;"/>
+                                </div>
+
+                                <!-- Show table when values exist -->
+                                <div invisible="not value_ids"
+                                     class="option-table">
+                                    <div class="d-flex justify-content-end mb-2 add-option-btn">
+                                        <!-- Use js_add_value_line for no-reload behavior -->
+                                        <button name="js_add_value_line"
+                                                string="Add Option"
+                                                type="object"
+                                                class="btn btn-primary"
+                                                style="background:#71639e;"/>
+                                    </div>
+
+                                    <!-- Editable tree for inline editing -->
+                                    <field name="value_ids"
+                                           context="{
+                                       'default_attribute_id': id,
+                                       'default_display_type': display_type
+                                   }">
+                                        <list editable="bottom" create="false"
+                                              delete="true">
+                                            <field name="sequence"
+                                                   widget="handle"/>
+                                            <field name="name" required="1"/>
+                                            <field name="display_type"
+                                                   column_invisible="True"/>
+                                            <field name="html_color"
+                                                   column_invisible="parent.display_type != 'color'"
+                                                   widget="color"
+                                                   required="parent.display_type == 'color'"/>
+                                            <field name="image"
+                                                   class="oe_avatar text-start float-none"
+                                                   column_invisible="parent.display_type != 'color'"
+                                                   options="{'size': [70, 70]}"
+                                                   widget="image"/>
+                                        </list>
+                                    </field>
+                                </div>
+
+                            </div>
+                        </page>
+
+                        <page name="type_general_info" string="General">
+                            <group string="Information">
+                                <group>
+                                    <field name="is_mandatory" widget="boolean_radio"/>
+                                    <field name="is_required_in_clone" widget="boolean_radio"/>
+                                </group>
+                                <group>
+                                    <field name="is_completeness" widget="boolean_radio"/>
+                                    <field name="company_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page name="History" string="History">
+                            <group>
+                                <field name="history_log" nolabel="1"
+                                       readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+
+                    <div invisible="original_name">
+                        <button type="object" string="Save"
+                                name="create_update_attribute_fields"
+                                class="oe_highlight" invisible="1"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="product_attribute_pim_tree_view" model="ir.ui.view">
+        <field name="name">product.attribute.tree.view</field>
+        <field name="model">product.attribute</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="true" edit="true"
+                  default_order="create_date desc"
+                  js_class="pim_attribute_split_view">
+                <field name="name"/>
+                <field name="display_type" string="Type"/>
+                <field name="company_id"/>
+                <field name="attribute_group" widget="many2many_tags"/>
+                <field name="is_mandatory" widget="boolean_toggle"/>
+                <field name="is_required_in_clone" widget="boolean_toggle"/>
+                <field name="is_cloning" widget="boolean_toggle"/>
+                <field name="is_completeness" widget="boolean_toggle"/>
+                <field name="is_ai_enrichable" string="AI Enrichable"
+                       widget="boolean_toggle"
+                       readonly="display_type not in ('text', 'textarea')"/>
+
+                <button name="attribute_master_form_view" type="object"
+                        icon="fa-pencil" title="Edit"/>
+                <button name="attribute_master_unlink" type="object"
+                        icon="fa-trash" title="Delete"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action to open the custom view -->
+    <record id="action_product_attributes_custom" model="ir.actions.act_window">
+        <field name="name">Attributes</field>
+        <field name="res_model">product.attribute</field>
+        <field name="domain">[('company_id', 'in', allowed_company_ids)]</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="product_attribute_pim_tree_view"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'list', 'view_id': ref('product_attribute_pim_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_product_attribute_master_custom_js_class')}),
+                ]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Record Found
+            </p>
+        </field>
+    </record>
+
+    <record id="action_update_field_view" model="ir.actions.server">
+        <field name="name">Update Attribute</field>
+        <field name="model_id" ref="product.model_product_attribute"/>
+        <field name="binding_model_id" ref="product.model_product_attribute"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">model.create_attributes()</field>
+    </record>
+    <!--    <record id="action_update_field_tree_view" model="ir.actions.server">-->
+    <!--        <field name="name">Update Attribute Tree View</field>-->
+    <!--        <field name="model_id" ref="product.model_product_attribute"/>-->
+    <!--        <field name="binding_model_id" ref="product.model_product_attribute"/>-->
+    <!--        <field name="binding_view_types">list,form</field>-->
+    <!--        <field name="state">code</field>-->
+    <!--        <field name="code">model.create_product_list_view()</field>-->
+    <!--    </record>-->
+    <!--    <record id="copy_phone_to_mobile" model="ir.actions.server">-->
+    <!--        <field name="name">Copy Phone to Mobile</field>-->
+    <!--        <field name="model_id" ref="base.model_res_partner"/>-->
+    <!--        <field name="binding_model_id" ref="base.model_res_partner"/>-->
+    <!--        <field name="binding_view_types">list</field>-->
+    <!--        <field name="state">code</field>-->
+    <!--        <field name="code">-->
+    <!--            action = records.action_copy_phone_to_mobile()-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+    <menuitem
+            id="menu_res_lang_locale"
+            name="Languages"
+            action="base.res_lang_act_window"
+            parent="pim_ext.menu_root_product_management"
+            sequence="10"/>
+</odoo>

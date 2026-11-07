@@ -1,0 +1,11 @@
+.PimColor .color_badge{
+    width: 32px;
+    height: 22px;
+    border:1px solid #ccc;
+    cursor: pointer;
+    border-radius:5px;
+    transition: transform .2s;
+}
+.PimColor .color_badge:hover{
+    transform: scale(1.2);
+}

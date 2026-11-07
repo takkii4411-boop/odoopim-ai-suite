@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the custom layout view -->
+        <record id="view_product_family_select_customs" model="ir.ui.view">
+            <field name="name">product.family.select.layout</field>
+            <field name="model">product.family.select</field>
+            <field name="arch" type="xml">
+                <form string="Attribute" create="false" edit="false" class="page_form">
+                    <div class="d-flex align-items-start">
+
+                        <div align="center">
+                            <form create="false" edit="false" delete="false" readonly="1" class="attribute_type">
+                                <field name="is_invisible" invisible="1"/>
+                                <div class="pim_oe_title">
+                                    <h2 class="pim_create_attribute"><span class="attr_title">Create Product</span></h2>
+                                </div>
+                                <div class="pim_oe_title" invisible="is_invisible">
+                                    <h2 class="choose_pim_attribute_type" style="text-align:left;">Choose the Product type</h2>
+                                </div>
+                                    <!-- Use a flex layout with columns -->
+
+                                <div class="d-flex justify-content-center" invisible="is_invisible">
+                                    <div class="o_grid attr_types">
+            <!--                            row 1-->
+                                        <div class="d-grid grid_column d-flex">
+                                            <!-- Button for Date -->
+                                            <div class="attribute-button">
+                                                <button name="simple_product" type="object" class="btn btn-light attribute-icon-button">
+                                                    <i class="fa fa-tag fa-4x"></i>
+                                                    <span>Simple Product</span>
+                                                </button>
+                                            </div>
+                                            <!-- Button for Multi-select -->
+                                            <div class="attribute-button">
+                                                <button name="variant_product" type="object" class="btn btn-light attribute-icon-button">
+                                                    <i class="fa fa-tags fa-4x"></i>
+                                                    <span>Product Model</span>
+                                                </button>
+                                            </div>
+
+                                        </div>
+            <!--                            row5-->
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="o_col_6 attr_form" invisible="not is_invisible">
+                                   <div class="attr_properties">
+                                       <sheet class="attr_sheet">
+<!--                                           <div class="oe_title">-->
+<!--                                               <h1 class="type_name"><field name="type_name" readonly="1" class="oe_inline choose_pim_attribute_type"/></h1>-->
+<!--                                           </div>-->
+                                           <notebook class="type_properties">
+                                               <page name="type_properties" string="Properties">
+                                                   <div id="o_type_properties" class="d-lg-flex top_property">
+                                                       <div id="o_type_properties_main" class="flex-grow-1">
+
+                                                       </div>
+                                                   </div>
+                                                   <div class="attr_form_values">
+                                                       <div>
+                                                           <div>
+                                                               <group>
+                                                                   <label for="family_id" string="Family" style="font-weight:bold;" required="True"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div>
+                                                           <field name="family_id" nolabel="1" />
+                                                       </div>
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="sku" string="SKU"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div>
+                                                           <field name="sku" nolabel="1"/>
+                                                       </div>
+
+                                                       <div id="o_type_properties">
+                                                           <div id="o_type_properties_main" class="flex-grow-1">
+                                                               <group>
+                                                                   <label for="name" string="Name"/>
+                                                               </group>
+                                                           </div>
+                                                       </div>
+                                                       <div>
+                                                           <field name="name" nolabel="1"/>
+                                                       </div>
+                                                   </div>
+                                               </page>
+
+                                           </notebook>
+                                       </sheet>
+                                   </div>
+                                </div>
+                            </form>
+                             <div class="attr_creation">
+                                                           <button type="object" string="Save"
+                                                                   name="create_product" class="oe_highlight"/>
+<!--                                                           <button type="object" string="Cancal"-->
+<!--                                                                   name="cancel_attributes" class="oe_highlight"/>-->
+
+                                                       </div>
+                        </div>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action to open the custom view -->
+        <record id="action_products_family_select_custom" model="ir.actions.act_window">
+            <field name="name">Product Family Select</field>
+            <field name="res_model">product.family.select</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_product_family_select_customs"/>
+            <field name="target">current</field>
+        </record>
+    </data>
+</odoo>

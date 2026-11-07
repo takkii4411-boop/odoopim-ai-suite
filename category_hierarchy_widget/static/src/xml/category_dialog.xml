@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="web.CategoryDialog">
+      <Dialog title="props.title">
+         <div class="fam-cat" style="max-height:500px;overflow: hidden;overflow-y: auto;scrollbar-width: thin;margin-bottom: 15px;padding-left:30px;">
+            <div class="jstr-navigation-panel jstr-hide-mobile jstr-hide-tablet">
+            <div class="jstr-panel-content">
+                <div  class="jstr-search-input-container" style="border-bottom: 1px solid light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    padding-bottom: 20px;
+    width: 100%;
+    position: fixed;
+    max-width: 876px;
+    background-color: #ffffff;">
+                        </div>
+                <t t-set="Categories" t-value="state.Categories"/>
+<!--                 <t t-esc="props.existingCatList"/>-->
+                <div id="categories" class="jstree jstree-1 jstree-default">
+                    <ul class="jstree-container-ul jstree-children jstree-no-icons" >
+                    <t t-foreach="Categories" t-as="categ_id" t-key="categ_id.id">
+                        <li  role="none" t-att-id="categ_id.id" class="jstree-node jstree-closed">
+                            <i t-on-click="show_child_categ" class="jstree-icon jstree-ocl" role="presentation"></i>
+                            <a  class="jstree-anchor" href="#" tabindex="-1" role="treeitem" aria-selected="false" aria-level="1" aria-expanded="true" t-att-id="categ_id.id+'_anchor'">
+                                <i class="jstree-icon jstree-checkbox" role="presentation"></i>
+                                <span  t-att-id="categ_id.id"><t t-esc="categ_id.text"/></span>>
+                            </a>
+                            <ul class="jstree-children">
+                            <t t-call="category_hierarchy_widget.category_template">
+                                                            <t t-set="Categories"
+                                                               t-value="categ_id.children"/>
+                            </t>
+                            </ul>
+                        </li>
+                    </t>
+                </ul>
+                </div>
+            </div>
+        </div>
+         </div>
+
+          <t t-set-slot="footer">
+               <div class="BC_btn_parent select_cat_btn">
+                <button
+                        t-if="state.SelectedCategory"
+                        class="custombuttonaddCat"
+                        data-tooltip="Select"
+                        aria-label="Select"
+                        t-on-click="addCategory">Select
+                </button>
+             </div>
+
+        </t>
+      </Dialog>
+
+    </t>
+
+</templates>

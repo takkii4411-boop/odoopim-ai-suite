@@ -1,0 +1,45 @@
+.o_image_carousel {
+  .carousel-image-container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .carousel-image {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .nav-btn {
+    opacity: 0.8;
+    background-color: rgba(255, 255, 255, 0.8);
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .thumbnail-overlay {
+    overflow-x: auto;
+    backdrop-filter: blur(4px);
+    border-radius: 6px;
+  }
+
+  .thumbnail {
+    opacity: 0.6;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    &.selected {
+      opacity: 1;
+      border-color: #007bff;
+    }
+  }
+
+  .btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

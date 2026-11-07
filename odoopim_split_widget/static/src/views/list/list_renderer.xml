@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!--    <t t-inherit="web.ListRenderer" t-inherit-mode="extension">-->
+<!--        <xpath expr="//thead//th[@t-if='hasSelectors']" position="before">-->
+<!--            <t t-if="numSwitch">-->
+<!--                <th class="o_list_record_selector list-number">#</th>-->
+<!--            </t>-->
+<!--        </xpath>-->
+<!--        <xpath expr="//tfoot//td[@t-if='hasSelectors']" position="before">-->
+<!--            <t t-if="numSwitch">-->
+<!--                <td class="o_list_record_selector"/>-->
+<!--            </t>-->
+<!--        </xpath>-->
+<!--    </t>-->
+
+<!--    <t t-inherit="web.ListRenderer.RecordRow" t-inherit-mode="extension">-->
+<!--        <xpath expr="//td[@t-if='hasSelectors']" position="before">-->
+<!--            <t t-if="numSwitch">-->
+<!--                <t t-set="num" t-value="(record_index + 1) + list.offset"/>-->
+<!--                <td t-esc="num" t-att-data-tooltip="num" class="cursor-pointer"/>-->
+<!--            </t>-->
+<!--        </xpath>-->
+<!--    </t>-->
+
+    <t t-inherit="web.ListRenderer.Rows" t-inherit-mode="extension">
+<!--        <xpath expr="//tr[@t-foreach='getEmptyRowIds']/td" position="before">-->
+<!--            <t t-if="numSwitch">-->
+<!--                <td/>-->
+<!--            </t>-->
+<!--        </xpath>-->
+<!--        <xpath expr="//td[@t-if='withHandleColumn']" position="before">-->
+<!--            <t t-if="numSwitch">-->
+<!--                <td/>-->
+<!--            </t>-->
+<!--        </xpath>-->
+        <xpath expr="//tr[@t-if='displayRowCreates']" position="replace"/>
+        <xpath expr="//t[@t-foreach='list.records']" position="before">
+            <tr t-if="displayRowCreates">
+                <td t-if="withHandleColumn"/>
+                <td t-att-colspan="(withHandleColumn ? nbCols - 1 : nbCols) + (numSwitch ? 1 : 0)"
+                    class="o_field_x2many_list_row_add"
+                    t-on-keydown="(ev) => this.onCellKeydown(ev, null)"
+                >
+                    <t t-foreach="creates" t-as="create" t-key="create_index">
+                        <a
+                            t-if="create.type === 'create'"
+                            href="#"
+                            role="button"
+                            t-att-class="create_index !== 0 ? 'ml16' : ''"
+                            t-att-tabindex="props.list.editedRecord ? '-1' : '0'"
+                            t-on-click.stop.prevent="() => this.add({ context: create.context })"
+                        >
+                            <t t-esc="create.string"/>
+                        </a>
+                        <ViewButton
+                            t-if="create.type === 'button'"
+                            className="`${create.className} ${create_index !== 0 ? 'ml16' : ''}`"
+                            clickParams="create.clickParams"
+                            icon="create.icon"
+                            record="props.list"
+                            string="create.string"
+                            title="create.title"
+                            tabindex="props.list.editedRecord ? '-1' : '0'"
+                        />
+                    </t>
+                </td>
+            </tr>
+        </xpath>
+    </t>
+
+<!--    <t t-inherit="web.ListRenderer.GroupRow" t-inherit-mode="extension">-->
+<!--        <xpath expr="//th[@tabindex='-1']" position="before">-->
+<!--            <t t-if="numSwitch">-->
+<!--                <t t-set="num" t-value="(group_index + 1) + list.offset"/>-->
+<!--                <td t-esc="num" t-att-data-tooltip="num" class="cursor-pointer"/>-->
+<!--            </t>-->
+<!--        </xpath>-->
+<!--    </t>-->
+
+</templates>

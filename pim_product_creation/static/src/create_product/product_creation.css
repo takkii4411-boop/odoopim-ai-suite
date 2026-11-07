@@ -1,0 +1,55 @@
+.loading-overlay {
+    backdrop-filter: blur(4px);
+    position: absolute;
+    width: inherit;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    align-content: stretch;
+    flex-wrap: wrap;
+    background: #ffffff12;
+}
+.MouseLoader {
+  width: 48px;
+  height: 78px;
+  position: relative;
+  box-sizing: border-box;
+  border: 2px solid #714B67;
+  margin: auto;
+  border-radius: 50% 50% 50% 50% / 25% 25% 25% 25%;
+}
+.MouseLoader::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #714B67;
+  border-radius: 10px;
+  animation: MousescrollDown 1.5s linear infinite;
+}
+@keyframes MousescrollDown {
+  0% {
+    top: 15px;
+    height: 4px;
+    opacity: 1;
+  }
+  33% {
+    top: 15px;
+    height: 40px;
+  }
+  66% {
+    top: 50px;
+    height: 10px;
+    opacity: 1;
+  }
+  100% {
+    top: 56px;
+    height: 4px;
+    opacity: 0;
+  }
+}

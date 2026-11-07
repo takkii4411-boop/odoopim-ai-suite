@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_root_product_managements"
+              name="OdooPIM"
+              web_icon="pim_ext,static/src/img/icon.png"
+              sequence="35"/>
+
+    <menuitem id="menu_root_product_root_management"
+              name="Products"
+              parent="pim_ext.menu_root_product_managements"
+              sequence="29"/>
+    <menuitem id="menu_root_product_management"
+              name="Configuration"
+              parent="pim_ext.menu_root_product_managements"
+              sequence="30"/>
+
+    <menuitem id="menu_pim_attribute_action"
+              action="action_product_attributes_custom" name="Attributes"
+              parent="pim_ext.menu_root_product_management" sequence="10"/>
+
+    <menuitem id="menu_pim_attribute_group"
+              action="action_attribute_group_view" name="Attributes Groups"
+              parent="pim_ext.menu_root_product_management" sequence="15"/>
+
+    <menuitem id="menu_pim_attribute_action3"
+              action="action_family_view" name="Families"
+              parent="pim_ext.menu_root_product_management" sequence="30"/>
+
+
+    <menuitem id="pim_brands_view_main"
+              name="Brand"
+              action="actions_product_brand"
+              parent="pim_ext.menu_root_product_management"
+              sequence="60"/>
+
+    <menuitem id="menu_general_attributes"
+              action="general_attributes_action" name="System Attributes"
+              parent="pim_ext.menu_root_product_management" sequence="61"/>
+
+    <menuitem id="menu_product_suppliers"
+              action="action_supplier_info" name="Suppliers" groups="base.group_user"
+              parent="pim_ext.menu_root_product_management" sequence="60"/>
+
+
+    <record id="product_view_kanban_catalog1" model="ir.ui.view">
+        <field name="name">product.view.kanban.catalog</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <kanban records_draggable="0" js_class="product_kanban_catalog">
+                <field name="id" invisible="1"/>
+                <field name="default_code" invisible="1"/>
+                <templates>
+                    <t t-name="kanban-menu">
+                        <a role="menuitem" type="edit" class="dropdown-item border-top-0">Edit</a>
+                    </t>
+                    <t t-name="kanban-box">
+                        <div class="d-flex flex-grow-1">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('product.product', 'image_128', record.id.raw_value)"
+                                     alt="Product"/>
+                            </div>
+                            <div class="oe_kanban_details p-2 d-flex">
+                                <div class="o_kanban_record_top flex-column m-0"
+                                     t-attf-id="product-{{record.id.raw_value}}">
+                                    <div class="d-flex">
+                                        <!--                                        ##odoo18-->
+                                        <!--                                        <field style="margin-top: 2px;" class="me-1" name="priority" widget="priority"/>-->
+                                        <h4 class="text-reset">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                        </h4>
+                                    </div>
+                                    <div t-if="record.default_code.value">
+                                        [<field name="default_code"/>]
+                                    </div>
+                                    <!-- Used by @web/product/js/product_catalog/order_line to
+                                         show the price using a t-portal. -->
+                                    <div name="o_kanban_price"
+                                         t-attf-id="product-{{record.id.raw_value}}-price"
+                                         class="d-flex flex-column"/>
+                                    <field name="product_template_attribute_value_ids"
+                                           widget="many2many_tags"
+                                           domain="[('id', 'in', parent.ids)]"
+                                           groups="product.group_product_variant"
+                                           options="{'color_field': 'color'}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_attribute_group_unlink_wizard_form" model="ir.ui.view">
+        <field name="name">attribute.group.unlink.wizard.form</field>
+        <field name="model">attribute.group.unlink.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Deletion">
+                <group>
+                    <div style="justify-content: center; align-items: center; white-space: nowrap; margin: 10px 0;">
+                        <p style="margin: 0; font-size: 14px;">
+                            Are you sure you want to delete this attribute group?
+                        </p>
+                    </div>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button string="Delete" class="btn-primary" type="object" name="confirm_unlink"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_master_unlink_wizard_form" model="ir.ui.view">
+        <field name="name">product.template.unlink.wizard.form</field>
+        <field name="model">product.template.unlink.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Deletion">
+                <group>
+                    <div style="justify-content: center; align-items: center; white-space: nowrap; margin: 10px 0;">
+                        <p style="margin: 0; font-size: 14px;">
+                            Are you sure you want to delete this product?
+                        </p>
+                        <field name="product_id" invisible="1"/>
+                    </div>
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    <button string="Delete" class="btn-primary" type="object" name="confirm_unlink"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_view_search_catalog1" model="ir.ui.view">
+        <field name="name">product.view.search.catalog</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <search string="Product">
+                <!-- Search field -->
+                <field name="name"
+                       string="Product"
+                       filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>
+                <field name="attribute_group_ids"/>
+                <field name="attribute_family_ids"/>
+                <field name="product_template_attribute_value_ids"
+                       groups="product.group_product_variant"/>
+                <field name="product_tmpl_id" string="Product Template"/>
+                <!-- Filter -->
+                <!--                ##odoo18<filter string="Favorites" name="favorites" domain="[('priority', '=', '1')]"/>-->
+                <separator/>
+                <filter string="Services" name="services" domain="[('type', '=', 'service')]"/>
+                <filter string="Products"
+                        name="products"
+                        domain="[('type', 'in', ['consu', 'product'])]"/>
+                <!-- Group By -->
+                <group expand="1" string="Group By">
+                    <filter string="Product Type" name="type" context="{'group_by':'type'}"/>
+                    <filter string="Product Category"
+                            name="categ_id"
+                            context="{'group_by':'categ_id'}"/>
+                </group>
+                <!-- searchpanel -->
+                <searchpanel>
+                    <field name="attribute_family_ids" string="Family" icon="fa-th-list" enable_counters="1"
+                           select="multi"/>
+                    <field name="attribute_group_ids" string="Attributes Group" icon="fa-th-list" enable_counters="1"
+                           select="multi"/>
+                    <field name="product_template_attribute_value_ids" string="Attribute &amp; Values" icon="fa-th-list"
+                           enable_counters="1" select="multi"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_product_list_variants" model="ir.actions.act_window">
+        <field name="name">List Product</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">kanban</field>
+        <field name="search_view_id" ref="product_view_search_catalog1"/>
+        <field name="context">{}</field>
+    </record>
+
+    <!--    <menuitem id="menu_product_variants_list"-->
+    <!--    action="action_product_list_variants" name="List Product"-->
+    <!--    parent="menu_main_product" sequence="1"/>-->
+
+    <!--    <menuitem id="menu_product_pricelist_main_2"-->
+    <!--        name="Manage Pricelists"-->
+    <!--        action="product.product_pricelist_action2"-->
+    <!--        groups="product.group_product_pricelist"-->
+    <!--        parent="pim_configuraion"-->
+    <!--        sequence="1"/>-->
+
+    <menuitem id="base.menu_management" name="Apps" sequence="500" web_icon="base,static/description/modules.png"
+              groups="pim_ext.group_hide_menus"/>
+
+    <menuitem name="Settings"
+              id="base.menu_administration"
+              web_icon="base,static/description/settings.png"
+              sequence="550"
+              groups="pim_ext.group_hide_menus"/>
+
+    <menuitem
+            id="stock_barcode.stock_barcode_menu"
+            action="stock_barcode.stock_barcode_action_main_menu"
+            web_icon="stock_barcode,static/description/icon.png"
+            sequence="155"
+            groups="pim_ext.group_hide_menus"/>
+
+    <menuitem name="Inventory" id="stock.menu_stock_root" sequence="140"
+              groups="pim_ext.group_hide_menus"
+              web_icon="stock,static/description/icon.png"/>
+
+    <menuitem id="sale.sale_menu_root"
+              name="Sales" groups="pim_ext.group_hide_menus"
+              web_icon="sale_management,static/description/icon.png"
+              sequence="30"/>
+
+    <menuitem name="Accounting"
+              id="account.menu_accounting"
+              groups="pim_ext.group_hide_menus"
+              web_icon="accountant,static/description/icon.png"
+              sequence="60"/>
+
+    <menuitem
+            id="spreadsheet_dashboard.spreadsheet_dashboard_menu_root"
+            name="Dashboards" groups="pim_ext.group_hide_menus"
+            action="spreadsheet_dashboard.ir_actions_dashboard_action"
+            web_icon="spreadsheet_dashboard,static/description/icon.png"
+            sequence="37"/>
+
+    <menuitem name="Website"
+              id="website.menu_website_configuration"
+              sequence="95"
+              groups="pim_ext.group_hide_menus"
+              web_icon="website,static/description/icon.png"/>
+
+    <!--    <template id="web_studio_systray_inherit" inherit_id="web_studio.SystrayItem" name="Hide Studio">-->
+    <!--        <xpath expr="//div" position="attributes">-->
+    <!--            <attribute name="groups">base.group_no_one</attribute>-->
+    <!--        </xpath>-->
+    <!--    </template>-->
+
+</odoo>

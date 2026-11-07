@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_push_to_channel_wizard" model="ir.ui.view">
+        <field name="name">push.to.channel.wizard.form</field>
+        <field name="model">push.to.channel.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Push Products to Channel">
+                <div class="alert alert-info text-center" role="alert">
+                    You are about to push product data to an external channel.
+                    Please select an active channel below.
+                </div>
+                
+                <group>
+                    <group>
+                        <field name="platform_id" options="{'no_create': True}"/>
+                        <field name="mapping_id" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="product_count"/>
+                        <field name="product_ids" widget="many2many_tags" readonly="1" nolabel="1"/>
+                    </group>
+                </group>
+                
+                <!-- FIXED: Now referencing the related fields directly from the wizard model -->
+                <div class="oe_grey_box mt-4" invisible="not platform_id">
+                    <h5 class="d-flex align-items-center">
+                        <field name="platform_logo" widget="image" class="me-2" style="width: 32px; height: 32px;"/>
+                        <field name="platform_id" readonly="1" nolabel="1"/>
+                    </h5>
+                    <p class="mb-0">
+                        <strong>Status:</strong>
+                        <field name="platform_status" readonly="1" nolabel="1"/>
+                    </p>
+                </div>
+                
+                <footer>
+                    <button name="action_push" string="Publish Products" type="object" class="btn-primary" icon="fa-rocket"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

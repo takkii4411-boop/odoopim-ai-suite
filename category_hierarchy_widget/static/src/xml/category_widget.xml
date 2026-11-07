@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="CategoryHierarchyTemplate" owl="1">
+                 <div class="fam-cat"
+                      style="max-height:500px;overflow: hidden;overflow-y: auto;scrollbar-width: thin;margin-bottom: 15px;padding-left:30px;">
+            <div class="jstr-navigation-panel jstr-hide-mobile jstr-hide-tablet">
+            <div class="jstr-panel-content">
+                <div class="jstr-search-input-container" style="padding-bottom: 20px;width: 100%; position: fixed;
+    max-width: 876px;background-color: #ffffff;">
+                        </div>
+                <t t-set="Categories" t-value="state.categories"/>
+                <!--                 <t t-esc="props.existingCatList"/>-->
+                <div id="categories" class="jstree jstree-1 jstree-default">
+                    <ul class="jstree-container-ul jstree-children jstree-no-icons">
+                    <t t-foreach="Categories" t-as="categ_id" t-key="categ_id.id">
+                        <li role="none" t-att-id="categ_id.id" class="jstree-node jstree-closed">
+                            <i t-on-click="(ev) => this.show_child_categ(ev.currentTarget)"
+                               class="jstree-icon jstree-ocl" role="presentation"></i>
+                            <a class="jstree-anchor" href="#" tabindex="-1" role="treeitem" aria-selected="false"
+                               aria-level="1" aria-expanded="true" t-att-id="categ_id.id+'_anchor'">
+                                <i class="jstree-icon jstree-checkbox" role="presentation"></i>
+                                <t t-esc="categ_id.text"/>
+<!--                                <i t-on-click="(ev) => this.addCatgeory(ev,categ_id.id)" class="fa fa-plus-circle"></i>-->
+
+                            </a>
+                            <ul class="jstree-children" t-att-id="'categ_'+categ_id.id">
+                            <t t-call="category_hierarchy_widget.category_template">
+                                                            <t t-set="Categories"
+                                                               t-value="categ_id.children"/>
+                            </t>
+                            </ul>
+                        </li>
+                    </t>
+                </ul>
+                </div>
+            </div>
+        </div>
+         </div>
+
+    </t>
+</templates>

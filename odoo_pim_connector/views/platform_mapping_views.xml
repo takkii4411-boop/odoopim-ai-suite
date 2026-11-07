@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- NEW: List view for all platform mapping configurations -->
+    <record id="view_pim_platform_mapping_list" model="ir.ui.view">
+        <field name="name">pim.platform.mapping.list</field>
+        <field name="model">pim.platform.mapping</field>
+        <field name="arch" type="xml">
+            <list string="Field Mapping Configurations" create="false">
+                <field name="name" string="Connector Configuration"/>
+            </list>
+        </field>
+    </record>
+
+
+    <!-- The main configuration form for a single platform -->
+    <record id="view_pim_platform_mapping_form" model="ir.ui.view">
+        <field name="name">pim.platform.mapping.form</field>
+        <field name="model">pim.platform.mapping</field>
+        <field name="arch" type="xml">
+            <form string="Field Mapping Configuration" create="false" delete="false">
+                <sheet>
+                    <div class.="d-flex align-items-center justify-content-between mb-4">
+                        <div>
+                            <h1><field name="name" readonly="1" class="oe_inline"/></h1>
+                        </div>
+                        <div>
+                            <field name="logo_image" widget="image" class="oe_avatar" style="width: 90px; height: 90px;" readonly="1" nolabel="1"/>
+                        </div>
+                    </div>
+                    <p class="text-muted">
+                        Configure how fields from your Odoo products map to the destination fields in your Shopware store.
+                        Mandatory fields are created automatically and cannot be deleted.
+                    </p>
+                    <field name="mapping_line_ids" nolabel="1" context="{'platform': platform_id.platform}">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="odoo_field_id" string="Odoo Source Field (Product)"/>
+                            <field name="external_field_key" string="External Destination Field"/>
+                            <field name="is_required" readonly="1"/>
+                        </list>
+                    </field>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- The action to open the form view -->
+    <record id="action_pim_platform_mapping" model="ir.actions.act_window">
+        <field name="name">Field Mappings</field>
+        <field name="res_model">pim.platform.mapping</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

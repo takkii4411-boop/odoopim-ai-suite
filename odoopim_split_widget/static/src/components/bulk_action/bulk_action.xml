@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="odoopim_split_widget.BulkAction">
+          <!--            Breadcrumb-->
+            <nav aria-label="breadcrumb" class="mb-3">
+            <div class="d-flex align-items-center justify-content-start">
+                <small>Products Bulk Actions</small>
+                <div class="px-2" style="flex-grow: 1;">
+                    <hr/>
+                </div>
+            </div>
+        </nav>
+
+            <!--            Main Title-->
+            <h2 class="mb-4 fw-bold">Select your action</h2>
+
+        <!--            Action Cards Grid-->
+        <div class="row g-3 mb-5">
+            <t t-foreach="this.props.actions" t-as="action" t-key="action.action">
+                <div class="col-md-6 col-lg-3">
+                    <a href="#" class="text-decoration-none" t-on-click="() => this.changeAction(action.action)">
+                        <div class="action-card h-100" t-att-class="this.state.selectedAction === action.action? 'highlighted':''">
+                            <div class="card-body text-center p-4">
+                                <div class="action-icon mb-3">
+                                    <img t-att-src="action.image_url" height="48"/>
+                                </div>
+                                <h6 class="card-title" t-esc="action.label"/>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </t>
+        </div>
+         <!--            Navigation Buttons-->
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-outline-secondary px-5" t-on-click="()=>this.changeStep(-1)">Previous</button>
+            <button class="btn btn-primary px-5" t-on-click="()=>this.changeStep(1)">Next</button>
+        </div>
+    </t>
+</templates>

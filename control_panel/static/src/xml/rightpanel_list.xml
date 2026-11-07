@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="control_panel.RightPanel" owl="1">
+        <div class="jstr-navigation-panel jstr-hide-mobile jstr-hide-tablet right-control-panel" t-if="records">
+            <div class="control-panel-head">Control Panel</div>
+<!--            <div class="control-panel">-->
+<!--                <button class="familybutton fa fa-plus-circle"-->
+<!--                        t-on-click="() => this.onClickExport()">Export Family</button>-->
+<!--            </div>-->
+            <!--            <div class="control-panel">-->
+            <!--                 <button class="familybutton fa fa-plus-circle" t-on-click="() => this.onClickImport()">Import Family</button>-->
+            <!--             </div>-->
+            <div class="control-panel">
+                <button class="familybutton fa fa-plus-circle" t-on-click="() => this.onClickAddCatgeory()">Add Category</button>
+            </div>
+            <div class="control-panel">
+                <button class="familybutton fa fa-plus-circle"
+                        t-on-click="() => this.onclickAddRelatedFamily()">Add Family</button>
+            </div>
+
+            <!--            <t t-if="records==1 and sku_len">-->
+            <!--                 <div class="control-panel">-->
+            <!--                     <button class="familybutton fa fa-plus-circle"-->
+            <!--                             t-on-click="() => this.onClickCloneSKU()">Clone SKU of the Family</button>-->
+            <!--                 </div>-->
+            <!--                <t t-if="family_count &gt; 1">-->
+            <!--                    <div class="control-panel">-->
+            <!--                        <button class="familybutton fa fa-plus-circle" t-on-click="() => this.onClickMoveSKU()">Move Family SKU to Existing Family</button>-->
+            <!--                    </div>-->
+            <!--                </t>-->
+            <!--                <t t-else="">-->
+            <!--                    <div class="control-panel">-->
+            <!--                       <button class="redbutton"  disabled="disabled">Move Family SKU to Existing Family</button>-->
+            <!--                </div>-->
+            <!--                </t>-->
+
+            <!--                <div class="control-panel">-->
+            <!--                     <button class="familybutton fa fa-plus-circle"  t-att-disabled="!state.edit_allowed" t-on-click="() => this.onClickMoveSKUnewfamily()">Move Family SKU to new Family</button>-->
+            <!--                 </div>-->
+            <!--            </t>-->
+            <!--            <t t-else="">-->
+            <!--                <div class="control-panel">-->
+            <!--                    <button class="redbutton"  t-att-disabled="!state.edit_allowed" disabled="disabled">Clone SKU of the Family</button>-->
+            <!--                </div>-->
+            <!--                <div class="control-panel">-->
+            <!--                       <button class="redbutton" t-att-disabled="!state.edit_allowed"  disabled="disabled">Move Family SKU to Existing Family</button>-->
+            <!--                </div>-->
+            <!--                <div class="control-panel">-->
+            <!--                       <button class="redbutton"  t-att-disabled="!state.edit_allowed" disabled="disabled">Move Family SKU to new Family</button>-->
+            <!--                    </div>-->
+            <!--            </t>-->
+<!--            <div class="control-panel">-->
+<!--            <button class="familybutton fa fa-plus-circle" t-on-click="() => this.onClickSubstitutefamily()">Add Substitute Family</button>-->
+<!--            </div>-->
+<!--            <div class="control-panel">-->
+<!--            <button class="familybutton fa fa-plus-circle" t-on-click="() => this.onClickComplementaryCategory()">Add Complementary Category</button>-->
+<!--            </div>-->
+        </div>
+    </t>
+    <t t-name="control_panel.productListView" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//Layout" position="attributes">
+            <attribute name="className">'prm-content'</attribute>
+        </xpath>
+        <xpath expr="//t[@t-component='props.Renderer']" position="attributes">
+        <attribute name="showButtons">props.showButtons</attribute>
+    </xpath>
+
+        <xpath expr="//t[@t-foreach='archInfo.headerButtons']" position="after">
+<!--            <t t-if="props.showButtons">-->
+            <div class="o-checkbox list-check o_field_discontinued o_boolean_toggle form-switch">
+                    <label class="list-check-label" for="toggle-discontinued"
+                           style="display:flex; align-items:center; padding: 5px;">
+                        <input
+                                type="checkbox"
+                                class="form-check-input hide_discontinued"
+                                id="toggle-discontinued"
+                                t-on-click="() => this.show_discontinued? this.hidearchived() : this.showarchived()"
+                                t-att-checked="this.show_discontinued"
+                        />
+                        <span class="list-check-label" style="margin-left: 5px; font-weight: 700;">Discontinued</span>
+                    </label>
+                </div>
+            <!--            </t>-->
+
+        </xpath>
+    </t>
+    <t t-name="control_panel.ProductRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary" owl="1">
+<!--        <xpath expr="//div[hasclass('o_list_renderer')]" position="before">-->
+        <!--            <ProductNavigation t-props="getProductNavigationProps()"/>-->
+        <!--        </xpath>-->
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="after">
+            <t t-if="props.showButtons">
+                <RightPanel t-props="getFamilyManagerProps()"/>
+            </t>
+
+        </xpath>
+    </t>
+
+</templates>

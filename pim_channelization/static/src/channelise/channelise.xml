@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates xml:space="preserve">
+    <t t-name="pim_channelization.PimChannelisation">
+        <button class="p-2 border rounded d-flex" t-on-click="ClickOpenChannels">
+            <span class="ms-2" ><t t-if="currentChannel" t-esc="currentChannel.platform"/></span>
+            <span class="ms-2"><i class="ChannelDropIcon fa fa-angle-down"/></span>
+        </button>
+        <div>
+            <div t-ref="ChannelDrop" t-if="this.state.show_drop"
+             class="position-absolute mt-1 border rounded bg-white shadow-sm"
+             style="z-index: 1050; min-width: 200px; width: auto;top: 20px;">
+            <h4 class="p-2" style="border-bottom:1px solid black;">Select Channel</h4>
+            <input t-if="this.state.channels.length > 7"
+                   type="text"
+                   t-ref="search"
+                   t-on-input="() => this.onSearchInput()"
+                   class="form-control rounded"
+                   placeholder="search..."/>
+            <div class="Channels mt-2" style="max-height:300px;overflow-y:scroll;scrollbar-width: none;">
+                <t t-foreach="this.state.filtered_channels" t-as="channel" t-key="channel_index">
+                    <t t-if="this.state.channel &amp;&amp; channel.id == this.state.channel">
+                        <a class="d-flex p-1 text-primary mb-1 rounded"
+                           style="cursor:pointer;border-bottom:1px solid #efefef;background:#efefef;"
+                           t-on-click="() => this.SelectChannel(channel)">
+                            <span class="ms-2"><t t-esc="channel.platform"/></span>
+                        </a>
+                    </t>
+                    <t t-else="">
+                        <a class="d-flex p-1 text-primary mb-1" t-if="channel.id"
+                           style="cursor:pointer;border-bottom:1px solid #efefef;"
+                           t-on-click="() => this.SelectChannel(channel)">
+                            <span class="ms-2"><t t-esc="channel.platform"/></span>
+                        </a>
+                    </t>
+                </t>
+            </div>
+        </div>
+        </div>
+    </t>
+</templates>

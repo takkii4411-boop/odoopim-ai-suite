@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="odoopim_split_widget.ActionController">
+        <div class="container py-4">
+<!--         Back Button-->
+            <div class="mb-4">
+                <button class="btn btn-link text-muted p-0 text-decoration-none" t-on-click="() => this.goBack()">
+                    <img src="/odoopim_split_widget/static/src/icons/back-arrow.svg" alt="Back" class="me-2"
+                         style="width: 16px; height: 16px;"/>
+                    Back
+                </button>
+            </div>
+
+            <!--            Progress Indicator-->
+            <div class="progress-container mb-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="progress-step" t-att-class="this.state.currentStep &gt;= 1 ? 'active' : ''">
+                        <div class="step-circle">1</div>
+                        <small class="text-muted">Select Action</small>
+                    </div>
+                    <div class="progress-line" t-att-class="this.state.currentStep &gt;= 1 ? 'active' : ''"></div>
+                    <div class="progress-step" t-att-class="this.state.currentStep &gt;= 2 ? 'active' : ''">
+                        <div class="step-circle">2</div>
+                       <small class="text-muted" t-esc="this.getStepLabel()"/>
+                    </div>
+                    <div class="progress-line" t-att-class="this.state.currentStep &gt;= 2 ? 'active' : ''"></div>
+                    <div class="progress-step" t-att-class="this.state.currentStep == 3 ? 'active' : ''">
+                        <div class="step-circle">3</div>
+                        <small class="text-muted">Confirm</small>
+                    </div>
+                </div>
+            </div>
+
+            <!--    CALLING THE BULK ACTION COMPONENT      -->
+            <t t-if="this.state.currentStep === 1">
+                <BulkAction renderer="props.renderer" controller="this" actions="this.actions"/>
+            </t>
+            <t t-elif="this.state.currentStep === 2 and this.state.selectedBulkAction === 'EDIT_ATTRIBUTES_VALUES'">
+                <EditAttribute renderer="props.renderer" controller="this" action="this.getSelectedActionObject()"/>
+            </t>
+            <t t-elif="this.state.currentStep === 2">
+                <EditCommonAttribute renderer="props.renderer" controller="this" action="this.getSelectedActionObject()"/>
+            </t>
+
+
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="pim_product_creation.TreeFormRenderer"
+       t-inherit="odoopim_split_widget.TreeFormRenderer"
+       t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('tree-form-form')]/t[@t-if='this.props.controllerRef.myState.isFilterOpened']" position="after">
+            <t t-elif="this.props.controllerRef.myState.isCreateProductOpen">
+                <ProductCreation resModel="this.props.list.resModel" treeForm="this"/>
+            </t>
+        </xpath>
+    </t>
+</templates>

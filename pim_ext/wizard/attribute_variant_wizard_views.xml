@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="add_attribute_variants_wizard" model="ir.ui.view">
+        <field name="name">add.attribute.variant.wizard.form</field>
+        <field name="model">attribute.variant.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Attribute variant">
+                <group>
+                    <!-- Allow multiple attribute groups to be selected -->
+                    <field name="name"/>
+                    <field name="variant_ids" string="Variants" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="attribute_family_id" string="Family" readonly="1" options="{'no_open': True}"/>
+                </group>
+                <footer>
+                    <button name="add_attributes_variant_to_family" string="Update" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="wizard_product_variant_values_views" model="ir.ui.view">
+        <field name="name">attribute.variant.values.wizard.form.rec</field>
+        <field name="model">attribute.variant.values.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Variant values">
+                <group>
+                    <field name="variant_value_ids" widget="many2many_tags"
+                           required="1"
+                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                    <field name="product_id" readonly="1" options="{'no_open': True}" invisible="1"/>
+                    <field name="attribute_family_id" string="Family" readonly="1" options="{'no_open': True}" invisible="1"/>
+                    <field name="variant_id" string="Varaint" readonly="1" options="{'no_open': True}" invisible="1"/>
+                    <field name="attribute_id" string="Attribute" readonly="1" invisible="1"/>
+                    <field name="allowed_attribute_type_ids" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="update_variant_value_rec" string="Update" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

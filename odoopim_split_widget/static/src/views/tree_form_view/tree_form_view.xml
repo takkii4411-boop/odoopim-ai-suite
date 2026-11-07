@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-name="odoopim_split_widget.TreeFormRenderer"
+       t-inherit="web.ListRenderer" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="attributes">
+            <attribute name="t-att-class">'tree-form-tree'</attribute>
+        </xpath>
+        <!--    TABLE HEADER COMPONENT    -->
+        <xpath expr="//table" position="before">
+            <div class="w-100 d-flex justify-content-between sticky-top p-2 action-window"
+                 t-if="props.list.selection and props.list.selection.length">
+                <div class="bulk-actions-info text-white">
+                    <strong>
+                        <t t-esc="props.list.selection.length"/>
+                    </strong>
+                    items selected
+                </div>
+                <div class="bulk-actions-buttons d-flex justify-content-end gap-2">
+                <!--  Primary Actions  -->
+                    <button class="btn btn-sm"
+                            t-att-class="this.treeFrom.selectedAction === 'BULK_ACTION'?'active':''"
+                            t-on-click="() => this.selectAction('BULK_ACTION')">
+                        <img src="/odoopim_split_widget/static/src/icons/action.svg"
+                             class="me-1"
+                             t-att-style="this.treeFrom.selectedAction === 'BULK_ACTION'? 'filter: invert(1);':''"/>
+                        Bulk Actions
+                    </button>
+                    <button class="btn btn-sm"
+                            t-att-class="this.treeFrom.selectedAction === 'SEQUENTIAL_EDIT'?'active':''"
+                            t-on-click="() => this.selectAction('SEQUENTIAL_EDIT')">
+                        <img src="/odoopim_split_widget/static/src/icons/edit.svg"
+                             class="me-1"
+                             t-att-style="this.treeFrom.selectedAction === 'SEQUENTIAL_EDIT'? 'filter: invert(1);':''"/>
+                        Sequential Edit
+                    </button>
+                    <button class="btn btn-sm"
+                            t-on-click="() => this.selectAction('BULK_EXPORT')">
+                        <img src="/odoopim_split_widget/static/src/icons/export.svg"
+                             class="me-1"
+                             style="width: 14px; height: 14px;"/>
+                        Quick Export
+                    </button>
+                    <button class="btn btn-sm"
+                            t-on-click="() => this.selectAction('BULK_DELETE')">
+                        <img src="/odoopim_split_widget/static/src/icons/delete.svg"
+                             class="me-1"
+                             style="width: 14px; height: 14px;"/>
+                        Delete
+                    </button>
+                    <!--  Dropdown Menu for More Actions  -->
+                    <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                    <i class="fa fa-ellipsis-v"/>
+                    </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item"
+                                   t-on-click="() => this.bulkArchive()">
+                                <i class="fa fa-archive me-2 text-warning"/>
+                                    Archive Selected
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   t-on-click="() => this.bulkDuplicate()">
+                                <i class="fa fa-copy me-2 text-info"/>
+                                    Duplicate
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--  Close Selection  -->
+                    <button class="btn btn-sm btn-outline-light ms-2"
+                            t-on-click="() => this.unselectAll()">
+                    <i class="fa fa-times"/>
+                    </button>
+                </div>
+            </div>
+        </xpath>
+        <!--    RIGHT SIDE FORM VIEW    -->
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="after">
+            <div class="tree-form-resize"
+                 t-on-pointerdown.stop.prevent="onStartTreeFormReSize"/>
+            <div class="tree-form-form">
+                <t t-if="this.props.controllerRef.myState.isFilterOpened">
+                    <Filters searchModel="env.searchModel"
+                             onClose="this.props.controllerRef.toggleFilter.bind(this.props.controllerRef)"/>
+                </t>
+
+
+                <t t-elif="this.treeFrom.selectedAction === false">
+                    <div class="form-action-buttons sticky-top bg-white border-bottom p-2 d-flex justify-content-between align-items-center"
+                         t-if="treeFrom.current_record">
+                        <!-- Save/Discard Buttons - Only show when changes exist on LEFT -->
+                        <div class="d-flex gap-2"
+                             t-if="this.treeFrom.isFormDirty">
+                            <button type="button"
+                                    class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+                                    t-on-click="() => this.onFormSave()">
+                                <i class="fa fa-check"/>
+                                Save
+                            </button>
+                            <button type="button"
+                                    class="btn btn-secondary btn-sm d-flex align-items-center gap-1"
+                                    t-on-click="() => this.onFormDiscard()">
+                                <i class="fa fa-times"/>
+                                Discard
+                            </button>
+                        </div>
+
+                        <!-- Empty div to maintain spacing when no changes -->
+                        <div t-else=""></div>
+
+                        <!-- Close Button - Always visible on RIGHT -->
+                        <button type="button"
+                                class="btn btn-light btn-sm d-flex align-items-center gap-1"
+                                t-on-click="() => this.closeFormView()">
+                            <i class="fa fa-times"/>
+                            Close
+                        </button>
+                    </div>
+                    <FormRenderer archInfo="treeFrom.archInfo"
+                                  record="treeFrom.current_record"
+                                  t-if="treeFrom.current_record"/>
+                    </t>
+
+
+                <t t-elif="this.treeFrom.selectedAction === 'BULK_ACTION'">
+                    <ActionController renderer="this"
+                                      parentAction="this.treeFrom.selectedAction"/>
+                </t>
+                <!--    ====================  SEQUENTIAL EDIT START ===================          -->
+                <t t-elif="this.treeFrom.selectedAction === 'SEQUENTIAL_EDIT'">
+                    <div class="py-2">
+                        <div class="d-flex justify-content-end mx-2">
+                            <button class="btn btn-success px-5"
+                                    t-on-click="()=>this.saveAndNext()">
+                                <t t-if="this.isLastSequenceEdit">Save and Finish</t>
+                                <t t-else="">Save and Next</t>
+                            </button>
+                        </div>
+                        <FormRenderer archInfo="treeFrom.archInfo"
+                                      record="treeFrom.current_record"
+                                      t-if="treeFrom.current_record"/>
+                        <div class="container">
+                          <div class="row">
+                            <div class="col text-start">
+                                <t t-if="!this.isFirstSequenceEdit">
+                                    <button type="button"
+                                            class="btn btn-light text-muted"
+                                            t-on-click="()=>this.previousSequenceEdit()"><i class="fa fa-chevron-left"></i>
+                                        <t t-esc="this.getRecordNameByIndex(this.treeFrom.currentSequenceEditIndex-1)"/></button>
+                                </t>
+                            </div>
+                              <div class="col text-center">
+                                <div class="completeness-section">
+                                    <div class="progress mb-2"
+                                         style="height: 12px;">
+                                        <div class="progress-bar primary"
+                                             role="progressbar"
+                                             t-att-style="'width:'+ this.completePercentage"></div>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="col text-end">
+                                <t t-if="!this.isLastSequenceEdit">
+                                    <button type="button"
+                                            class="btn btn-light text-muted"
+                                            t-on-click="()=>this.nextSequenceEdit()"><t t-esc="this.getRecordNameByIndex(this.treeFrom.currentSequenceEditIndex+1)"/>
+                                        <i class="fa fa-chevron-right"></i></button>
+                                </t>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </t>
+
+                <!--    ====================  SEQUENTIAL EDIT END ===================          -->
+                <t t-elif="this.treeFrom.selectedAction === 'BULK_EXPORT'">
+                     <button class="btn btn-secondary mt-2"
+                             t-on-click="() => this.setLeftRightWidth(100,0)">
+                                <i class="fa fa-arrow-left"/>
+                         Back
+                     </button>
+                    <div class="row d-flex justify-content-center align-items-center"
+                         style="height:70vh;">
+                        <div class="col-12 text-center">
+                           <i class="fa fa-gear fs-2"/>
+                            <h2>Coming Soon</h2>
+                       </div>
+                    </div>
+                </t>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

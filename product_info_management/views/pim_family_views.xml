@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="pim_family_tree" model="ir.ui.view">
+        <field name="name">pim.family.tree</field>
+        <field name="model">pim.family</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pim_family_form" model="ir.ui.view">
+        <field name="name">pim.family.form</field>
+        <field name="model">pim.family</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pim_family" model="ir.actions.act_window">
+        <field name="name">Families</field>
+        <field name="res_model">pim.family</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Family
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_pim_family"
+        name="Families"
+        action="action_pim_family"
+        parent="product_info_management.menu_pim_product_settings"
+        sequence="30"/>
+</odoo>

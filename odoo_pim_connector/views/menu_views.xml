@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Top-Level Menu -->
+    <menuitem id="menu_pim_connector_root"
+              name="Channel Pim Connector"
+              sequence="10"
+              web_icon="odoo_pim_connector,static/description/odoo_n8n_pim.png"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_pim_dashboard"
+              name="Dashboard"
+              parent="menu_pim_connector_root"
+              sequence="10"/>
+
+    <!-- NEW: Configuration Menu -->
+    <menuitem id="menu_pim_configuration"
+              name="Configuration"
+              parent="menu_pim_connector_root"
+              sequence="20"/>
+
+    <!-- SUB-MENUS FOR CONFIGURATION -->
+    <menuitem id="menu_pim_connectors_config"
+              name="PIM Connectors"
+              parent="menu_pim_configuration"
+              action="action_platform_credentials_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_pim_sync_logs"
+              name="Sync Logs"
+              parent="menu_pim_configuration"
+              action="action_pim_sync_log"
+              sequence="20"/>
+
+    <menuitem id="menu_pim_field_mapping"
+              name="Field Mapping"
+              parent="menu_pim_configuration"
+              action="action_pim_field_mapping"
+              sequence="30"/>
+
+    <menuitem id="menu_test_n8n"
+              name="Test N8N"
+              parent="menu_pim_configuration"
+              sequence="29"/>
+          
+</odoo>

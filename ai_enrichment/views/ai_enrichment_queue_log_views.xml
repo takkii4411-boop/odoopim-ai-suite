@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View (Unchanged but included for completeness) -->
+    <record id="view_ai_enrichment_queue_log_tree" model="ir.ui.view">
+        <field name="name">ai.enrichment.queue.log.tree</field>
+        <field name="model">ai.enrichment.queue.log</field>
+        <field name="arch" type="xml">
+            <list string="Sync Logs" create="false" edit="false" delete="true">
+                <field name="reference" string="Sync ID"/>
+                <field name="name" string="Run ID"/>
+                <field name="create_date_formatted" string="Sync Created Date"/>
+                <field name="type" string="Type"/>
+                <!-- <field name="generation_success_count" string="Gen. Success" invisible="1"/>
+                <field name="update_success_count" string="Update Success" invisible="1"/> -->
+                <field name="state" widget="badge" decoration-info="state == 'queued'"
+                       decoration-warning="state == 'processing'" decoration-success="state == 'done'"
+                       decoration-danger="state == 'failed'"/>
+            </list>
+        </field>
+    </record>
+
+    <!--    <record id="action_redirect_to_product" model="ir.actions.act_window">-->
+    <!--        <field name="name">Product</field>-->
+    <!--        <field name="res_model">product.template</field>-->
+    <!--        <field name="view_mode">form</field>-->
+    <!--        <field name="target">current</field>-->
+    <!--    </record>-->
+
+    <!-- Form View (FIXED) -->
+    <record id="view_ai_enrichment_queue_log_form" model="ir.ui.view">
+        <field name="name">ai.enrichment.queue.log.form</field>
+        <field name="model">ai.enrichment.queue.log</field>
+        <field name="arch" type="xml">
+            <form string="Sync Log" create="false" edit="false" delete="true">
+                <header>
+                    <button name="action_refresh_status" type="object" string="Refresh Status" class="btn-primary"
+                            invisible="state in ('done', 'failed')"/>
+                    <!-- FIX: Restored the statusbar widget for a professional look -->
+                    <field name="state" widget="statusbar" statusbar_visible="queued,processing,done,failed"/>
+                </header>
+                <sheet>
+                    <!-- <h1><field name="name" readonly="1"/></h1> -->
+                    <h1>
+                        <field name="reference" readonly="1"/>
+                    </h1>
+
+                    <group>
+                        <group string="Sync Configuration">
+                            <field name="name"/>
+                            <field name="config_id" invisible="1"/>
+                            <field name="prompt_type"/>
+                            <field name="update_field" invisible="1"/>
+                            <field name="update_field_label" string="Updated Field"/>
+                            <!--                            <field name="error_message"/>-->
+                        </group>
+                        <group string="Sync Details">
+                            <field name="type"/>
+                            <field name="create_date"/>
+                            <field name="product_count"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!--                                                <page string="Products" name="products">-->
+                        <!--                                                    <field name="product_ids" readonly="1">-->
+                        <!--                                                        <list>-->
+                        <!--                                                            <field name="default_code"/>-->
+                        <!--                                                            <field name="name"/>-->
+                        <!--                                                        </list>-->
+                        <!--                                                    </field>-->
+                        <!--                                                </page>-->
+
+                        <!--                                                <page string="Products" name="products">-->
+                        <!--                                                    <field name="product_templates" readonly="1">-->
+                        <!--                                                        <list>-->
+                        <!--                                                            <field name="default_code"/>-->
+                        <!--                                                            <field name="name"/>-->
+                        <!--                                                        </list>-->
+                        <!--                                                    </field>-->
+                        <!--                                                </page>-->
+
+                        <page string="Products" name="products">
+                            <field name="product_templates" readonly="1">
+                                <list editable="bottom">
+                                    <field name="id"/>
+                                    <field name="default_code"/>
+                                    <field name="name"/>
+<!--                                    <button name="action_redirect_to_product"-->
+<!--                                            type="object"-->
+<!--                                            string="Open Product"-->
+<!--                                            class="btn-primary"-->
+<!--                                            icon="fa-external-link"/>-->
+                                    <button name="action_redirect_to_product"
+                                            string="Go to Product"
+                                            type="object"
+                                            class="oe_highlight"
+                                      icon="fa-external-link"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Products Variants" name="products">
+                            <field name="product_variants" readonly="1">
+                                <list editable="bottom">
+                                    <field name="id"/>
+                                    <field name="default_code" optional="hide"/>
+                                    <field name="display_name"/>
+                                    <button name="action_redirect_to_product_variant"
+                                            string="Go to Variant"
+                                            type="object"
+                                            class="oe_highlight"
+                                      icon="fa-external-link"/>
+                                </list>
+                            </field>
+                        </page>
+
+
+                        <page string="Results Summary" name="results">
+                            <group>
+                                <group>
+                                    <field name="generation_success_count"/>
+                                    <field name="generation_failed_count"/>
+                                    <field name="error_message"/>
+                                </group>
+                                <group>
+                                    <field name="update_success_count"/>
+                                    <field name="update_failed_count"/>
+                                </group>
+                            </group>
+
+                            <field name="error_message" invisible="state not in 'failed'" style="color:red;"/>
+                            <field name="results_json" widget="ace" options="{'editor_mode': 'json'}" readonly="1"
+                                   invisible="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_ai_enrichment_queue_log_search" model="ir.ui.view">
+        <field name="name">ai.enrichment.queue.log.search</field>
+        <field name="model">ai.enrichment.queue.log</field>
+        <field name="arch" type="xml">
+            <search string="AI Enrichment Logs">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="create_date"/>
+                <field name="type"/>
+                <field name="state"/>
+
+                <!-- Filter for Done -->
+                <filter name="done" string="Done" domain="[('state','=','done')]"/>
+
+                <!-- Filter for Failed -->
+                <filter name="failed" string="Failed" domain="[('state','=','failed')]"/>
+
+                <!-- Filter for Product AI Enrichment -->
+                <filter name="product_ai_enrichment" string="Product AI Enrichment"
+                        domain="[('type','=','Product Ai Enrichment')]"/>
+
+                <filter name="update_success" string="Updated Products"
+                        domain="[('update_success_count','>=',1)]"/>
+
+
+                <filter name="update_failed" string="Failed Products"
+                        domain="[('update_failed_count','>=',1)]"/>
+
+
+                <!--                            <filter name="is_ai_enrichable"-->
+                <!--                    string="AI Enrichable"-->
+                <!--                    domain="[('is_ai_enrichable','=',True)]"/>-->
+
+
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter name="group_by_create_date" string="Created Date"
+                            context="{'group_by':'create_date'}"/>
+                    <filter name="group_by_state" string="Status"
+                            context="{'group_by':'state'}"/>
+
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="view_product_attribute_search_ai" model="ir.ui.view">
+        <field name="name">product.attribute.search.ai</field>
+        <field name="model">product.attribute</field>
+        <field name="arch" type="xml">
+            <search string="Product Attributes">
+                <field name="name"/>
+                <filter name="is_ai_enrichable"
+                        string="AI Enrichable"
+                        domain="[('is_ai_enrichable','=',True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_is_ai_enrichable"
+                            string="AI Enrichable"
+                            context="{'group_by':'is_ai_enrichable'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <!--    <record id="view_ai_enrichment_queue_log_filter" model="ir.ui.view">-->
+    <!--        <field name="name">ai.enrichment.queue.log.search</field>-->
+    <!--        <field name="model">ai.enrichment.queue.log</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <search>-->
+    <!--                &lt;!&ndash; ✅ Filter to show only updated products &ndash;&gt;-->
+    <!--                <filter name="update_success" string="Updated Products"-->
+    <!--                        domain="[('update_success_count','>',0)]"/>-->
+
+    <!--                &lt;!&ndash; ✅ Group by update_success_count &ndash;&gt;-->
+    <!--                <group expand="0" string="Group By">-->
+    <!--                    <filter name="group_update_success" string="Update Success Count"-->
+    <!--                            context="{'group_by':'update_success_count'}"/>-->
+    <!--                </group>-->
+    <!--            </search>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+
+    <!--    <record id="view_ai_enrichment_queue_log_search_count" model="ir.ui.view">-->
+    <!--        <field name="name">ai.enrichment.queue.log.search</field>-->
+    <!--        <field name="model">ai.enrichment.queue.log</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <search string="AI Enrichment Logs">-->
+    <!--                <field name="reference"/>-->
+    <!--                <field name="name"/>-->
+    <!--                <field name="create_date"/>-->
+    <!--                <field name="type"/>-->
+    <!--                <field name="state"/>-->
+
+    <!--                &lt;!&ndash; Filter for Done &ndash;&gt;-->
+    <!--                <filter name="done" string="Done" domain="[('state','=','done')]"/>-->
+
+    <!--                &lt;!&ndash; Filter for Failed &ndash;&gt;-->
+    <!--                <filter name="failed" string="Failed" domain="[('state','=','failed')]"/>-->
+
+    <!--                &lt;!&ndash;  NEW Filter for Updated Products &ndash;&gt;-->
+    <!--                <filter name="update_success" string="Updated Products"-->
+    <!--                        domain="[('update_success_count','>=',1)]"/>-->
+
+    <!--                &lt;!&ndash; Filter for Product AI Enrichment &ndash;&gt;-->
+    <!--                <filter name="product_ai_enrichment" string="Product AI Enrichment"-->
+    <!--                        domain="[('type','=','Product Ai Enrichment')]"/>-->
+
+    <!--                &lt;!&ndash; Group By &ndash;&gt;-->
+    <!--                <group expand="0" string="Group By">-->
+    <!--                    <filter name="group_by_create_date" string="Created Date"-->
+    <!--                            context="{'group_by':'create_date'}"/>-->
+    <!--                    <filter name="group_by_state" string="Status"-->
+    <!--                            context="{'group_by':'state'}"/>-->
+    <!--                </group>-->
+    <!--            </search>-->
+    <!--        </field>-->
+    <!--    </record>-->
+
+
+    <!-- Action (Unchanged) -->
+    <record id="action_ai_enrichment_queue_log" model="ir.actions.act_window">
+        <field name="name">Sync Logs</field>
+        <field name="res_model">ai.enrichment.queue.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No enrichment jobs have been queued yet.
+            </p>
+        </field>
+    </record>
+</odoo>

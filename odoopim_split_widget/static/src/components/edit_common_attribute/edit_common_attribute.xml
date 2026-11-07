@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<!-- MAIN COMPONENT TEMPLATE -->
+<t t-name="odoopim_split_widget.EditCommonAttribute">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <div class="d-flex align-items-center justify-content-start">
+            <small>Products Bulk Actions</small>
+            <div class="px-2" style="flex-grow: 1;">
+                <hr/>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Title -->
+    <h2 class="mb-4 fw-bold">
+        Change the <t t-esc="props.action.label"/> of
+        <t t-esc="props.renderer.env.model.root.selection.length"/> products
+    </h2>
+
+    <!-- CHANGE STATUS -->
+    <t t-if="props.action.action === 'CHANGE_STATUS'">
+        <small class="text-muted py-2">The selected products will be enabled or disabled.</small>
+        <div class="mt-2 mb-5">
+            <select class="form-control form-select" name="active"
+                    t-on-change="onValueChange">
+                <option value="">Select</option>
+                <option value="1">Enable</option>
+                <option value="0">Disable</option>
+            </select>
+        </div>
+    </t>
+
+    <!-- CHANGE FAMILY -->
+    <t t-elif="props.action.action === 'CHANGE_FAMILY'">
+        <small class="text-muted py-2">The family of the selected products will be changed.</small>
+        <div class="mt-2 mb-5">
+            <label class="form-label">Family</label>
+            <select class="form-control form-select" name="family_id"
+                    t-on-change="onValueChange">
+                <option value="">Select</option>
+                <t t-if="state.allFamilies">
+                    <t t-foreach="state.allFamilies" t-as="family" t-key="family.id">
+                        <option t-att-value="family.id" t-esc="family.name"/>
+                    </t>
+                </t>
+            </select>
+        </div>
+    </t>
+
+    <!-- AI ENRICHMENT (Dynamic Data) -->
+    <t t-elif="props.action.action === 'AI_ENRICHMENT'">
+
+        <small class="text-muted py-2">The selected products will be enriched using AI.</small>
+
+        <!-- PROVIDER -->
+        <div class="mt-3 mb-3">
+            <label class="form-label fw-semibold">AI Provider</label>
+            <div class="d-flex gap-4 mt-2">
+
+                <t t-if="state.aiProviders">
+                    <t t-foreach="state.aiProviders" t-as="prov" t-key="prov.value">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="provider"
+                                   t-att-value="prov.value"
+                                   t-on-change="onValueChange"/>
+                            <label class="form-check-label">
+                                <t t-esc="prov.label"/>
+                            </label>
+                        </div>
+                    </t>
+                </t>
+
+            </div>
+        </div>
+
+                <!-- AI MODEL -->
+        <div class="mt-3 mb-3">
+            <label class="form-label fw-semibold">AI Model</label>
+
+            <div class="d-flex flex-column gap-2 mt-2">
+
+                <t t-if="state.aiFilteredModels.length">
+                    <t t-foreach="state.aiFilteredModels" t-as="mdl" t-key="mdl.id">
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="radio"
+                                   name="model_id"
+                                   t-att-value="mdl.id"
+                                   t-on-change="onValueChange"
+                                   t-att-checked="state.attributeValues.model_id == mdl.id"/>
+
+                            <label class="form-check-label">
+                                <t t-esc="mdl.name"/>
+                            </label>
+                        </div>
+
+                    </t>
+                </t>
+
+                <t t-if="!state.aiFilteredModels.length">
+                    <div class="text-muted small">Select a provider to see available models.</div>
+                </t>
+
+            </div>
+        </div>
+
+            <!-- FIELDS -->
+        <div class="mt-3 mb-3 position-relative dropdown-root" t-ref="dropdownWrapper">
+
+            <label class="form-label fw-semibold">Fields to Update</label>
+
+            <!-- Selected tags -->
+            <div class="d-flex flex-wrap gap-2 mb-2">
+                <t t-foreach="state.attributeValues.field_ids || []" t-as="fid" t-key="fid">
+                    <t t-set="sel" t-value="state.aiFields.find(f => f.id === fid)"/>
+                    <t t-if="sel">
+                        <span class="badge bg-primary text-white px-2 py-1">
+                            <t t-esc="sel.name"/>
+                            <span class="ms-2 fw-bold"
+                                  style="cursor:pointer;"
+                                  t-on-click="() => this.removeField(fid)">×</span>
+                        </span>
+                    </t>
+                </t>
+            </div>
+
+            <!-- Search input with clear button -->
+            <div class="position-relative w-100">
+
+                <input type="text"
+                       class="form-control pe-4"
+                       placeholder="Search fields..."
+                       t-model="state.searchFieldText"
+                       t-on-input="onSearchField"
+                       t-on-focus="onFocusSearch"
+                       t-on-blur="onBlurSearch"/>
+
+                <!-- Clear Button Always Visible While Focused or Text Exists -->
+                <span t-if="state.searchFieldText || state.isSearchFocused"
+                      class="clear-search-btn"
+                      tabindex="0"
+                      t-on-click="clearSearch">
+                    ×
+                </span>
+            </div>
+
+
+            <!-- Dropdown -->
+            <t t-if="state.showDropdown">
+                <div class="dropdown-panel border rounded p-2 w-100 position-absolute bg-white shadow"
+                     style="max-height:260px; overflow-y:auto; z-index:2000;">
+
+                    <t t-foreach="state.filteredAiFields" t-as="af" t-key="af.id">
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   t-att-value="af.id"
+                                   t-att-checked="(state.attributeValues.field_ids || []).includes(af.id)"
+                                   t-on-change="(e) => this.onFieldCheckboxChange(e, af.id)"/>
+                            <label class="form-check-label">
+                                <t t-esc="af.name"/>
+                            </label>
+                        </div>
+                    </t>
+
+                </div>
+            </t>
+
+        </div>
+
+
+        <!-- PROMPT TYPE -->
+        <div class="mt-3 mb-3">
+            <label class="form-label fw-semibold">Prompt Type</label>
+            <div class="d-flex gap-4 mt-2">
+
+                <t t-if="state.promptTypes">
+                    <t t-foreach="state.promptTypes" t-as="pt" t-key="pt.id">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio"
+                                   name="prompt_type"
+                                   t-att-value="pt.id"
+                                   t-on-change="onValueChange"/>
+                            <label class="form-check-label">
+                                <t t-esc="pt.name"/>
+                            </label>
+                        </div>
+                    </t>
+                </t>
+
+            </div>
+        </div>
+
+    </t>
+
+    <!-- ADD TO CATEGORIES -->
+    <t t-elif="props.action.action === 'ADD_TO_CATEGORIES'">
+        <small class="text-muted py-2">The products will be classified into categories.</small>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="category-navigation bg-white rounded shadow-sm">
+
+                        <!-- Tabs -->
+                        <ul class="nav nav-tabs border-bottom-0">
+                            <li class="nav-item">
+                                <button class="nav-link active"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#default-category">Default Category</button>
+                            </li>
+
+                        </ul>
+
+                        <!-- Tab content -->
+                        <div class="tab-content">
+
+                            <!-- Default Category -->
+                            <div class="tab-pane fade show active p-3" id="default-category">
+                                <t t-if="state.allCategories">
+                                    <t t-foreach="state.allCategories" t-as="category" t-key="category.id">
+                                        <t t-call="CategoryItem">
+                                            <t t-set="category" t-value="category"/>
+                                            <t t-set="level" t-value="0"/>
+                                        </t>
+                                    </t>
+                                </t>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- FALLBACK -->
+    <t t-else="">
+        <div class="my-5 text-center">
+            <h1>Coming Soon...</h1>
+        </div>
+    </t>
+
+    <!-- FOOTER BUTTONS -->
+    <div class="d-flex justify-content-between mt-4">
+        <button class="btn btn-outline-secondary px-5"
+                t-on-click="() => this.changeStep(-1)">Previous</button>
+        <button class="btn btn-success px-5"
+                t-on-click="() => this.applyChanges()">Confirm</button>
+    </div>
+
+</t>
+
+<!-- CATEGORY ITEM TEMPLATE -->
+<t t-name="CategoryItem">
+    <div class="category-item mb-2"
+         t-att-class="props.level > 0 ? 'ms-' + (props.level * 3) : ''">
+
+        <div class="d-flex align-items-center">
+            <i class="chevron-right me-2"
+               data-bs-toggle="collapse"
+               t-att-data-bs-target="'#cat-'+category.id"></i>
+
+            <input type="checkbox"
+                   class="form-check-input me-2"
+                   name="pim_category_ids"
+                   t-att-value="category.id"
+                   t-on-change="onCategorySelected"/>
+
+            <label class="form-check-label text-muted">
+                <t t-esc="category.name"/>
+            </label>
+        </div>
+
+        <div class="collapse show ms-4" t-att-id="'cat-'+category.id">
+            <t t-if="category.children">
+                <t t-foreach="category.children" t-as="child" t-key="child.id">
+                    <t t-call="CategoryItem">
+                        <t t-set="category" t-value="child"/>
+                        <t t-set="level" t-value="props.level + 1"/>
+                    </t>
+                </t>
+            </t>
+        </div>
+
+    </div>
+</t>
+
+</templates>

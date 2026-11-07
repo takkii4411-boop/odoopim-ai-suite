@@ -1,0 +1,1 @@
+from . import coming_soon_wizard

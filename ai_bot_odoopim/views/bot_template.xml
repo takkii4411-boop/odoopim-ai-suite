@@ -1,0 +1,60 @@
+<odoo>
+    <template id="custom_footer_template" inherit_id="web.webclient_bootstrap">
+    <xpath expr="//meta[@name='viewport']" position="after">
+             <div class="custom-footer" style="display:none">    <!--initially display hidden -->
+                <img src="/ai_bot_odoopim/static/src/img/main_bot.png" class="footer-image" alt="Footer Image" id="botImage" loading="lazy"/>
+                <div class="bot-chat" id="botChat">
+                    <div class="chat-header">
+                        <span>ODOO PIM BOT</span>
+                        <div class="icons-left">
+                            <button id="maximizeChat" title="Maximize">&#9633;</button>
+                            <button id="clearChat" title="Clear">&#x21bb;</button>
+                            <button id="closeChat" title="Close">&#x00D7;</button>
+                        </div>
+                    </div>
+                        <div class="chat-body custom-background">
+                            <div class="bot-info card-style">
+                                <img src="/ai_bot_odoopim/static/src/img/bot.gif" class="bot-icon" alt="Bot Icon" loading="lazy"/>
+                            
+                                <span class="bot-description">
+                                    Whether you need help with <strong>odoopim</strong>,
+                                    I'm here to provide <em>instant support</em> and guidance.<br/>
+                                    <strong>Let’s make your Odoo experience smoother</strong> and more efficient.</span>
+                            </div>                            
+                            <!-- Confirmation Popup (Initially Hidden) -->
+                            <div id="confirmationPopup" class="confirmation-popup glass-effect" style="display: none;">
+                                <p>Clearing the chat will delete the conversation memory as well. Are you sure?</p>
+                                <button id="confirmDelete" class="btn confirm-btn">Yes</button>
+                                <button id="cancelDelete" class="btn cancel-btn">No</button>
+                            </div>
+                            <div id="APICheckSetting" class="confirmation-popup glass-effect" style="display: none;">
+                                <img src="/ai_bot_odoopim/static/src/img/warning.gif" alt="Warning Icon" style="width: 25px; height: 25px; margin-bottom: 10px;" />
+                                <h3 style="color: red;">Attention!</h3>
+                                <p>Please check your <strong>API Key</strong> or <strong>AI Model</strong> in Settings.</p>
+                                <button id="closeClear" class="btn confirm-btn">Ok</button>
+                            </div>
+                        </div>
+                    <div class="chat-footer">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggleScrape"/>
+                            <span class="slider"/>
+                        </label>
+                        <div class="input-container">
+                            <input type="text" placeholder="Type your message..." class="chat-input" id="userMessage"/>
+                            <!-- <button class="newbutton send-button" id="sendButton">Send</button> -->
+                            <button class="stop-button" title="Stop" style="display:none;">
+                                <span class="fa fa-stop"/>
+                            </button>
+                        </div>
+<!--                        <div class="mic-button">-->
+<!--                            <span class="icon"><img src="/ai_bot/static/src/img/mic.png" alt="Warning Icon" style="width: 25px; height: 25px; margin-bottom: 10px;"></img></span>-->
+<!--                        </div>-->
+                         <div class="star-button send-button">
+                            <img src="/ai_bot_odoopim/static/src/img/right-arrow.png" class="icon" alt="Send"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

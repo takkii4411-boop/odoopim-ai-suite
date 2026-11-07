@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_product_create_wizard_form" model="ir.ui.view">
+        <field name="name">product.create.wizard</field>
+        <field name="model">product.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Product" create="false" delete="false" class="page_form">
+                <field name="product_create_type" invisible="1"/>
+                <header>
+                    <button string="Back" type="object" icon="fa-arrow-left"
+                                    name="action_back_menu"/>
+                </header>
+                <div class="pim_oe_title">
+                    <h2 class="pim_create_attribute">
+                        <span class="attr_title">
+                            <field name="product_create_type" readonly="1"/>
+                        </span>
+                    </h2>
+                </div>
+                <form class="attribute_type" invisible="product_create_type != 'none'">
+                    <div class="pim_oe_title">
+                        <h2 class="choose_pim_attribute_type" style="text-align:left;">Select your action</h2>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+                                <button name="create_main_product" type="object"
+                                        class="btn btn-light attribute-icon-button w-100">
+                                    <i class="fa fa-calendar fa-2x"></i>
+                                    <span>Product</span>
+                                </button>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+                                <button name="create_product_model" type="object"
+                                        class="btn btn-light attribute-icon-button w-100">
+                                    <i class="fa fa-file fa-2x"></i>
+                                    <span>Product Model</span>
+                                </button>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+                                <button name="action_maintenance" type="object"
+                                        class="btn btn-light attribute-icon-button w-100">
+                                    <i class="fa fa-file-text-o fa-2x"></i>
+                                    <span>Bundle Product</span>
+                                </button>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6 mb-2">
+                                <button name="action_maintenance" type="object"
+                                        class="btn btn-light attribute-icon-button w-100">
+                                    <i class="fa fa-file-text-o fa-2x"></i>
+                                    <span>Grouped Product</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form class="attribute_type" invisible="product_create_type not in ['product','model']">
+                    <div class="row productModel">
+                        <div class="col-md-6 col-sm-12 col-lg-6 text-end align-items-center d-grid">
+                            <div class="text-end">
+                                <img src="/pim_ext/static/src/img/pim.png"
+                                     class="img-fluid"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-lg-6 text-start align-items-center d-flex ">
+                            <div class="rightColumn">
+                                <div class="pim_oe_title mb-4">
+                                    <h2 invisible="product_create_type not in ['product']" class="choose_pim_attribute_type" style="text-align:left;">Create a Product</h2>
+                                    <h2 invisible="product_create_type not in ['model']" class="choose_pim_attribute_type" style="text-align:left;">Create a Product Model</h2>
+                                </div>
+                                <div class="mt-2">
+                                    <label for="name" class="mb-2 d-block">Product Name</label>
+                                    <field name="name" string="Product Name" class="w-100"
+                                           placeholder="Enter Product Name..." nolabel="1"
+                                           style="border: 1px solid #ccc; padding: 0px; border-radius: 8px;"/>
+
+                                </div>
+                                <div class="mt-2">
+                                    <label for="sku" class="mb-2 d-block">SKU</label>
+                                    <field name="sku" string="SKU" class="w-100"
+                                           placeholder="Enter SKU..." nolabel="1"
+                                           style="border: 1px solid #ccc; padding: 0px; border-radius: 8px;"/>
+
+                                </div>
+                                <div class="mt-2">
+                                    <label for="family_id" class="mb-2 d-block">Family</label>
+                                    <field name="family_id" string="Family" nolabel="1"
+
+                                           placeholder="Choose Family..." class="w-100"
+                                           style="border: 1px solid #ccc; padding: 0px; border-radius: 8px;"
+                                           options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}"/>
+                                </div>
+                                <div class="mt-2" invisible="product_create_type != 'model'">
+                                    <label for="family_variant_id" class="mb-2 d-block">Variants</label>
+                                    <field name="family_variant_id" nolabel="1" class="w-100"
+
+                                           style="border: 1px solid #ccc; padding: 0px; border-radius: 8px;"
+                                           placeholder="Choose Family Variant..."
+                                           options="{'no_create_edit': True, 'no_quick_create': True, 'no_open': True}"/>
+                                </div>
+                                <div class="mt-2" invisible="product_create_type != 'model'">
+                                    <label for="is_sku_manual" class="mb-2 d-block">Need Different SKU</label>
+                                    <field name="is_sku_manual" string="Need Different SKU" class="w-100"
+                                           placeholder="Enter SKU..." nolabel="1" widget="boolean_toggle"/>
+
+                                </div>
+                                <div class="o_row mt-4">
+                                    <button name="action_cancel"
+                                            style="border-radius: 20px;"
+                                            string="Cancel" type="object"
+                                            class="btn p-2 btn-secondary"/>
+                                    <button name="action_save" string="Create"
+                                            style="border-radius:20px;"
+                                            type="object"
+                                            class="btn p-2 btn-primary"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form class="attribute_type" invisible="product_create_type not in ['progress']">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Under Construction</h2>
+                        </div>
+                    </div>
+                </form>
+            </form>
+        </field>
+    </record>
+</odoo>

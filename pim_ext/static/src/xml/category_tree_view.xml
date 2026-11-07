@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="pim_ext.CategoryListRenderer" owl="1">
+        <div class="o_list_renderer o_renderer pim-category-view d-flex flex-column h-100" t-ref="root">
+            <div class="pim-top-header">
+                <h1 class="pim-title">Categories</h1>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-pim-primary" t-on-click="createCategory">
+                        <i class="fa fa-plus me-2"/> Create Category
+                    </button>
+                </div>
+            </div>
+
+            <div class="pim-tab-bar" style="margin:15px;">
+                <div class="pim-tabs-list">
+                    <a class="pim-tab-item active">Default category</a>
+                </div>
+           
+            <div class="pim-scroll-area table-responsive flex-grow-1 overflow-auto">
+                <div class="pim-default-category-container">
+                    <div class="pim-container-header">
+                        <span class="pim-container-title">Default category</span>
+                    </div>
+
+                    <div class="category-tree-list">
+                        <t t-if="state.treeData &amp;&amp; state.treeData.length">
+                            <t t-foreach="state.treeData" t-as="node" t-key="'root_' + node_index">
+                                <t t-if="node &amp;&amp; node.id">
+                                    <t t-call="pim_ext.CategoryTreeItem">
+                                        <t t-set="node" t-value="node"/>
+                                        <t t-set="level" t-value="0"/>
+                                        <t t-set="parentKey" t-value="'root'"/>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <div class="p-5 text-center text-muted">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-3 opacity-50">
+                                    <path d="M19.8536 7.44146H12.192L9.68868 5.04695C9.65683 5.01713 9.61494 5.00037 9.57131 5H4.14631C3.76856 5 3.46338 5.30518 3.46338 5.68293V18.3171C3.46338 18.6948 3.76856 19 4.14631 19H19.8536C20.2314 19 20.5366 18.6948 20.5366 18.3171V8.12439C20.5366 7.74665 20.2314 7.44146 19.8536 7.44146ZM19 17.4634H4.99996V6.53659H9.02283L11.5753 8.97805H19V17.4634Z" fill="#9CA3AF"/>
+                                </svg>
+                                <p class="mb-0">No categories found</p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+            <table class="o_list_table position-fixed invisible" t-ref="table" style="top:-9999px;">
+                <thead>
+                    <tr>
+                        <th t-foreach="props.list?.columns || []" t-as="c" t-key="c_index">
+                            <t t-esc="c.label"/>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="props.list?.records || []" t-as="r" t-key="r_index">
+                        <td t-foreach="props.list?.columns || []" t-as="c" t-key="'col_' + c_index">
+                            <t t-esc="r.data[c.name]"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+
+    <t t-name="pim_ext.CategoryTreeNav">
+        <div class="category-sidebar h-100 d-flex flex-column bg-white border-end">
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs nav-fill border-bottom">
+                <li class="nav-item">
+                    <a class="nav-link py-3 rounded-0 fw-bold text-dark active border-bottom border-primary border-3" 
+                       href="#">
+                        Default Category
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content flex-grow-1 overflow-auto p-0">
+                <div class="accordion-tree">
+                    <t t-if="state.treeData &amp;&amp; state.treeData.length">
+                        <t t-foreach="state.treeData" t-as="node" t-key="'nav_' + node_index">
+                            <t t-call="pim_ext.CategoryTreeItem">
+                                <t t-set="node" t-value="node"/>
+                                <t t-set="level" t-value="0"/>
+                                <t t-set="isNavMode" t-value="true"/>
+                                <t t-set="parentKey" t-value="'nav'"/>
+                            </t>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="p-4 text-center text-muted">
+                            <i class="fa fa-folder-o fa-2x mb-2 opacity-50"/>
+                            <p class="mb-0 small">No categories found</p>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="pim_ext.CategoryTreeItem">
+        <div class="category-item-container">
+            <!-- Determine if we're in nav mode (sidebar) or list mode (main view) -->
+            <t t-set="isNav" t-value="isNavMode || false"/>
+            <div t-att-class="[
+    isNav ? 'tree-node' : 'tree-row-item',
+    state.selectedCategoryId === node.id ? 'active-category' : '',
+    state.highlightedId === node.id ? 'category-highlighted' : ''
+].join(' ')">
+                <div t-att-class="isNav ? 'd-flex align-items-center py-2 px-3 position-relative tree-row' : 'tree-content-wrapper'"
+                     t-att-style="isNav ? ('padding-left: ' + (level * 20 + 15) + 'px;') : ('padding-left: ' + ((level * 32) + 20) + 'px;')">
+                    
+                    <span t-if="node.children?.length > 0" 
+                          t-att-class="isNav ? 'fa fa-fw me-2 cursor-pointer small' : 'icon-expand cursor-pointer'"
+                          t-on-click.stop="(ev) => this.toggleExpand(node.id, ev)">
+                        <i t-att-class="state.expanded.has(node.id) ? (isNav ? 'fa-chevron-down' : 'fa fa-fw fa-angle-down') : (isNav ? 'fa-chevron-right' : 'fa fa-fw fa-angle-right')"/>
+                    </span>
+                    <span t-else="" 
+                          t-att-class="isNav ? 'fa fa-fw me-2' : 'icon-expand'" 
+                          t-att-style="isNav ? 'width:12px;' : 'cursor: default;'">
+                        <i t-if="!isNav" class="fa fa-fw"/>
+                    </span>
+                    
+                    <t t-if="isNav">
+                        <i class="fa me-2 text-muted"
+                           t-att-class="state.expanded.has(node.id) ? 'fa-folder-open-o' : 'fa-folder-o'"/>
+                    </t>
+                    <t t-else="">
+                        <t t-if="node.children?.length > 0">
+                            <svg class="icon-folder-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.5" d="M21.75 7.49805V15.8315C21.75 16.0083 21.6798 16.1778 21.5548 16.3028C21.4298 16.4278 21.2602 16.498 21.0834 16.498H18.75V10.498C18.75 10.2991 18.671 10.1084 18.5303 9.96772C18.3897 9.82706 18.1989 9.74805 18 9.74805H11.25L8.44969 7.64805C8.31987 7.55068 8.16197 7.49805 7.99969 7.49805H6V5.24805C6 5.04913 6.07902 4.85837 6.21967 4.71772C6.36032 4.57706 6.55109 4.49805 6.75 4.49805H10.9997C11.162 4.49805 11.3199 4.55068 11.4497 4.64805L14.25 6.74805H21C21.1989 6.74805 21.3897 6.82706 21.5303 6.96772C21.671 7.10837 21.75 7.29913 21.75 7.49805Z" fill="#714B67"/>
+                                <path d="M21 5.99805H14.5003L11.8997 4.04805C11.6397 3.85404 11.3241 3.74885 10.9997 3.74805H6.75C6.35218 3.74805 5.97064 3.90608 5.68934 4.18739C5.40804 4.46869 5.25 4.85022 5.25 5.24805V6.74805H3.75C3.35218 6.74805 2.97064 6.90608 2.68934 7.18739C2.40804 7.46869 2.25 7.85022 2.25 8.24805V18.748C2.25 19.1459 2.40804 19.5274 2.68934 19.8087C2.97064 20.09 3.35218 20.248 3.75 20.248H18.0834C18.459 20.2476 18.819 20.0981 19.0846 19.8326C19.3501 19.567 19.4995 19.207 19.5 18.8315V17.248H21.0834C21.459 17.2476 21.819 17.0981 22.0846 16.8326C22.3501 16.567 22.4995 16.207 22.5 15.8315V7.49805C22.5 7.10022 22.342 6.71869 22.0607 6.43739C21.7794 6.15608 21.3978 5.99805 21 5.99805ZM18 18.748H3.75V8.24805H7.99969L10.8 10.348C10.9298 10.4454 11.0877 10.498 11.25 10.498H18V18.748ZM21 15.748H19.5V10.498C19.5 10.1002 19.342 9.71869 19.0607 9.43739C18.7794 9.15608 18.3978 8.99805 18 8.99805H11.5003L8.89969 7.04805C8.63967 6.85404 8.32411 6.74885 7.99969 6.74805H6.75V5.24805H10.9997L13.8 7.34805C13.9298 7.44541 14.0877 7.49805 14.25 7.49805H21V15.748Z" fill="#111827"/>
+                            </svg>
+                        </t>
+                        <t t-else="">
+                            <svg class="icon-folder-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.8536 7.44146H12.192L9.68868 5.04695C9.65683 5.01713 9.61494 5.00037 9.57131 5H4.14631C3.76856 5 3.46338 5.30518 3.46338 5.68293V18.3171C3.46338 18.6948 3.76856 19 4.14631 19H19.8536C20.2314 19 20.5366 18.6948 20.5366 18.3171V8.12439C20.5366 7.74665 20.2314 7.44146 19.8536 7.44146ZM19 17.4634H4.99996V6.53659H9.02283L11.5753 8.97805H19V17.4634Z" fill="#111827"/>
+                            </svg>
+                        </t>
+                    </t>
+                    
+                    <span t-att-class="isNav ? 'cursor-pointer text-dark text-truncate' : 'text-category'"
+                          t-on-click="() => this.editCategory(node.id)">
+                        <t t-esc="node.name"/>
+                    </span>
+                    
+                    <t t-if="isNav">
+                        <i class="fa fa-plus-circle text-muted ms-2 cursor-pointer hover-primary" 
+                           title="Add Subcategory"
+                           t-on-click.stop="(ev) => this.createChild(node.id, ev)"/>
+                    </t>
+                    <t t-else="">
+                        <svg class="icon-add cursor-pointer"
+                             viewBox="0 0 22 22"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg"
+                             title="Add Subcategory"
+                             t-on-click.stop="(ev) => this.createChild(node.id, ev)">
+                            <path d="M11 20.625C5.6925 20.625 1.375 16.3075 1.375 11C1.375 5.6925 5.6925 1.375 11 1.375C16.3075 1.375 20.625 5.6925 20.625 11C20.625 16.3075 16.3075 20.625 11 20.625ZM11 2.75C6.44875 2.75 2.75 6.44875 2.75 11C2.75 15.5512 6.44875 19.25 11 19.25C15.5512 19.25 19.25 15.5512 19.25 11C19.25 6.44875 15.5512 2.75 11 2.75Z" fill="#707070"/>
+                            <path d="M11 15.8125C10.615 15.8125 10.3125 15.51 10.3125 15.125V6.875C10.3125 6.49 10.615 6.1875 11 6.1875C11.385 6.1875 11.6875 6.49 11.6875 6.875V15.125C11.6875 15.51 11.385 15.8125 11 15.8125Z" fill="#707070"/>
+                            <path d="M15.125 11.6875H6.875C6.49 11.6875 6.1875 11.385 6.1875 11C6.1875 10.615 6.49 10.3125 6.875 10.3125H15.125C15.51 10.3125 15.8125 10.615 15.8125 11C15.8125 11.385 15.51 11.6875 15.125 11.6875Z" fill="#707070"/>
+                        </svg>
+                    </t>
+
+                    <div class="flex-grow-1" t-on-click="() => this.editCategory(node.id)"/>
+                    
+                    <div class="action-buttons d-flex align-items-center gap-2">
+                        <i class="fa fa-pencil text-muted cursor-pointer hover-primary" 
+                           t-att-style="isNav ? 'font-size: 14px;' : 'font-size: 16px;'"
+                           title="Edit Category"
+                           t-on-click.stop="(ev) => this.editCategory(node.id, ev)"/>
+                        <i class="fa fa-trash-o text-muted cursor-pointer hover-danger" 
+                           t-att-style="isNav ? 'font-size: 14px;' : 'font-size: 16px;'"
+                           title="Delete Category"
+                           t-on-click.stop="(ev) => this.deleteCategory(node.id, ev)"/>
+                    </div>
+                </div>
+            </div>
+            
+            <t t-if="node.children?.length > 0 &amp;&amp; state.expanded.has(node.id)">
+                <div t-att-class="isNav ? 'tree-children ms-4' : 'category-children'">
+                    <t t-foreach="node.children" t-as="child" t-key="(parentKey || 'node') + '_' + node.id + '_' + child_index">
+                        <t t-call="pim_ext.CategoryTreeItem">
+                            <t t-set="node" t-value="child"/>
+                            <t t-set="level" t-value="level + 1"/>
+                            <t t-set="isNavMode" t-value="isNav"/>
+                            <t t-set="parentKey" t-value="(parentKey || 'node') + '_' + node.id"/>
+                        </t>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

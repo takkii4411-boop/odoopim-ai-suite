@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="supabind_dashboard.SupabindDashboard" owl="1">
+        <div class="o_supabind_iframe_container">
+        <!-- <hr/> -->
+            <iframe class="o_supabind_iframe"
+                    t-att-src="state.iframeURL"
+                    frameborder="0"
+                    allowfullscreen="true"/>
+        </div>
+    </t>
+
+</templates>

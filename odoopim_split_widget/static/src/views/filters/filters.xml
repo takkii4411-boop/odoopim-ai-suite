@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="odoopim_split_widget.Filters">
+        <div class="filter-container">
+            <!-- Filter Header -->
+            <div class="filter-header">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-funnel me-2"/>
+                        <span class="filter-title">Filter</span>
+                    </div>
+                    <button class="btn-close-filter text-light" t-on-click="close">
+                        <i class="fa fa-times xl"/>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Applied Filters Section -->
+            <div class="applied-filters-section" id="appliedFilters">
+
+                <t t-if="this.state.selectedFilters and Object.keys(this.state.selectedFilters).length &gt; 0">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="applied-filters-title">Applied filters</span>
+                        <button class="btn-clear-all" t-on-click="clearAllFilters">
+                            <i class="fa fa-times me-1"/> Clear all
+                        </button>
+                    </div>
+                </t>
+                <!-- Current Applied Saved Filter Indicator -->
+                <t t-if="state.selectedFilterId">
+                    <div class="alert alert-info small py-2 px-3 mb-3 d-flex align-items-center justify-content-between">
+                        <span class="text-truncate flex-grow-1 pe-2">
+                            <i class="fa fa-filter me-1"/> Applied:
+                            <t t-foreach="state.savedFilters" t-as="saved" t-key="saved.id">
+                                <t t-if="saved.id === state.selectedFilterId">
+                                    <strong><t t-esc="saved.name"/></strong>
+                                </t>
+                            </t>
+                        </span>
+                        <button class="btn-close btn-close-sm flex-shrink-0" t-on-click="clearSavedDomain" aria-label="Clear saved filter"/>
+                    </div>
+                </t>
+                <div class="applied-filters-tags">
+                    <t t-if="this.state.selectedFilters and Object.keys(this.state.selectedFilters).length &gt; 0">
+                        <t t-foreach="Object.keys(this.state.selectedFilters)" t-as="group" t-key="group">
+                            <t t-if="this.state.selectedFilters[group]">
+                                <span class="filter-tag">
+                                    <t t-esc="group"/>: <t t-esc="this.state.selectedFilters[group].label"/>
+                                    <button class="btn-remove-tag" t-on-click="()=>this.removeFilter(group)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </span>
+                            </t>
+                        </t>
+                    </t>
+                </div>
+            </div>
+
+            <!-- Filter Sections -->
+            <div class="filter-sections">
+                <!-- Saved Filters -->
+                <div class="filter-section">
+                    <button class="filter-section-header" data-bs-toggle="collapse" data-bs-target="#savedFiltersList">
+                        <strong>Saved Filters</strong>
+                        <i class="fa fa-chevron-down"/>
+                    </button>
+                    <div class="collapse show" id="savedFiltersList">
+                        <div class="filter-section-content">
+
+                            <!-- Save Current Button + Input -->
+                            <div class="mb-3">
+                                <input type="text" class="form-control form-control-sm mb-2" placeholder="Name for current filters" t-ref="saveInput"/>
+                                <button class="btn btn-primary btn-sm w-100" t-on-click="saveCurrent">
+                                    <i class="fa fa-save me-1"/> Save Current Filters
+                                </button>
+                            </div>
+
+                            <!-- Scrollable List of Saved Filters -->
+                            <div style="max-height: 350px; overflow-y: auto;">
+                                <t t-if="state.savedFilters and state.savedFilters.length &gt; 0">
+                                    <ul class="list-group list-group-flush">
+                                        <t t-foreach="state.savedFilters" t-as="saved" t-key="saved.id">
+                                            <li class="list-group-item px-0 py-2 saved-filter-item d-flex align-items-center justify-content-between">
+
+                                                <!-- Left: Click to Apply + Name / Rename -->
+                                                <div class="d-flex align-items-center flex-grow-1 me-3 min-width-0 text-truncate"
+                                                     t-on-click="() => this.onSavedChange(saved.id)"
+                                                     role="button">
+
+                                                    <!-- Normal Name Display -->
+                                                    <span class="text-truncate d-block"
+                                                          t-att-title="saved.name"
+                                                          t-if="!state.filterToRename || state.filterToRename.id !== saved.id"
+                                                          style="max-width: 100%;">
+                                                        <t t-esc="saved.name"/>
+                                                    </span>
+
+                                                    <!-- Rename Mode -->
+                                                    <div t-if="state.filterToRename &amp;&amp; state.filterToRename.id === saved.id"
+                                                         class="d-flex align-items-center w-100">
+                                                        <input t-ref="renameInput"
+                                                               type="text"
+                                                               class="form-control form-control-sm me-2 flex-grow-1"
+                                                               t-att-value="saved.name"/>
+                                                        <button class="btn btn-sm btn-success"
+                                                                t-on-click.stop.prevent="() => this.renameFilter(saved.id, this.__owl__.refs.renameInput.value.trim())">
+                                                            <i class="fa fa-check"/>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-secondary ms-1"
+                                                                t-on-click.stop.prevent="() => this.cancelRenameFilter()">
+                                                            <i class="fa fa-times"/>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right: More Actions Dropdown -->
+                                                <div class="dropdown"
+                                                     t-if="!state.filterToRename || state.filterToRename.id !== saved.id">
+                                                    <button class="btn btn-sm btn-light dropdown-toggle"
+                                                            type="button"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                        <i class="fa fa-ellipsis-v"/>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                                        <li>
+                                                            <button class="dropdown-item"
+                                                                    t-on-click.stop.prevent="() => this.toggleDefault(saved.id)">
+                                                                <i t-att-class="saved.is_default ? 'fa fa-star text-warning' : 'fa fa-star-o'"/>
+                                                                <span class="ms-2" t-esc="saved.is_default ? 'Remove Default' : 'Set as Default'"/>
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item"
+                                                                    t-on-click.stop.prevent="() => this.startRename(saved)">
+                                                                <i class="fa fa-pencil me-2"/> Rename
+                                                            </button>
+                                                        </li>
+                                                        <li>
+                                                            <button class="dropdown-item"
+                                                                    t-on-click.stop.prevent="() => this.openShareDialog(saved.id)">
+                                                                <i class="fa fa-share-alt me-2"
+                                                                   t-att-class="saved.shared_user_ids &amp;&amp; saved.shared_user_ids.length ? 'text-primary' : ''"/>
+                                                                Share with Users
+                                                            </button>
+                                                        </li>
+                                                        <li><hr class="dropdown-divider"/></li>
+                                                        <li>
+                                                            <button class="dropdown-item text-danger"
+                                                                    t-on-click.stop.prevent="() => this.deleteFilter(saved.id)">
+                                                                <i class="fa fa-trash me-2"/> Delete
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </t>
+                                    </ul>
+                                </t>
+
+                                <div t-else="">
+                                    <p class="text-muted small text-center py-3">No saved filters yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Family -->
+                <div class="filter-section">
+                    <button class="filter-section-header" data-bs-toggle="collapse" data-bs-target="#familySection">
+                        <strong>Family</strong>
+                        <i class="fa fa-chevron-down"/>
+                    </button>
+                    <div class="collapse show" id="familySection">
+                        <div class="filter-section-content">
+                            <select class="form-select" t-att-value="state.selectedFamilyId || ''" t-on-change="onFamilyChange">
+                                <option value="">Select a family</option>
+                                <t t-if="this.state.allFamilies and this.state.allFamilies.length &gt; 0">
+                                    <t t-foreach="this.state.allFamilies" t-as="family" t-key="family.id">
+                                        <option t-att-value="family.id"><t t-esc="family.name"/></option>
+                                    </t>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <t t-foreach="this.state.commonFilters" t-as="group" t-key="group.group_name">
+                    <div class="filter-section">
+                        <button class="filter-section-header" data-bs-toggle="collapse" t-att-data-bs-target="'#'+group.group_name">
+                            <strong><t t-esc="group.group_name"/></strong>
+                            <i class="fa fa-chevron-down"/>
+                        </button>
+                        <div class="collapse show" t-att-id="group.group_name">
+                            <div class="filter-section-content">
+                                <div class="btn-group-custom">
+                                    <t t-foreach="group.filters" t-as="filter" t-key="filter.label">
+                                        <button class="btn-filter-option" t-att-class="this.state.selectedFilters[group.group_name] and this.state.selectedFilters[group.group_name].label === filter.label ? 'active' : ''" t-att-data-domain="filter.domain" t-att-data-group="group.group_name" t-on-click="filter.action"><t t-esc="filter.label"/></button>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>
+
+
+<!-- Created at Section -->
+<!--<div class="filter-section">-->
+<!--<button class="filter-section-header collapsed" data-bs-toggle="collapse" data-bs-target="#createdAtSection">-->
+<!--    <strong>Created at</strong>-->
+<!--    <i class="fa fa-chevron-down"></i>-->
+<!--</button>-->
+<!--<div class="collapse" id="createdAtSection">-->
+<!--    <div class="filter-section-content">-->
+<!--        <div class="date-filter-options">-->
+<!--            <div class="form-check">-->
+<!--                <input class="form-check-input" type="radio" name="createdAtType" value="between" data-group="createdAt" id="betweenCreated" t-on-change="(e)=>this.onChangeDateType(e)"/>-->
+<!--                <label class="form-check-label" for="betweenCreated">Between</label>-->
+<!--            </div>-->
+<!--            <div class="form-check">-->
+<!--                <input class="form-check-input" type="radio" name="createdAtType" value="not_between" data-group="createdAt" id="notBetweenCreated" t-on-change="(e)=>this.onChangeDateType(e)"/>-->
+<!--                <label class="form-check-label" for="notBetweenCreated">Not between</label>-->
+<!--            </div>-->
+<!--            <div class="form-check">-->
+<!--                <input class="form-check-input" type="radio" name="createdAtType" value="more" data-group="createdAt" id="moreThanCreated" t-on-change="(e)=>this.onChangeDateType(e)"/>-->
+<!--                <label class="form-check-label" for="moreThanCreated">More than</label>-->
+<!--            </div>-->
+<!--            <div class="form-check">-->
+<!--                <input class="form-check-input" type="radio" name="createdAtType" value="less" data-group="createdAt" id="lessThanCreated" t-on-change="(e)=>this.onChangeDateType(e)"/>-->
+<!--                <label class="form-check-label" for="lessThanCreated">Less than</label>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="date-range-section">-->
+<!--            <p class="date-range-label">Select date range</p>-->
+<!--            <div class="date-inputs">-->
+<!--                <div class="date-input-group">-->
+<!--                    <i class="bi bi-calendar3"></i>-->
+<!--                    <input type="date" class="form-control" value="2024-08-13"/>-->
+<!--                </div>-->
+<!--                <span class="date-separator">—</span>-->
+<!--                <div class="date-input-group">-->
+<!--                    <i class="bi bi-calendar3"></i>-->
+<!--                    <input type="date" class="form-control" value="2024-08-13"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <button class="btn-update">Update</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->

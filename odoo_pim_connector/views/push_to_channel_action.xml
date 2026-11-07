@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+        <!-- Server action for "Push to Channel" which is now bound directly -->
+        <record id="action_push_to_channel" model="ir.actions.server">
+            <field name="name">Publish to Channel</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template"/>
+            <!-- Bind to tree and form views -->
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_push_to_channel_n8n()</field>
+        </record>
+        <record id="action_push_to_channel_variant" model="ir.actions.server">
+            <field name="name">Publish to Channel</field>
+            <field name="model_id" ref="product.model_product_product"/>
+            <field name="binding_model_id" ref="product.model_product_product"/>
+            <!-- Bind to tree and form views -->
+            <field name="binding_view_types">list,form</field>
+            <field name="state">code</field>
+            <field name="code">action = records.action_push_to_channel_n8n()</field>
+        </record>
+     </data>
+</odoo>

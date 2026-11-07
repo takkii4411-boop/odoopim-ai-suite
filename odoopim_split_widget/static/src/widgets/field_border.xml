@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odoopim_split_widget.FieldBorder" owl="1">
+        <div class="o_boolean_status"
+             t-att-class="props.record.data[props.name] == 'ENABLED' ? 'o_enabled' : 'o_disabled'">
+            <t t-esc="props.record.data[props.name] == 'ENABLED' ? 'Enabled' : 'Disabled'"/>
+        </div>
+    </t>
+</templates>

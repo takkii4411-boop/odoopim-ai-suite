@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_model_field_form_view_translate_channel" model="ir.ui.view">
+        <field name="name">ir.model.fields.view.translate.channel</field>
+        <field name="model">ir.model.fields</field>
+        <field name="inherit_id" ref="base.view_model_fields_form"/>
+        <field name="arch" type="xml">
+            <field name="translate" position="after">
+                <field name="m_translate" invisible="ttype not in ['char', 'text', 'html']"/>
+                <field name="m_channelization" invisible="ttype not in ['char','text', 'html']"/>
+            </field>
+        </field>
+    </record>
+</odoo>

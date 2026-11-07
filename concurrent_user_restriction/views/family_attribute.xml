@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="family_attribute_inherit_form" model="ir.ui.view">
+        <field name="name">family.attribute.smart.buttons</field>
+        <field name="model">family.attribute</field>
+        <field name="inherit_id" ref="pim_ext.view_product_families_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//button" position="after">
+                  <i class="fa fa-refresh fa-fw"></i>
+             </xpath>
+        </field>
+    </record>
+</odoo>

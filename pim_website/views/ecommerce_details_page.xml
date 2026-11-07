@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ENHANCED PRODUCT DETAIL TEMPLATE -->
+    <template id="pxm_product_detail" name="PIM Product Detail Page">
+        <t t-call="website.layout">
+            <t t-set="page_name">PIM Product Detail Page</t>
+            <t t-set="x_icon" t-value="website.image_url(website, 'favicon')"/>
+            <div id="wrap" class="bg-light">
+                <div class="container py-3" id="pxm-product-root"
+                     t-att-data-product-id="product.id">
+                    <div class="pxm-breadcrumb-card bg-white rounded-3 shadow-sm px-4 py-3">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 align-items-center">
+
+                                <!-- HOME / SHOP -->
+                                <li class="breadcrumb-item d-flex align-items-center">
+                                    <a href="/pxm/shop"
+                                       class="d-flex align-items-center text-primary fw-semibold text-decoration-none">
+                                        <i class="fa fa-home me-2"></i>
+                                        <span>Product Hub</span>
+                                    </a>
+                                </li>
+
+                                <!-- DIVIDER -->
+                                <li class="breadcrumb-item px-2 text-muted">
+                                    <i class="fa fa-angle-right"></i>
+                                </li>
+
+                                <!-- CURRENT PRODUCT -->
+                                <li class="breadcrumb-item active pxm-product-breadcrumb">
+                                    <span class="pxm-current-product px-3 py-1 rounded-pill">
+                                        <i class="fa fa-cube me-2 text-primary"></i>
+                                        <span class="pxm-product-name">
+                                            <t t-esc="product.name"/>
+                                        </span>
+                                    </span>
+                                </li>
+
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+
+                <!-- Main Product Section -->
+                <div class="container py-4">
+                    <div class="row g-4">
+                        <div class="col-12 col-lg-6">
+                            <div class="product-image-wrapper bg-white rounded-3 shadow-sm p-3 p-md-4 sticky-top"
+                                 style="top: 20px;">
+
+                                <!-- IMAGE SPLIT WRAPPER -->
+                                <div class="image-split-wrapper d-flex gap-3">
+
+                                    <!-- LEFT THUMBNAILS -->
+                                    <div class="thumbnail-vertical">
+                                        <t t-if="image_gallery">
+                                            <t t-foreach="image_gallery" t-as="gimg">
+                                                <div class="thumb-wrapper">
+                                                    <img class="thumb-item"
+                                                         t-att-data-src="'data:image/png;base64,%s' % gimg"
+                                                         t-att-src="'data:image/png;base64,%s' % gimg"/>
+                                                </div>
+                                            </t>
+                                        </t>
+                                    </div>
+
+                                    <!-- RIGHT MAIN IMAGE -->
+                                    <div class="main-image-fixed position-relative rounded-3 overflow-hidden flex-grow-1">
+
+                                        <img id="mainProductImage"
+                                             t-att-src="'data:image/png;base64,%s' % (image_gallery[0] if image_gallery else '')"
+                                             class="main-product-img zoomable-image"/>
+
+                                        <!-- ARROWS -->
+                                        <button class="img-arrow left-arrow">
+                                            <i class="fa fa-chevron-left"></i>
+                                        </button>
+                                        <button class="img-arrow right-arrow">
+                                            <i class="fa fa-chevron-right"></i>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <!-- left: PRODUCT INFO -->
+                        <div class="col-12 col-lg-6">
+                            <div class="product-info-wrapper">
+                                <!-- Product Title -->
+                                <h1 class="product-title fw-bold mb-3"
+                                    style="color: #1a1a2e; font-size: clamp(1.5rem, 4vw, 2.5rem);"
+                                    t-esc="product.name"/>
+
+                                <!-- Rating & Reviews -->
+                                <div class="d-flex align-items-center mb-3 flex-wrap gap-2">
+                                    <div class="pxm-price-row d-flex justify-content-between align-items-center">
+                                        <!-- Holders for left & right sections -->
+                                        <div class="pxm-left">
+                                            <!-- Availability Ribbon -->
+                                            <t t-foreach="product_dynamic_values[product.id].items()" t-as="attr">
+                                                <t t-set="label" t-value="attr[0]"/>
+                                                <t t-set="val" t-value="attr[1]"/>
+
+                                                <t t-if="label == 'Availability'">
+                                                    <t t-if="val == 'In Stock'">
+                                                        <div class="pxm-availability-ribbon pxm-ribbon-success">
+                                                            <i class="fa fa-check-circle me-2"></i>
+                                                            <span class="pxm-ribbon-text" t-esc="val"/>
+                                                            <div class="pxm-ribbon-corner"></div>
+                                                        </div>
+                                                    </t>
+                                                    <t t-elif="val == 'Out of Stock'">
+                                                        <div class="pxm-availability-ribbon pxm-ribbon-danger">
+                                                            <i class="fa fa-times-circle me-2"></i>
+                                                            <span class="pxm-ribbon-text" t-esc="val"/>
+                                                            <div class="pxm-ribbon-corner"></div>
+                                                        </div>
+                                                    </t>
+                                                    <t t-elif="val == 'Coming Soon'">
+                                                        <div class="pxm-availability-ribbon pxm-ribbon-warning">
+                                                            <i class="fa fa-exclamation-triangle me-2"></i>
+                                                            <span class="pxm-ribbon-text" t-esc="val"/>
+                                                            <div class="pxm-ribbon-corner"></div>
+                                                        </div>
+                                                    </t>
+                                                    <t t-elif="val == 'Discontinued'">
+                                                        <div class="pxm-availability-ribbon pxm-ribbon-info">
+                                                            <i class="fa fa-clock-o me-2"></i>
+                                                            <span class="pxm-ribbon-text" t-esc="val"/>
+                                                            <div class="pxm-ribbon-corner"></div>
+                                                        </div>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <div class="pxm-availability-ribbon pxm-ribbon-default">
+                                                            <i class="fa fa-info-circle me-2"></i>
+                                                            <span class="pxm-ribbon-text"
+                                                                  t-esc="val or 'N/A'"/>
+                                                            <div class="pxm-ribbon-corner"></div>
+                                                        </div>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- SKU & Category -->
+                                <div class="product-meta p-3 bg-light rounded-2">
+                                    <div class="row g-2">
+
+                                        <!-- SKU -->
+                                        <div class="col-6 col-sm-4" t-if="product.sku">
+                                            <small class="text-muted d-block">SKU</small>
+                                            <strong class="text-dark" t-esc="product.sku"/>
+                                        </div>
+
+                                        <!-- Category -->
+                                        <div class="col-6 col-sm-4" t-if="product.pim_category_ids">
+                                            <small class="text-muted d-block">Category</small>
+                                            <strong class="text-dark">
+                                                <t t-foreach="product.pim_category_ids" t-as="cat">
+                                                    <t t-esc="cat.name"/>
+                                                    <br/>
+                                                </t>
+                                            </strong>
+                                        </div>
+
+                                        <!-- Family -->
+                                        <div class="col-6 col-sm-4" t-if="product.family_id">
+                                            <small class="text-muted d-block">Family</small>
+                                            <strong class="text-dark" t-esc="product.family_id.name"/>
+                                        </div>
+
+                                        <!-- Brand -->
+                                        <div class="col-6 col-sm-4" t-if="product.brand_id">
+                                            <small class="text-muted d-block">Brand</small>
+                                            <strong class="text-dark" t-esc="product.brand_id.name"/>
+                                        </div>
+
+                                        <!-- Supplier -->
+                                        <div class="col-6 col-sm-4" t-if="product.supplier_id">
+                                            <small class="text-muted d-block">Supplier</small>
+                                            <strong class="text-dark" t-esc="product.supplier_id.name"/>
+                                        </div>
+
+                                        <!-- Quality Type -->
+                                        <div class="col-6 col-sm-4" t-if="product.quality_type">
+                                            <small class="text-muted d-block">Quality Type</small>
+                                            <strong class="text-dark">
+                                                <t t-esc="dict(product._fields['quality_type'].selection).get(product.quality_type)"/>
+                                            </strong>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Price Section -->
+                                <div class="price-section mb-4 p-4 rounded-3 shadow-sm border border-light">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                        <div>
+                                            <h3 class="text-primary fw-bold mb-1"
+                                                style="font-size: clamp(1.75rem, 5vw, 2.5rem);">
+                                                <div class="pxm-right d-flex">
+                                                    <!-- Price Per Meter -->
+                                                    <t t-foreach="product_dynamic_values[product.id].items()"
+                                                       t-as="attr">
+                                                        <t t-set="field_info"
+                                                           t-value="dynamic_price_fields.get(attr[0])"/>
+                                                        <t t-set="label" t-value="attr[0]"/>
+                                                        <t t-set="val" t-value="attr[1]"/>
+                                                        <t t-if="field_info and field_info.get('display_type') == 'price' and label == 'Price per Meter'">
+                                                            <!-- Multiple -->
+                                                            <t t-if="val and isinstance(val, list)">
+                                                                <t t-foreach="val" t-as="v">
+                                                                    <t t-if="v">
+                                                                        <div class="pxm-attr-badge ms-2">
+                                                                            <img src="/pim_website/static/src/img/money-sack.png"
+                                                                                 class="pxm-icon"
+                                                                                 style="height:25px; width:25px; transform: rotate(25deg);"/>
+                                                                            <strong>
+                                                                                <span class="pxm-value-text"
+                                                                                      t-esc="v"
+                                                                                      t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                            </strong>
+                                                                        </div>
+                                                                    </t>
+                                                                </t>
+                                                            </t>
+
+                                                            <!-- Single -->
+                                                            <t t-elif="val">
+                                                                <div class="pxm-attr-badge ms-2">
+                                                                    <strong>
+                                                                        <span class="pxm-value-text" t-esc="val"
+                                                                              t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                    </strong>
+                                                                </div>
+                                                            </t>
+
+                                                        </t>
+                                                    </t>
+                                                </div>
+
+                                            </h3>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="text-decoration-line-through text-muted">
+                                                    <t t-foreach="product_dynamic_values[product.id].items()"
+                                                       t-as="attr">
+                                                        <t t-set="label" t-value="attr[0]"/>
+                                                        <t t-set="val" t-value="attr[1]"/>
+
+                                                        <t t-if="label == 'Sold Per' and val">
+
+                                                            <!-- Multiple values -->
+                                                            <t t-if="val and isinstance(val, list)">
+                                                                <t t-foreach="val" t-as="v">
+                                                                    <t t-if="v">
+
+                                                                        <t t-set="is_number"
+                                                                           t-value="v.replace(',','').replace(' ','').isdigit()"/>
+
+                                                                        <span class="badge bg-danger">
+                                                                            <strong>
+                                                                                <t t-if="is_number">
+                                                                                    <!-- Numeric → show monetary -->
+                                                                                    <span t-esc="float(v)"
+                                                                                          t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                                </t>
+
+                                                                                <t t-else="">
+                                                                                    <!-- Text → show as text -->
+                                                                                    <span t-esc="v"/>
+                                                                                </t>
+                                                                            </strong>
+                                                                        </span>
+
+                                                                    </t>
+                                                                </t>
+                                                            </t>
+
+                                                            <!-- Single value -->
+                                                            <t t-elif="val">
+                                                                <t t-set="is_number"
+                                                                   t-value="val.replace(',','').replace(' ','').isdigit()"/>
+
+                                                                <span>
+                                                                    <strong>
+                                                                        <t t-if="is_number">
+                                                                            <span t-esc="float(val)"
+                                                                                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <span t-esc="val"/>
+                                                                        </t>
+                                                                    </strong>
+                                                                </span>
+                                                            </t>
+
+                                                        </t>
+                                                    </t>
+
+                                                </span>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <!-- Discount -->
+                                                    <t t-foreach="product_dynamic_values[product.id].items()"
+                                                       t-as="attr">
+                                                        <t t-set="label" t-value="attr[0]"/>
+                                                        <t t-set="val" t-value="attr[1]"/>
+                                                        <t t-if="label == 'Discount' and val">
+                                                            <!-- Multiple -->
+                                                            <t t-if="val and isinstance(val, list)">
+                                                                <t t-foreach="val" t-as="v">
+                                                                    <t t-if="v">
+                                                                        <span class="badge bg-danger">
+                                                                            <strong>
+                                                                                <t t-esc="v"/>
+                                                                            </strong>
+                                                                        </span>
+                                                                    </t>
+                                                                </t>
+                                                            </t>
+                                                            <!-- Single -->
+                                                            <t t-elif="val">
+                                                                <span class="btn custom-discount"
+                                                                      style="border-radius: 50px;">
+                                                                    <strong>
+                                                                        <t t-esc="val"/>
+                                                                    </strong>
+                                                                </span>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="pim-actions d-flex gap-2 justify-content-end">
+                                                <a t-att-href="'/report/pdf/pim_website.pim_product_report/%s' % product.id"
+                                                   target="_blank"
+                                                   class="btn btn-primary new-pim-export-pdf">
+                                                    <i class="fa fa-file-pdf-o me-1"></i>
+                                                    Catalogue
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="product-description mt-4 mb-4">
+                                    <!-- Collapsible Header -->
+                                    <h5 class="fw-bold mb-3 d-flex justify-content-between align-items-center"
+                                        style="color: #1a1a2e; cursor: pointer;"
+                                        data-bs-toggle="collapse" data-bs-target="#descriptionCollapse"
+                                        aria-expanded="true" aria-controls="descriptionCollapse">
+                                        <span>
+                                            <i class="fa fa-info-circle text-primary me-2"></i>Description
+                                        </span>
+                                        <i class="fa fa-chevron-down text-muted rotate-icon"></i>
+                                    </h5>
+
+                                    <!-- Collapsible Content (shown by default) -->
+                                    <div class="collapse show" id="descriptionCollapse">
+                                        <p class="text-muted lh-lg ps-3" style="text-align: justify;"
+                                           t-esc="product.description or 'No description available.'"/>
+                                    </div>
+                                </div>
+
+                                <hr class="my-4"/>
+                                <!-- Action Buttons -->
+                                <div class="action-buttons mt-4 p-3 bg-light rounded-3">
+                                    <div class="row g-3 text-center">
+                                        <div class="col-6">
+                                            <button class="pxm-btn-secondary w-100" id="pxm-share-btn">
+                                                <i class="fa fa-share-alt me-1"></i>Share
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="pxm-btn-secondary w-100"
+                                                    data-current-product-id="[[ product.id ]]">
+                                                <i class="fa fa-balance-scale me-1"></i>Compare
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Additional Product Information Tabs -->
+                <div class="container">
+                    <div class="pxm-spec-header">
+                        <h4 class="pxm-spec-title">
+                            <i class="fa fa-sliders me-2"></i>
+                            Product Specifications
+                        </h4>
+                    </div>
+
+                    <div class="bg-white rounded-3 shadow-sm p-4 mb-4">
+
+                        <!-- Desktop Tabs (hidden on mobile) -->
+                        <ul class="nav nav-pills product-tabs mb-4 d-none d-md-flex" role="tablist">
+                            <t t-foreach="attribute_groups" t-as="grp" t-index="grp_index">
+                                <li class="nav-item" role="presentation">
+                                    <button
+                                            class="nav-link px-4 py-2"
+                                            t-att-class="grp_index == 0 and 'nav-link px-4 py-2 active' or 'nav-link px-4 py-2'"
+                                            t-att-id="'attr-tab-%s' % grp_index"
+                                            data-bs-toggle="pill"
+                                            t-att-data-bs-target="'#attr-pane-%s' % grp_index"
+                                            type="button"
+                                            role="tab"
+                                            t-att-aria-controls="'attr-pane-%s' % grp_index"
+                                            t-att-aria-selected="grp_index == 0 and 'true' or 'false'">
+                                        <span class="fw-semibold ">
+                                            <t t-esc="grp['group']"/>
+                                        </span>
+                                    </button>
+                                </li>
+                            </t>
+                        </ul>
+
+                        <!-- Mobile Accordion (hidden on desktop) -->
+                        <div class="d-md-none" id="mobile-accordion">
+                            <t t-foreach="attribute_groups" t-as="grp" t-index="grp_index">
+                                <div class="card mb-2">
+                                    <div class="card-header p-2" id="heading">
+                                        <h5 class="mb-0">
+                                            <button class="btn custom-btn-link w-100 d-flex justify-content-between align-items-center"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    style="color:black;"
+                                                    t-att-data-bs-target="'#collapse-' + str(grp_index)"
+                                                    aria-expanded="false"
+                                                    t-att-aria-controls="'collapse-' + str(grp_index)">
+                                                <span>
+                                                    <t t-esc="grp['group']"/>
+                                                </span>
+                                                <i class="fa fa-angle-double-down collapse-icon"></i>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div t-att-id="'collapse-' + str(grp_index)"
+                                         class="collapse"
+                                         t-att-class="grp_index == 0 and 'collapse show' or 'collapse'"
+                                         t-att-aria-labelledby="'heading-' + str(grp_index)"
+                                         data-bs-parent="#mobile-accordion">
+                                        <div class="card-body p-2">
+
+                                            <t t-set="has_any_value" t-value="False"/>
+                                            <div class="row g-3">
+                                                <table class="table table-bordered table-sm mb-0 attribute-table">
+                                                    <tbody>
+                                                        <t t-foreach="grp['attributes']" t-as="att">
+                                                            <t t-set="label" t-value="att.get('label')"/>
+                                                            <t t-set="value"
+                                                               t-value="product_dynamic_values[product.id].get(label)"/>
+                                                            <t t-set="field_info"
+                                                               t-value="dynamic_price_fields.get(label)"/>
+
+                                                            <t t-if="value not in (None, '', False, [], 0, 0.0)">
+                                                                <t t-set="has_any_value" t-value="True"/>
+                                                                <tr>
+                                                                    <th class="attribute-label">
+                                                                        <t t-esc="label"/>
+                                                                    </th>
+                                                                    <td class="attribute-value">
+                                                                        <!-- Same display logic as before -->
+                                                                        <t t-if="field_info and field_info.get('display_type') == 'price'">
+                                                                            <span class="fw-bold"
+                                                                                  t-esc="value"
+                                                                                  t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') == 'yes_no'">
+                                                                            <span t-if="value" class="badge bg-success">
+                                                                                Yes
+                                                                            </span>
+                                                                            <span t-else="" class="badge bg-secondary">
+                                                                                No
+                                                                            </span>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') == 'float'">
+                                                                            <t t-esc="'%.2f' % value"/>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') == 'number'">
+                                                                            <t t-esc="value"/>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') in ('multi_select','multi','pills','ref_data_multi')">
+                                                                            <t t-foreach="value" t-as="v">
+                                                                                <span class="badge bg-light text-dark me-1">
+                                                                                    <t t-esc="v"/>
+                                                                                </span>
+                                                                            </t>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') in ('select','radio','simple_select','ref_data_simple_select')">
+                                                                            <span class="badge bg-primary">
+                                                                                <t t-esc="value"/>
+                                                                            </span>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') in ('text','textarea','identifier')">
+                                                                            <t t-esc="value"/>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') == 'file'">
+                                                                            <a t-att-href="value" target="_blank"
+                                                                               class="btn btn-sm btn-outline-primary">
+                                                                                Download
+                                                                            </a>
+                                                                        </t>
+                                                                        <t t-elif="field_info and field_info.get('display_type') == 'image'">
+                                                                            <img t-att-src="value" class="img-thumbnail"
+                                                                                 style="max-height:60px"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <t t-esc="value"/>
+                                                                        </t>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                        </t>
+                                                        <t t-if="not has_any_value">
+                                                            <tr>
+                                                                <td colspan="2"
+                                                                    class="text-center text-muted small py-3">
+                                                                    No details available for this section
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- Tab Content for Desktop (unchanged) -->
+                        <div class="tab-content d-none d-md-block" id="productAttributeTabContent">
+                            <t t-foreach="attribute_groups" t-as="grp" t-index="grp_index">
+                                <div
+                                        class="tab-pane fade "
+                                        t-att-class="grp_index == 0 and 'tab-pane fade show active' or 'tab-pane fade'"
+                                        t-att-id="'attr-pane-%s' % grp_index"
+                                        role="tabpanel"
+                                        t-att-aria-labelledby="'attr-tab-%s' % grp_index">
+
+                                    <t t-set="has_any_value" t-value="False"/>
+                                    <div class="row g-3">
+                                        <table class="table table-bordered table-sm mb-0 attribute-table">
+                                            <tbody>
+                                                <t t-foreach="grp['attributes']" t-as="att">
+                                                    <t t-set="label" t-value="att.get('label')"/>
+                                                    <t t-set="value"
+                                                       t-value="product_dynamic_values[product.id].get(label)"/>
+                                                    <t t-set="field_info" t-value="dynamic_price_fields.get(label)"/>
+
+                                                    <t t-if="value not in (None, '', False, [], 0, 0.0)">
+                                                        <t t-set="has_any_value" t-value="True"/>
+                                                        <tr>
+                                                            <th class="attribute-label">
+                                                                <t t-esc="label"/>
+                                                            </th>
+                                                            <td class="attribute-value">
+                                                                <!-- Same display logic as before -->
+                                                                <t t-if="field_info and field_info.get('display_type') == 'price'">
+                                                                    <span class="fw-bold"
+                                                                          t-esc="value"
+                                                                          t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') == 'yes_no'">
+                                                                    <span t-if="value" class="badge bg-success">Yes
+                                                                    </span>
+                                                                    <span t-else="" class="badge bg-secondary">No</span>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') == 'float'">
+                                                                    <t t-esc="'%.2f' % value"/>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') == 'number'">
+                                                                    <t t-esc="value"/>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') in ('multi_select','multi','pills','ref_data_multi')">
+                                                                    <t t-foreach="value" t-as="v">
+                                                                        <span class="badge bg-light text-dark me-1">
+                                                                            <t t-esc="v"/>
+                                                                        </span>
+                                                                    </t>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') in ('select','radio','simple_select','ref_data_simple_select')">
+                                                                    <span class="badge bg-primary">
+                                                                        <t t-esc="value"/>
+                                                                    </span>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') in ('text','textarea','identifier')">
+                                                                    <t t-esc="value"/>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') == 'file'">
+                                                                    <a t-att-href="value" target="_blank"
+                                                                       class="btn btn-sm btn-outline-primary">Download
+                                                                    </a>
+                                                                </t>
+                                                                <t t-elif="field_info and field_info.get('display_type') == 'image'">
+                                                                    <img t-att-src="value" class="img-thumbnail"
+                                                                         style="max-height:60px"/>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <t t-esc="value"/>
+                                                                </t>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                                <t t-if="not has_any_value">
+                                                    <tr>
+                                                        <td colspan="2" class="text-center text-muted small py-3">No
+                                                            details available for this section
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </t>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <t t-if="associated_products_by_type">
+                    <t t-call="pim_website.pxm_product_associations"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+</odoo>

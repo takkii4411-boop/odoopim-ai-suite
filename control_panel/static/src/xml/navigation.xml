@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="control_panel.ProductNavigation" owl="1">
+        <div class="jstr-navigation-panel jstr-hide-mobile jstr-hide-tablet">
+            <div class="jstr-panel-content">
+                <JsTreeContainer t-props="getJsTreeProps('categories')"/>
+            </div>
+        </div>
+    </t>
+
+</templates>

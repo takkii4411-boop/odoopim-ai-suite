@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="pim_locales_channels.ChannelTranslationButton">
+        <t t-if="this.isTranslate">
+            <span class="o_field_translate_channel btn btn-link"
+                  t-on-click.prevent="onClick">
+                <img style="width:15px;"
+                     src="/pim_locales_channels/static/src/img/global.png"
+                     alt="Channel Translation"/>
+            </span>
+        </t>
+    </t>
+</templates>

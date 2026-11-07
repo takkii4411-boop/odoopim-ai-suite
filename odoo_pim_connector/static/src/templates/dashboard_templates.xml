@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    
+    <!-- Main Dashboard Template -->
+    <t t-name="PIMDashboardMain">
+        <div class="o_pim_connector_dashboard">
+            <div class="o_pim_dashboard_content">
+                <!-- Content will be dynamically rendered -->
+            </div>
+        </div>
+    </t>
+
+    <!-- Dashboard Content Template -->
+    <t t-name="PIMDashboardContent">
+        <div class="o_pim_custom_layout">
+            <t t-foreach="categories" t-as="categoryKey">
+                <t t-set="category" t-value="categories[categoryKey]"/>
+                <t t-if="category.records.length > 0">
+                    <div class="o_pim_category_section">
+                        <div class="o_pim_category_header">
+                            <h3><t t-esc="category.title"/></h3>
+                        </div>
+                        <div class="o_pim_cards_grid">
+                            <t t-foreach="category.records" t-as="record">
+                                <div class="oe_kanban_card o_pim_connector_card" t-att-data-record-id="record.id">
+                                    <t t-if="record.is_coming_soon">
+                                        <div class="o_kanban_coming_soon_badge">Coming Soon</div>
+                                    </t>
+                                    <t t-if="record.is_active and !record.is_coming_soon">
+                                        <div class="o_kanban_active_dot"/>
+                                    </t>
+                                    <div class="oe_kanban_global_click o_pim_kanban_card" 
+                                         t-att-class="record.is_coming_soon ? 'o_kanban_pim_coming_soon' : ''">
+                                        <div class="o_kanban_image">
+                                            <img t-att-src="'/odoo_pim_connector/static/src/img/' + record.platform + '.png'" 
+                                                 alt="Logo" 
+                                                 onerror="this.style.display='none'"/>
+                                        </div>
+                                        <div class="oe_kanban_details">
+                                            <strong class="o_kanban_record_title">
+                                                <t t-esc="record.name"/>
+                                            </strong>
+                                            <div class="text-muted">PIM Connector</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+
+</templates>

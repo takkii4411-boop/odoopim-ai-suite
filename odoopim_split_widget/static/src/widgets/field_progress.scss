@@ -1,0 +1,56 @@
+.o_field_progress_wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; // space between bar and text
+}
+
+.o_field_progress {
+    position: relative;
+    width: 50px;   // width of the pill bar
+    height: 14px;  // height of the pill bar
+    border-radius: 999px; // makes it pill-shaped
+    background-color: white; // background track
+    border: 1px solid #E1E1E1; // light gray border
+    overflow: hidden;
+    flex-shrink: 0; // prevent shrinking
+
+    .o_field_progress_bar {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.3s ease;
+    }
+}
+
+.o_field_progress_text {
+    font-weight: 500;
+    font-size: 14px;
+    color: #0f172a; // dark navy-like text color
+}
+
+
+
+.oe_green_bg {
+  background-color: #2EA20B; // solid green
+  color: #fff;
+}
+
+.oe_light_green_bg {
+  background-color: #76C712; // light green
+  color: #000;
+}
+
+.oe_yellow_bg {
+  background-color: #ffc107; // yellow
+  color: #000;
+}
+
+.oe_orange_bg {
+  background-color: #E0900E; // orange
+  color: #fff;
+}
+
+.oe_red_bg {
+  background-color: #EB4614; // red
+  color: #fff;
+}
+

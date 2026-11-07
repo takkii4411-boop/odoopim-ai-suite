@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- ============================================ -->
+    <!-- MAIN ASSOCIATION MANAGER -->
+    <!-- ============================================ -->
+   <t t-name="odoo_pim_association.AssociationManager">
+    <div class="pim-association-container">
+        <!-- Sticky Header - Top Right Aligned -->
+        <div class="pim-association-header">
+            <div class="pim-header-content">
+                <!-- Updated template section for dropdown -->
+                <div class="pim-type-dropdown-wrapper">
+    <div class="pim-custom-dropdown">
+        <div class="pim-dropdown-trigger"
+             t-on-click.stop="toggleDropdown"
+             t-att-style="state.selectedType ? 'background-color: ' + getSelectedTypeBgColor() : ''">
+            <div class="pim-dropdown-selected">
+                <t t-if="state.selectedType">
+                    <span class="type-color-dot"
+                          t-att-style="'background-color: ' + getSelectedTypeColor()"/>
+                </t>
+                <span class="pim-selected-name"
+                      t-esc="getSelectedTypeName()"/>
+                <span class="pim-selected-badge"
+                      t-esc="getSelectedTypeCount()"/>
+            </div>
+            <i t-att-class="'fa fa-chevron-' + (state.dropdownOpen ? 'up' : 'down')"/>
+        </div>
+        <!-- Dropdown Menu -->
+        <div t-if="state.dropdownOpen"
+             class="pim-dropdown-menu">
+            <t t-foreach="state.types" t-as="type"
+               t-key="type.id">
+                <div t-att-class="'pim-dropdown-item ' + (state.selectedType === type.id ? 'active' : '')"
+                     t-att-data-type-id="type.id"
+                     t-on-click="onTypeClick"
+                     t-att-style="state.selectedType === type.id ? 'background-color: ' + getTypeBgColor(type.color) : ''">
+                    <span class="type-color-dot"
+                          t-att-style="'background-color: ' + getTypeColor(type.color)"/>
+                    <span class="pim-item-name"
+                          t-esc="type.name"/>
+                    <span class="pim-item-count"
+                          t-esc="getCount(type.id)"/>
+                </div>
+            </t>
+        </div>
+    </div>
+</div>
+                <!-- Add Button -->
+                <button class="pim-add-btn" type="button"
+                        t-on-click="openDialog"
+                        t-att-disabled="!state.selectedType">
+                    <i class="fa fa-plus-circle"/>
+                    <span>Add Associations</span>
+                </button>
+            </div>
+        </div>
+        <!-- Products Grid Section -->
+        <div class="pim-products-section">
+            <!-- Loading State -->
+            <div t-if="state.loading" class="pim-loading-state">
+                <div class="pim-loading-spinner"/>
+                <p>Loading associations...</p>
+            </div>
+            <!-- Products Grid -->
+            <div t-elif="state.associatedProducts.length > 0"
+                 class="pim-product-grid">
+                <t t-foreach="state.associatedProducts" t-as="product"
+                   t-key="product.id">
+                    <div class="pim-product-card">
+                        <!-- Remove Button -->
+                        <button class="pim-remove-btn" type="button"
+                                t-att-data-product-id="product.id"
+                                t-on-click.stop="removeProduct"
+                                title="Remove">
+                            <i class="fa fa-times"/>
+                        </button>
+                        <!-- Product Image -->
+                        <div class="pim-product-image">
+                            <img t-att-src="getImageUrl(product)"
+                                 alt="Product"/>
+                            <!-- Completeness Badge -->
+                            <div class="pim-completeness-badge">
+                                <span class="pim-percentage"
+                                      t-esc="Math.round(product.percentage_complete)"/>
+                                <span class="pim-percent-symbol">%</span>
+                            </div>
+                        </div>
+                        <!-- Product Info -->
+                        <div class="pim-product-info">
+                            <h6 class="pim-product-name"
+                                t-esc="product.name"/>
+                            <div class="pim-product-meta">
+                                <span t-if="product.active"
+                                      class="pim-status-badge active">
+                                    Active
+                                </span>
+                                <span t-else=""
+                                      class="pim-status-badge inactive">
+                                    Inactive
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+            <!-- Empty State -->
+            <div t-else="" class="pim-empty-state">
+                <div class="pim-empty-icon">
+                    <i class="fa fa-link"/>
+                </div>
+                <h4>No Associated Products</h4>
+                <p>Click "Add Associations" to get started</p>
+            </div>
+        </div>
+    </div>
+    <!-- Dropdown Overlay -->
+    <div t-if="state.dropdownOpen" class="pim-dropdown-overlay"
+         t-on-click="closeDropdown"/>
+</t>
+    <!-- ============================================ -->
+    <!-- ASSOCIATION DIALOG - UPDATED -->
+    <!-- ============================================ -->
+    <t t-name="odoo_pim_association.AssociationDialog">
+        <div class="pim-modal-overlay" t-on-click="onClose">
+            <div class="pim-modal-container" t-on-click.stop="">
+                <!-- Dialog Header -->
+                <div class="pim-header">
+                    <div class="pim-header-left">
+                        <div class="pim-icon-box">
+                            <i class="fa fa-cube"/>
+                        </div>
+                        <div>
+                            <h4>Add Product Associations</h4>
+                            <p>Select products to associate</p>
+                        </div>
+                    </div>
+                    <button class="pim-close" t-on-click="onClose">
+                        <i class="fa fa-times"/>
+                    </button>
+                </div>
+                <!-- Status Bar -->
+                <div class="pim-status">
+                    <span>
+                        <i class="fa fa-filter"/>
+                        <strong t-esc="getActiveFilterCount()"/>
+                        Filters
+                    </span>
+                    <span>
+                        <i class="fa fa-cube"/>
+                        <strong t-esc="state.filteredProducts.length"/>
+                        Products
+                    </span>
+                    <span>
+                        <i class="fa fa-check-circle"/>
+                        <strong t-esc="state.selectedProducts.length"/>
+                        Selected
+                    </span>
+                </div>
+                <!-- Loading State -->
+                <div t-if="state.loading" class="pim-loading">
+                    <div class="spinner-border text-primary"/>
+                    <p>Loading products...</p>
+                </div>
+                <!-- Error State -->
+                <div t-elif="state.error" class="pim-error">
+                    <i class="fa fa-exclamation-circle"/>
+                    <p t-esc="state.error"/>
+                    <button class="btn btn-sm btn-primary"
+                            t-on-click="loadData">
+                        Retry
+                    </button>
+                </div>
+                <!-- Main Content -->
+                <div t-else="" class="pim-content">
+                    <!-- Left Sidebar - Filters -->
+                    <div class="pim-filters">
+                        <h6>
+                            <i class="fa fa-filter"/>
+                            Filters
+                        </h6>
+                        <!-- Search -->
+                        <div class="pim-filter-item">
+                            <label>Search</label>
+                            <input type="text"
+                                   placeholder="Search products..."
+                                   t-on-input="onSearchChange"/>
+                        </div>
+                        <!-- Category Filter -->
+                        <div class="pim-filter-item">
+                            <label>Category</label>
+                            <select t-on-change="onCategoryChange">
+                                <option value="">All Categories</option>
+                                <t t-foreach="state.categories" t-as="cat"
+                                   t-key="cat.id">
+                                    <option t-att-value="cat.id"
+                                            t-esc="cat.name"/>
+                                </t>
+                            </select>
+                        </div>
+                        <!-- Family Filter -->
+                        <div class="pim-filter-item">
+                            <label>Family</label>
+                            <select t-on-change="onFamilyChange">
+                                <option value="">All Families</option>
+                                <t t-foreach="state.families" t-as="fam"
+                                   t-key="fam.id">
+                                    <option t-att-value="fam.id"
+                                            t-esc="fam.name"/>
+                                </t>
+                            </select>
+                        </div>
+                        <!-- Status Filter - FIXED -->
+                        <div class="pim-filter-item">
+                            <label>Status</label>
+                            <select t-on-change="onStatusChange">
+                                <option value=""
+                                        t-att-selected="state.filters.active === null">All</option>
+                                <option value="active"
+                                        t-att-selected="state.filters.active === true">Active</option>
+                                <option value="inactive"
+                                        t-att-selected="state.filters.active === false">Inactive</option>
+                            </select>
+                        </div>
+                        <!-- Reset Button -->
+                        <button class="pim-reset-btn" t-on-click="resetFilters">
+                            <i class="fa fa-undo"/>
+                            Reset All
+                        </button>
+                    </div>
+                    <!-- Middle - Products Grid -->
+                    <div class="pim-products-wrapper">
+                        <div class="pim-products">
+                            <!-- Product Cards - FIXED -->
+                            <t t-if="state.filteredProducts.length > 0">
+                                <t t-foreach="state.filteredProducts"
+                                   t-as="product" t-key="product.id">
+                                    <div t-att-class="'pim-card ' + (isProductSelected(product.id) ? 'selected' : '')"
+                                         t-att-data-product-id="product.id"
+                                         t-on-click.stop="onProductClick">
+                                        <!-- Card Image -->
+                                        <div class="pim-card-img">
+                                            <img t-att-src="getImageUrl(product)"
+                                                 alt="Product"/>
+                                            <!-- Selection Overlay -->
+                                            <div class="pim-card-overlay">
+                                                <div class="pim-overlay-icon">
+                                                    <i class="fa fa-check-circle"/>
+                                                </div>
+                                            </div>
+                                            <!-- Completeness Badge -->
+                                            <div class="pim-complete-badge">
+                                                <div class="pim-complete-circle"
+                                                     t-att-style="'background: conic-gradient(' + getProgressBarColor(product.percentage_complete || 0) + ' ' + ((product.percentage_complete || 0) * 3.6) + 'deg, rgba(226, 232, 240, 0.3) 0deg)'">
+                                                    <div class="pim-complete-inner">
+                                                        <strong t-esc="Math.round(product.percentage_complete || 0)"/>
+                                                        <span>%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="pim-card-body">
+                                            <div class="pim-card-header">
+                                                <h6 t-esc="product.name"/>
+                                                <span t-if="product.active"
+                                                      class="pim-status-dot active"
+                                                      title="Active"/>
+                                                <span t-else=""
+                                                      class="pim-status-dot inactive"
+                                                      title="Inactive"/>
+                                            </div>
+                                            <p class="pim-sku"
+                                               t-esc="product.sku || 'N/A'"/>
+                                            <div class="pim-card-footer">
+                                                <span class="pim-family">
+                                                    <i class="fa fa-tag"/>
+                                                    <t t-if="product.family_id"
+                                                       t-esc="product.family_id[1]"/>
+                                                    <t t-else="">No Family</t>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                            <!-- Empty Products -->
+                            <div t-else="" class="pim-empty">
+                                <i class="fa fa-inbox"/>
+                                <h5>No products found</h5>
+                                <p>Try adjusting your filters</p>
+                            </div>
+                        </div>
+                        <!-- Footer Actions -->
+                        <div t-if="state.selectedProducts.length > 0"
+                             class="pim-products-footer">
+                            <div class="pim-footer-content">
+                                <div class="pim-footer-info">
+                                    <i class="fa fa-check-square"/>
+                                    <strong>
+                                        <t t-esc="state.selectedProducts.length"/>
+                                        Products Selected
+                                    </strong>
+                                </div>
+                                <div class="pim-footer-actions">
+                                    <button class="btn-cancel"
+                                            t-on-click="clearAllSelected">
+                                        <i class="fa fa-times"/>
+                                        Clear
+                                    </button>
+                                    <button class="btn-add" t-on-click="onSave">
+                                        <i class="fa fa-plus"/>
+                                        Add Products
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Sidebar - Selected Products - FIXED -->
+                    <div class="pim-selected">
+                        <h6>
+                            <i class="fa fa-check-square"/>
+                            Selected (
+                            <t t-esc="state.selectedProducts.length"/>
+                            )
+                        </h6>
+                        <div class="pim-selected-list">
+                            <!-- Selected Items -->
+                            <t t-if="state.selectedProducts.length > 0">
+                                <t t-foreach="getSelectedProductsData()"
+                                   t-as="sel" t-key="sel.id">
+                                    <div class="pim-selected-item">
+                                        <img t-att-src="getImageUrl(sel)"
+                                             alt="Product"/>
+                                        <div class="pim-selected-info">
+                                            <strong t-esc="sel.name"/>
+                                            <small t-esc="sel.sku"/>
+                                            <span t-att-style="'color: ' + getProgressBarColor(sel.percentage_complete || 0)">
+                                                <t t-esc="Math.round(sel.percentage_complete || 0)"/>
+                                                %
+                                            </span>
+                                        </div>
+                                        <button t-att-data-product-id="sel.id"
+                                                t-on-click.stop="onSelectedProductClick">
+                                            <i class="fa fa-times"/>
+                                        </button>
+                                    </div>
+                                </t>
+                            </t>
+                            <!-- Empty Selected -->
+                            <div t-else="" class="pim-empty-small">
+                                <i class="fa fa-cube"/>
+                                <p>No products selected</p>
+                            </div>
+                        </div>
+                        <!-- Total -->
+                        <div t-if="state.selectedProducts.length > 0"
+                             class="pim-total">
+                            Total: <strong><t t-esc="state.selectedProducts.length"/>
+                            items</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <!-- ============================================ -->
+    <!-- DELETE CONFIRMATION DIALOG -->
+    <!-- ============================================ -->
+    <t t-name="odoo_pim_association.DeleteConfirmationDialog">
+    <div class="pim-confirm-overlay" t-on-click="onClose">
+        <div class="pim-confirm-modal" t-on-click.stop="">
+            <!-- Header -->
+            <div class="pim-confirm-header">
+                <div class="pim-confirm-icon-wrapper">
+                    <div class="pim-confirm-icon delete">
+                        <i class="fa fa-trash-o"/>
+                    </div>
+                </div>
+                <h3>Remove Product Association?</h3>
+                <p>Are you sure you want to remove this product from associations?</p>
+            </div>
+            <!-- Product Preview Card -->
+            <div class="pim-confirm-product-card">
+                <img t-att-src="getImageUrl(props.product)" alt="Product"/>
+                <div class="pim-confirm-product-info">
+                    <h5 t-esc="props.product.name"/>
+                    <div class="pim-confirm-product-meta">
+                        <span class="pim-confirm-sku">
+                            <i class="fa fa-barcode"/>
+                            <t t-esc="props.product.sku || 'N/A'"/>
+                        </span>
+                        <span t-if="props.product.family_id"
+                              class="pim-confirm-family">
+                            <i class="fa fa-tag"/>
+                            <t t-esc="props.product.family_id[1] || props.product.family_id"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Actions -->
+            <div class="pim-confirm-footer">
+                <button class="pim-confirm-btn cancel" t-on-click="onClose">
+                    <i class="fa fa-times"/>
+                    Cancel
+                </button>
+                <button class="pim-confirm-btn delete" t-on-click="onConfirm">
+                    <i class="fa fa-trash"/>
+                    Remove Product
+                </button>
+            </div>
+        </div>
+    </div>
+</t>
+</templates>
+
+
+

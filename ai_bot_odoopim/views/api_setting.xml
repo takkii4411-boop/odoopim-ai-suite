@@ -1,0 +1,34 @@
+<odoo>
+    <record id="res_config_settings_view_form_inherit_ai_bot" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ai.bot.api</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="1"/> <!-- Higher priority than the base view -->
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/> <!-- Inherit the original view -->
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='invite_users']" position="after"> <!-- Insert after Users section -->
+
+                <div id="ai_bot_odoopim_api_settings">
+                    <block title="Odoo AI Bot API" name="ai_bot_odoopim_api_container">
+                        <setting id="ai_bot_odoopim_api_setting">
+                            <div class="d-flex flex-column mt-2">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="fa fa-lg fa-cogs me-2" aria-label="AI Bot Model"/>
+                                    <span class='o_form_label'>Model</span>
+                                </div>
+                                <field name="ai_bot_odoopim_model" class="w-100 fw-bold" style="max-width: 100%;"/>
+
+                                <div class="d-flex align-items-center mb-2 mt-3">
+                                    <span class="fa fa-lg fa-rocket me-2" aria-label="AI Bot API"/>
+                                    <span class='o_form_label'>API Key</span>
+                                </div>
+                                <field name="ai_bot_odoopim_api_key" class="w-100 fw-bold" style="max-width: 100%;"/>
+                            </div>
+                        </setting>
+                    </block>
+                </div>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

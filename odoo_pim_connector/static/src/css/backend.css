@@ -1,0 +1,218 @@
+/* odoo_pim_connector/static/src/css/backend.css */
+
+/* Main PIM Connector Dashboard Styling */
+.o_pim_connector_dashboard {
+    background-color: #f8f9fa !important;
+    padding: 20px !important;
+}
+
+/* Override Odoo's default kanban view styling */
+.o_pim_connector_dashboard .o_kanban_view {
+    background: transparent !important;
+}
+
+.o_pim_connector_dashboard .o_content {
+    background: transparent !important;
+}
+
+/* Hide default kanban renderer and create custom layout */
+.o_pim_connector_dashboard .o_kanban_renderer {
+    display: none !important;
+}
+
+/* Custom category sections */
+.o_pim_category_section {
+    margin-bottom: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Category Header */
+.o_pim_category_header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px 25px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.o_pim_category_header h3 {
+    color: white;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards Grid Container */
+.o_pim_cards_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 25px;
+}
+
+/* Individual Connector Card */
+.o_pim_connector_card {
+    position: relative;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.o_pim_connector_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+/* Grey-out effect for disabled cards */
+.o_kanban_pim_coming_soon {
+    filter: grayscale(80%);
+    opacity: 0.65;
+}
+
+.o_kanban_pim_coming_soon:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* The 'Coming Soon' badge */
+.o_kanban_coming_soon_badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* The green "active" dot indicator */
+.o_kanban_active_dot {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(45deg, #51cf66, #40c057);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px white, 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+
+/* Compact horizontal card layout */
+.o_pim_kanban_card {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    gap: 1.2rem;
+    min-height: 80px;
+}
+
+.o_pim_kanban_card .o_kanban_image {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.o_pim_kanban_card .o_kanban_image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.o_pim_kanban_card .oe_kanban_details {
+    flex: 1;
+}
+
+.o_pim_kanban_card .o_kanban_record_title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.o_pim_kanban_card .text-muted {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+/* Hide all default kanban elements */
+.o_pim_connector_dashboard .o_kanban_group,
+.o_pim_connector_dashboard .o_kanban_header,
+.o_pim_connector_dashboard .o_kanban_load_more,
+.o_pim_connector_dashboard .o_kanban_record {
+    display: none !important;
+}
+
+/* Custom layout will be injected via JavaScript */
+#pim_custom_layout {
+    width: 100%;
+}
+
+.oe_kanban_card {
+    position: relative;
+}
+
+/* Style for the new "Active" badge */
+.o_kanban_active_badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 3px 8px;
+    background-color: #28a745; /* Green color */
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 10px;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .o_pim_cards_grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .o_pim_category_header {
+        padding: 15px 20px;
+    }
+    
+    .o_pim_category_header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .o_pim_kanban_card {
+        padding: 1rem;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .o_pim_connector_dashboard {
+        padding: 10px !important;
+    }
+    
+    .o_pim_category_section {
+        margin-bottom: 25px;
+    }
+    
+    .o_pim_cards_grid {
+        padding: 15px;
+    }
+}

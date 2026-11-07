@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_coming_soon_wizard_form" model="ir.ui.view">
+        <field name="name">coming.soon.wizard.form</field>
+        <field name="model">coming.soon.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Coming Soon">
+                <p>
+                    <field name="message" nolabel="1"/>
+                </p>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

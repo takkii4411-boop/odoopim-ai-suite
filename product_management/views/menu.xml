@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <menuitem name="Product Management"
+              id="menu_product_management_main"
+              sequence="40"
+              groups="product_management.group_product_management_user,base.group_system"
+              web_icon="product_management,static/description/icon.png"
+    />
+    <menuitem name="Product Management"
+              id="menu_product_management"
+              parent="menu_product_management_main"
+              action="product_management.product_product_mntn_action"
+              sequence="10"
+              groups="product_management.group_product_management_user,base.group_system"
+    />
+    <menuitem name="Configuration"
+              id="menu_product_management_conf"
+              parent="menu_product_management_main"
+              sequence="50"
+              action="res_config_settings_product_management_action"
+              groups="base.group_system"
+    />
+
+</odoo>

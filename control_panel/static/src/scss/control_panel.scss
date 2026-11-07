@@ -1,0 +1,30 @@
+.prm-content .jstr-navigation-panel.right-control-panel {
+    flex: none;
+    overflow: unset;
+    padding-bottom: 0;
+    .control-panel-head {
+        padding: 0.5rem 0.3rem;
+        font-weight: 500;
+    }
+    .control-panel {
+        padding: .15rem .3rem;
+        .familybutton {
+            padding: 0.5rem 0.3rem;
+            color: #017e84;
+            font-weight: 500;
+            border-radius: 0.1875rem;
+            text-align: left;
+            &:hover {
+                background-color: #c6dfe4;
+            }
+            &:before {
+                font-family: 'FontAwesome';
+                padding-right: 5px;
+            }
+        }
+        .redbutton {
+            padding: 0.5rem 0.3rem;
+            text-align: left;
+        }
+    }
+}

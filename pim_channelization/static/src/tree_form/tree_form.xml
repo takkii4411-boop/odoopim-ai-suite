@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates xml:space="preserve">
+    <t t-name="pim_ext.TreeFormView"
+       t-inherit="odoopim_split_widget.TreeFormView" t-inherit-mode="extension">
+        <xpath expr="//button[@t-on-click.stop='toggleFilter']" position="before">
+            <PimChannelisation root="this"/>
+        </xpath>
+    </t>
+</templates>

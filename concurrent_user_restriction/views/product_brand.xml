@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+     <record id="product_brand_inherit" model="ir.ui.view">
+        <field name="name">product.brand.inherited</field>
+        <field name="inherit_id" ref="pim_ext.view_product_brand_form"/>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+             <xpath expr="//header" position="inside">
+<!--                     <div style="padding-bottom:10px;padding-left:650px;" invisible="not editing_warning">-->
+<!--                        <button name="reload_onclick" type="object"-->
+<!--                                class="o_form_button_cancel btn btn-light px-1 py-0 lh-sm">-->
+<!--                            <i class="fa fa-refresh fa-fw"></i>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div style="" invisible="not editing_warning">-->
+<!--                        <field name="editing_warning"/>-->
+<!--                    </div>-->
+                    <field name="completeness" widget="progressbar_extended"/>
+                    <field name="editing" invisible="1"/>
+                    <field name="edit_session_name" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

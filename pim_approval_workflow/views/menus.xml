@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="menu_workflow_management"
+        name="Workflow Management"
+        parent="pim_ext.menu_root_product_management"
+        action="pim_approval_workflow.action_pim_workflow"
+        groups="pim_approval_workflow.group_pim_administrator"
+        sequence="10"/>
+</odoo>
