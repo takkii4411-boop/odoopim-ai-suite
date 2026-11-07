@@ -1,10 +1,10 @@
 # ODOOPIM — AI-Powered Product Information Management Suite for Odoo 18
 
-![Odoo](https://img.shields.io/badge/Odoo-18.0-purple) ![Modules](https://img.shields.io/badge/Custom%20Modules-25-blue) ![License](https://img.shields.io/badge/License-LGPL--3-green)
+![Odoo](https://img.shields.io/badge/Odoo-18.0-purple) ![Modules](https://img.shields.io/badge/Modules%20Showcased-25-blue) ![License](https://img.shields.io/badge/License-LGPL--3-green)
 
 An enterprise-grade **Product Information Management (PIM)** suite built on Odoo 18, delivering **Akeneo PIM–style** capabilities — families, attributes, channelization, localization, approval workflows, AI enrichment & translation, marketplace connectors, and an embedded AI chatbot — all natively integrated with Odoo Sales, Inventory, Website and Studio.
 
-> Part of the ODOOPIM product line (onboarder.odoopim.com). Work here = **client-driven module development**: AI layer, localization/channelization, approvals, bulk imports, connectors and UI widgets + debugging across the platform.
+> Part of the ODOOPIM product line (onboarder.odoopim.com — Navabrind IT Solutions). **My contribution here = the UI widget suite + client-driven debugging & small enhancements across the platform.** The PIM core, AI layer, channelization/localization, approval workflows, imports and connectors are company/team product modules — bundled in this showcase for context, not claim of authorship.
 
 ---
 
@@ -32,14 +32,23 @@ odoopim-ai-suite/
 ├── concurrent_user_restriction/# Concurrent login restriction
 ├── web_char_capitalize/        # Auto-capitalize char fields
 ├── odoo_deletedialog/          # Delete confirmation dialog
-├── control_panel/              # PIM control panel (jsTree powered)
-├── category_hierarchy_widget/  # Category hierarchy widget
-├── odoopim_split_widget/       # Attribute split view widget
-├── oi_fields_attribute/        # Attribute field widgets
+├── control_panel/              # PIM control panel (jsTree powered) ← MY WORK
+├── category_hierarchy_widget/  # Category hierarchy widget ← MY WORK
+├── odoopim_split_widget/       # Attribute split view widget ← MY WORK
+├── oi_fields_attribute/        # Attribute field widgets ← MY WORK
 └── sh_product_custom_fields/   # Custom product fields (3rd-party base, customized)
 ```
 
-## Highlights
+## My Contribution — UI Widget Suite
+
+- **`odoopim_split_widget`** — split-screen navigation widget for wide PIM record views (largest widget in the suite, 39 files).
+- **`category_hierarchy_widget`** — jsTree-powered category hierarchy browsing widget.
+- **`oi_fields_attribute`** — attribute field rendering widgets.
+- **`control_panel`** — PIM control panel with quick navigation & stats.
+
+Plus **client-driven debugging and small enhancements** across the platform modules below.
+
+## Platform Highlights (bundled suite — team context, not my authorship)
 
 - **Core PIM engine** — product families, attribute groups, categories (hierarchy), brands, suppliers, mass edit wizards, publish actions.
 - **Channelization + Localization** — model attribute values per sales channel and locale (Akeneo-inspired), with a combined locales/channels manager.
